@@ -2,6 +2,7 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
 namespace MixUp
 {
     public partial class App : Application
@@ -11,6 +12,8 @@ namespace MixUp
             InitializeComponent();
 
             MainPage = new NavigationPage(new MainPage());
+
+            
         }
 
         protected override void OnStart()

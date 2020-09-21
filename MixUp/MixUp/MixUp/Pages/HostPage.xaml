@@ -16,7 +16,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label Text="Lobby!"
+            <Label Text="HostLobbyPage!"
                     Grid.Column="1"
                     Grid.Row="0"
                     VerticalOptions="Center" 

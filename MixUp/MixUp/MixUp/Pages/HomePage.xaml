@@ -30,14 +30,21 @@
                         VerticalOptions="Center"
                         BackgroundColor="#1DB954"
                         TextColor="white"
-                        Clicked="OnButtonClicked" />
+                        Clicked="OnHostButtonClicked" />
+
+                <Entry Placeholder="Enter Ip Address"
+                       x:Name="ipEntry"/>
+
+                <Entry Placeholder="Enter port"
+                       x:Name="portEntry"/>
+
 
                 <Button Text="Join Lobby!"
                         HorizontalOptions="CenterAndExpand"
                         VerticalOptions="Center"
                         BackgroundColor="#1DB954"
                         TextColor="white"
-                        Clicked="OnButtonClicked" />
+                        Clicked="OnJoinButtonClicked" />
             
             </StackLayout>
             

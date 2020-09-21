@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MixUp.Pages.LobbyPage">
+    <ContentPage.Content>
+        <Grid Margin="20,35,20,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            
+
+            <StackLayout Grid.Column="1"
+                         Grid.Row="1">
+                <Label Text="LobbyPage!"
+                    
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" />
+
+                <Label Text="Lobby id : "
+                    
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" />
+
+                <Label Text="placeholder"
+                    x:Name="lobbyIp"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" />
+
+                <Label Text=""
+                    x:Name="joinName"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" />
+
+            </StackLayout>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
