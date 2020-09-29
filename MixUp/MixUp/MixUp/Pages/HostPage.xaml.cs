@@ -20,11 +20,14 @@ namespace MixUp.Pages
 
         async void OnCreateLobbyButtonClicked(object sender, EventArgs args)
         {
-            System.Threading.ThreadStart work = LobbyServer.ExecuteServer;
+            // Start Server thread
+            Server lobbyServer = new Server();
+            System.Threading.ThreadStart work = lobbyServer.ExecuteServer;
             Thread serverThread = new Thread(work);
             serverThread.Start();
-            //Lobby lobby = new Lobby();
-            await Navigation.PushAsync(new Pages.LobbyPage());
+
+            await Navigation.PushAsync(new Pages.LobbyPage(nameEntry.Text, true));
+            
         }
 
         async void OnSettingsButtonClicked(object sender, EventArgs args)

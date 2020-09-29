@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -12,10 +13,34 @@ namespace MixUp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LobbyPage : ContentPage
     {
-        public LobbyPage()
+        Session session;
+        public LobbyPage(String name, bool isAdmin)
         {
             InitializeComponent();
 
+            // Start the Session thread
+            Session lobbySession = new Session(this);
+            this.session = lobbySession;
+            if (!isAdmin)
+            {
+                session.isAdmin = false;
+            }
+
+            System.Threading.ThreadStart clientWork = lobbySession.ExecuteClient;
+            Thread clientThread = new Thread(clientWork);
+            clientThread.Start();
+
+        }
+
+        void OnSendButtonClicked(object sender, EventArgs args)
+        {
+            String messageToSend = messageEntry.Text;
+            session.connectionManager.SendMessage(messageToSend);
+        }
+
+        public void Update()
+        {
+            // TO DO : REFRESH PAGE
         }
     }
 }

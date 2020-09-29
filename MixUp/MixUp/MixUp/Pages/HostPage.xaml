@@ -25,6 +25,9 @@
             <StackLayout Grid.Column="1"
                          Grid.Row="1">
 
+                <Entry Placeholder="Enter your name"
+                       x:Name="nameEntry"/>
+
                 <Button Text="Create Lobby!"
                         HorizontalOptions="CenterAndExpand"
                         VerticalOptions="Center"
