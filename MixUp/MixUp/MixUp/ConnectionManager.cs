@@ -19,19 +19,19 @@ namespace MixUp
         IPAddress ipAddr;
         IPEndPoint localEndPoint;
         Socket sender;
-        Int32 port = 13000;
+        Int32 port = 11000;
         public ConnectionManager(Session session)
         {
             this.session = session;
             // Establish the remote endpoint for the socket. This example uses port 13000 on the local computer. 
             ipHost = Dns.GetHostEntry(Dns.GetHostName());
-            ipAddr = ipHost.AddressList[1];
-
-            if (!session.isAdmin)
+            ipAddr = ipHost.AddressList[0];
+            if (session.lobbyPage.ip != null)
             {
-                ipAddr = IPAddress.Parse("192.168.200.2");
-                port = 13000;
+                ipAddr = IPAddress.Parse(session.lobbyPage.ip.ToString());
             }
+            //
+
             //
             localEndPoint = new IPEndPoint(ipAddr, port);
             // Creation TCP/IP Socket using Socket Class Costructor 

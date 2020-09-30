@@ -24,8 +24,8 @@ namespace MixUp
             // Establish the local endpoint for the socket. 
             // Dns.GetHostName returns the name of the host running the application. 
             ipHost = Dns.GetHostEntry(Dns.GetHostName());
-            ipAddr = ipHost.AddressList[1];
-            localEndPoint = new IPEndPoint(ipAddr, 13000);
+            ipAddr = ipHost.AddressList[0];
+            localEndPoint = new IPEndPoint(ipAddr, 11000);
 
             // Creation TCP/IP Socket using Socket Class Costructor 
             listener = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);

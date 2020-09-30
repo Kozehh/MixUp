@@ -14,17 +14,17 @@ namespace MixUp.Pages
     public partial class LobbyPage : ContentPage
     {
         Session session;
-        public LobbyPage(String name, bool isAdmin)
+        public String ip;
+        public LobbyPage(String name, String ip)
         {
             InitializeComponent();
+
+            this.ip = ip;
 
             // Start the Session thread
             Session lobbySession = new Session(this);
             this.session = lobbySession;
-            if (!isAdmin)
-            {
-                session.isAdmin = false;
-            }
+
 
             System.Threading.ThreadStart clientWork = lobbySession.ExecuteClient;
             Thread clientThread = new Thread(clientWork);

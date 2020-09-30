@@ -26,7 +26,7 @@ namespace MixUp.Pages
             Thread serverThread = new Thread(work);
             serverThread.Start();
 
-            await Navigation.PushAsync(new Pages.LobbyPage(nameEntry.Text, true));
+            await Navigation.PushAsync(new Pages.LobbyPage(nameEntry.Text, null));
             
         }
 
