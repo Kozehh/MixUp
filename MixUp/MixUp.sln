@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixUp.iOS", "MixUp\MixUp.iO
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixUp", "MixUp\MixUp\MixUp.csproj", "{4B521B86-2C1F-4AB4-B09B-C4258E686D09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixUpAPI", "MixUpAPI\MixUpAPI.csproj", "{ACC4E8FC-CF30-4F1C-B0FF-63A0FD5F3D82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixUpAPI", "MixUpAPI\MixUpAPI.csproj", "{ACC4E8FC-CF30-4F1C-B0FF-63A0FD5F3D82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

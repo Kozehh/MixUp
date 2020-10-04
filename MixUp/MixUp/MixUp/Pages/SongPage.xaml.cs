@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
 
 namespace MixUp.Pages
@@ -26,17 +27,14 @@ namespace MixUp.Pages
         async void OnLoginButtonClicked(object sender, EventArgs args)
         { 
             var getResult = _client.GetAsync(_mixUpApi).Result;
-            _client.DefaultRequestHeaders.Add("Clear-Site-Data", "cache, cookies");
-            var lol = JsonConvert.DeserializeObject<Uri>(getResult.Content.ReadAsStringAsync().Result);
-            var va = _client.GetAsync(lol).Result;
-            var htmlLOL = va.Content.ReadAsStringAsync().Result;
+            var source = new UrlWebViewSource
+            {
+                Url = getResult.Content.ReadAsStringAsync().Result
+            };
 
-            
-            var htmlSource = new HtmlWebViewSource();
-            htmlSource.Html = @htmlLOL;
             WebView loginView = new WebView()
             {
-                Source = htmlSource,
+                Source = source,
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 WidthRequest = 1000,
                 HeightRequest = 1000

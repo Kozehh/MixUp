@@ -14,8 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Xamarin.Forms;
-using JsonConverter = System.Text.Json.Serialization.JsonConverter;
 
 namespace MixUpAPI.Controllers
 {
@@ -23,7 +21,6 @@ namespace MixUpAPI.Controllers
     [Route("MixUpApi")]
     public class SpotifyController : ControllerBase
     {
-        private NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
         private const string _authURL = "https://accounts.spotify.com/authorize?";
         private const string _tokenURL = @"https://accounts.spotify.com/api/token";
         private const string _playlistURL = @"https://api.spotify.com/v1/me/playlists";
@@ -32,12 +29,11 @@ namespace MixUpAPI.Controllers
         public string client_secret = "e86971bae67043eaa474a084eab7b356";
         public string client_id = "d8235676727f4a1b9938a49627c86640";
         public string response_type = "code";
-        public string redirect_uri = "http://localhost:5000/MixUpApi/callback";
+        public string redirect_uri = "http://10.0.2.2:5000/MixUpApi/callback";
         private string _state = "profile activity";
         public string scope = "user-read-private user-read-email";
         private string _code; // Code received from authorize access -> Will be exchange for an access
         public static AuthorizationRequest reeqq = new AuthorizationRequest();
-
         
 
         [HttpGet]
@@ -65,7 +61,7 @@ namespace MixUpAPI.Controllers
 
         [HttpGet]
         [Route("Authenticate")]
-        public Uri Authenticate()
+        public string Authenticate()
         {
             var param = new Dictionary<string, string>()
             {
@@ -75,7 +71,7 @@ namespace MixUpAPI.Controllers
                 {"state", _state},
                 {"scope", scope}
             };
-            var newUrl = new Uri(QueryHelpers.AddQueryString(_authURL, param));
+            var newUrl = QueryHelpers.AddQueryString(_authURL, param);
 
             return newUrl;
         }
