@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>57fc453b-85f6-4f97-8e19-0188adb16240</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Xamarin.Forms.Core">
+      <HintPath>Z:\Microsoft\Xamarin\NuGet\xamarin.forms\4.6.0.1141\lib\MonoAndroid90\Xamarin.Forms.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+
+</Project>
