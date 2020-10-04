@@ -28,5 +28,10 @@ namespace MixUp
             await Navigation.PushAsync(new Pages.HomePage());
         }
 
+        async void OnSongPageButtonClicked(object sender, EventArgs args)
+        {
+            await Navigation.PushAsync(new Pages.SongPage());
+        }
+
     }
 }
