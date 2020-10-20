@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Mime;
 using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
+using MixUpAPI.Models;
 using Newtonsoft.Json;
 
 namespace MixUpAPI.Controllers
@@ -33,8 +26,9 @@ namespace MixUpAPI.Controllers
         private string _state = "profile activity";
         public string scope = "user-read-private user-read-email";
         private string _code; // Code received from authorize access -> Will be exchange for an access
-        public static AuthorizationRequest reeqq = new AuthorizationRequest();
-        
+
+        private string _dbManagerApi = "http://localhost:65497/db-manager/";
+
 
         [HttpGet]
         [Route("callback")]
@@ -53,8 +47,8 @@ namespace MixUpAPI.Controllers
             }
             else
             {
-                reeqq.code = code;
-                GetToken();
+                Program.code = code;
+                RequestToken();
                 return true;
             }
         }
@@ -66,7 +60,7 @@ namespace MixUpAPI.Controllers
             var param = new Dictionary<string, string>()
             {
                 {"client_id", client_id},
-                {"response_type", response_type },
+                {"response_type", response_type},
                 {"redirect_uri", redirect_uri},
                 {"state", _state},
                 {"scope", scope}
@@ -77,26 +71,68 @@ namespace MixUpAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Token")]
-        public async void GetToken()
+        [Route("RequestToken")]
+        public void RequestToken()
         {
             string s = "authorization_code";
             var param = new Dictionary<string, string>()
             {
-                {"code", reeqq.code },
+                {"code", Program.code },
                 {"redirect_uri", redirect_uri},
                 {"grant_type", s},
                 {"client_id", client_id},
                 {"client_secret", client_secret}
             };
 
-            HttpClient c = new HttpClient();
-            HttpResponseMessage tknRes = await c.PostAsync(_tokenURL, new FormUrlEncodedContent(param));
-            var jsonContent = await tknRes.Content.ReadAsStringAsync();
-            Token tok = JsonConvert.DeserializeObject<Token>(jsonContent);
+            var token = GetNewToken(param);
+            // Associate the member with his token in the db
+            PostDbManager("Token/Add", token);
+        }
 
-            GetPlaylists(tok);
-            Console.WriteLine("OK");
+        [HttpPost]
+        [Route("RefreshToken")]
+        public Token RefreshToken([FromBody] Token tokenToRefresh)
+        {
+
+            string refresh = "refresh_token";
+            var param = new Dictionary<string, string>()
+            {
+                {"grant_type", refresh},
+                {refresh, tokenToRefresh.RefreshToken}
+            };
+
+            Token tokenRefreshed = GetNewToken(param);
+
+            // Update the users token in the db
+            PostDbManager("Token/Update", tokenRefreshed);
+            return tokenRefreshed;
+        }
+
+        public Token GetNewToken(Dictionary<string, string> requestBody)
+        {
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.PostAsync(_tokenURL, new FormUrlEncodedContent(requestBody)).Result;
+            var jsonContent = response.Content.ReadAsStringAsync().Result;
+            Token token = JsonConvert.DeserializeObject<Token>(jsonContent);
+            //TODO: Catch errors and exceptions
+            return token;
+        }
+
+
+        public void PostDbManager(string apiPath, Token dataToSend)
+        {
+            HttpClient client = new HttpClient();
+            try
+            {
+                var serialize = JsonConvert.SerializeObject(dataToSend);
+                var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
+                var result = client.PostAsync(_dbManagerApi + apiPath, toSend).Result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
         }
 
         static async void GetPlaylists(Token token)
@@ -110,19 +146,5 @@ namespace MixUpAPI.Controllers
             Console.WriteLine("xd");
         }
 
-    }
-    internal class Token
-    {
-        [JsonProperty("access_token")]
-        public string AccessToken { get; set; }
-
-        [JsonProperty("token_type")]
-        public string TokenType { get; set; }
-
-        [JsonProperty("expires_in")]
-        public int ExpiresIn { get; set; }
-
-        [JsonProperty("refresh_token")]
-        public string RefreshToken { get; set; }
     }
 }

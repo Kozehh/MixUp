@@ -46,6 +46,8 @@ namespace MixUp.Pages
             };
 
 
+            //var res = _client.GetAsync("http://10.0.2.2:5000/MixUpApi/db").Result;
+
         }
     }
 }
