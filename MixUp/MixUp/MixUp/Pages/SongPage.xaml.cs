@@ -16,7 +16,7 @@ namespace MixUp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SongPage : ContentPage
     {
-        private string _mixUpApi = "http://10.44.88.242:9000/MixUpApi/Authenticate";
+        private string _mixUpApi = "http://10.44.88.242/mixup/Authenticate";
         private HttpClient _client;
         public SongPage()
         {
@@ -44,10 +44,6 @@ namespace MixUp.Pages
             {
                 Children = { loginView }
             };
-
-
-            //var res = _client.GetAsync("http://10.0.2.2:5000/MixUpApi/db").Result;
-
         }
     }
 }
