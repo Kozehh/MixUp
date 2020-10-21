@@ -22,12 +22,12 @@ namespace MixUpAPI.Controllers
         public string client_secret = "e86971bae67043eaa474a084eab7b356";
         public string client_id = "d8235676727f4a1b9938a49627c86640";
         public string response_type = "code";
-        public string redirect_uri = "http://10.0.2.2:5000/MixUpApi/callback";
+        public string redirect_uri = "http://10.44.88.242:9000/MixUpApi/callback";
         private string _state = "profile activity";
         public string scope = "user-read-private user-read-email";
         private string _code; // Code received from authorize access -> Will be exchange for an access
 
-        private string _dbManagerApi = "http://localhost:65497/db-manager/";
+        private string _dbManagerApi = "http://10.44.88.242:9010/db-manager/";
 
 
         [HttpGet]

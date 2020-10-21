@@ -1,0 +1,19 @@
+version '3.8'
+services:
+
+    mixupApi:
+        build:
+            context: ./MixUp
+            dockerfile: MixUpAPI/Dockerfile
+        depends_on:
+            - dbmanager
+        ports: 
+            - "9000:80"
+    
+    dbmanager:
+        build:
+            context: ./MixUp
+            dockerfile: DBManager/Dockerfile
+        ports: 
+            - "9010:80"
+        
