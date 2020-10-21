@@ -27,7 +27,7 @@ namespace MixUpAPI.Controllers
         public string scope = "user-read-private user-read-email";
         private string _code; // Code received from authorize access -> Will be exchange for an access
 
-        private string _dbManagerApi = "http://127.0.0.1:9000/db-manager/";
+        private string _dbManagerApi = "http://localhost:9000/db-manager/";
 
 
         [HttpGet]
