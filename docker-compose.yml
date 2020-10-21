@@ -1,7 +1,7 @@
 version: '3.8'
 services:
 
-    mixupApi:
+    mixupapi:
         build:
             context: ./MixUp
             dockerfile: MixUpAPI/Dockerfile
