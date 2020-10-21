@@ -57,7 +57,6 @@ namespace MixUpAPI.Controllers
         [Route("Authenticate")]
         public string Authenticate()
         {
-            Console.WriteLine("HELLO WORLD");
             var param = new Dictionary<string, string>()
             {
                 {"client_id", client_id},

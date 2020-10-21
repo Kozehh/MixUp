@@ -36,6 +36,7 @@ namespace DBManager.Controllers
         [Route("Token/Add")]
         public void AddToken([FromBody] Token newToken)
         {
+            Console.WriteLine("Hello again");
             UserService service = new UserService();
             service.Create(newToken);
         }
