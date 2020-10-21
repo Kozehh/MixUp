@@ -15,5 +15,5 @@ services:
             context: ./MixUp
             dockerfile: DBManager/Dockerfile
         ports: 
-            - "9010:80"
+            - "80:80"
         
