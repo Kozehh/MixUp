@@ -10,6 +10,14 @@ namespace DBManager.Controllers
     [ApiController]
     public class DBManagerController : ControllerBase
     {
+
+        private readonly UserService _userService;
+
+        public DBManagerController(UserService userService)
+        {
+            _userService = userService;
+        }
+
         [HttpGet]
         [Route("db")]
         public void Test()
@@ -37,8 +45,7 @@ namespace DBManager.Controllers
         {
             Console.WriteLine(newToken.RefreshToken);
             Console.WriteLine(newToken.ExpiresIn);
-            UserService service = new UserService();
-            service.Create(newToken);
+            _userService.Create(newToken);
         }
     }
 }

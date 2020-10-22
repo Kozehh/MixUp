@@ -86,6 +86,7 @@ namespace MixUpAPI.Controllers
             };
 
             var token = GetNewToken(param);
+            Console.WriteLine("Access token" + token.AccessToken);
             // Associate the member with his token in the db
             PostDbManager("Token/Add", token);
         }
@@ -127,15 +128,13 @@ namespace MixUpAPI.Controllers
             {
                 var serialize = JsonConvert.SerializeObject(dataToSend);
                 var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
-                Console.WriteLine("token:" + dataToSend.RefreshToken);
-                Console.WriteLine("expires in :" + dataToSend.ExpiresIn);
+                Console.WriteLine("ToSend" + toSend.ReadAsStringAsync().Result);
                 var result = client.PostAsync(_dbManagerApi + "/db-manager/" + apiPath, toSend).Result;
                 Console.WriteLine(result.ReasonPhrase);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-
             }
         }
 

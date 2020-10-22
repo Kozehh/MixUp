@@ -1,5 +1,7 @@
-﻿using MongoDB.Bson;
+﻿using System.Text.Json.Serialization;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
 namespace DBManager.Models
 {
@@ -7,18 +9,23 @@ namespace DBManager.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        [JsonProperty("id")]
         public string Id { get; set; }
 
-        [BsonElement("access_token")]
+        [BsonElement("AccessToken")]
+        [JsonProperty("access_token")]
         public string AccessToken { get; set; }
 
-        [BsonElement("token_type")]
+        [BsonElement("TokenType")]
+        [JsonProperty("token_type")]
         public string TokenType { get; set; }
 
-        [BsonElement("expires_in")]
+        [BsonElement("ExpiresIn")]
+        [JsonProperty("expires_in")]
         public int ExpiresIn { get; set; }
 
-        [BsonElement("refresh_token")]
+        [BsonElement("RefreshToken")]
+        [JsonProperty("refresh_token")]
         public string RefreshToken { get; set; }
     }
 }
