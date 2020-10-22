@@ -9,11 +9,11 @@ services:
             - dbmanager
         ports: 
             - "80:80"
+        links:
+            - dbmanager
     
     dbmanager:
         build:
             context: ./MixUp
             dockerfile: DBManager/Dockerfile
-        ports: 
-            - "9000:80"
         

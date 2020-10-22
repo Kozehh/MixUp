@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -116,7 +116,6 @@ namespace MixUpAPI.Controllers
             var jsonContent = response.Content.ReadAsStringAsync().Result;
             Token token = JsonConvert.DeserializeObject<Token>(jsonContent);
             //TODO: Catch errors and exceptions
-            Console.WriteLine("Token : " + token.AccessToken);
             return token;
         }
 
@@ -128,7 +127,10 @@ namespace MixUpAPI.Controllers
             {
                 var serialize = JsonConvert.SerializeObject(dataToSend);
                 var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
-                var result = client.PostAsync(_dbManagerApi + apiPath, toSend).Result;
+                Console.WriteLine("token:" + dataToSend.RefreshToken);
+                Console.WriteLine("expires in :" + dataToSend.ExpiresIn);
+                var result = client.PostAsync(_dbManagerApi + "/db-manager/" + apiPath, toSend).Result;
+                Console.WriteLine(result.ReasonPhrase);
             }
             catch (Exception ex)
             {

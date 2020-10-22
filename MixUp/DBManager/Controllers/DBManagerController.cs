@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using DBManager.Services;
 using Microsoft.AspNetCore.Mvc;
 using MixUpAPI.Models;
@@ -36,7 +36,8 @@ namespace DBManager.Controllers
         [Route("Token/Add")]
         public void AddToken([FromBody] Token newToken)
         {
-            Console.WriteLine("Hello again");
+            Console.WriteLine(newToken.RefreshToken);
+            Console.WriteLine(newToken.ExpiresIn);
             UserService service = new UserService();
             service.Create(newToken);
         }
