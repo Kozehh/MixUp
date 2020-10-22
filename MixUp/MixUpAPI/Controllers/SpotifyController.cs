@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using DBManager.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using MixUpAPI.Models;
 using Newtonsoft.Json;
 
 namespace MixUpAPI.Controllers
@@ -112,7 +112,7 @@ namespace MixUpAPI.Controllers
         public Token GetNewToken(Dictionary<string, string> requestBody)
         {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.PostAsync(_tokenURL, new FormUrlEncodedContent(requestBody)).Result;
+            var response = client.PostAsync(_tokenURL, new FormUrlEncodedContent(requestBody)).Result;
             var jsonContent = response.Content.ReadAsStringAsync().Result;
             Token token = JsonConvert.DeserializeObject<Token>(jsonContent);
             //TODO: Catch errors and exceptions

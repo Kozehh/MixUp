@@ -1,9 +1,8 @@
 using System;
+using DBManager.Models;
 using DBManager.Services;
 using Microsoft.AspNetCore.Mvc;
-using MixUpAPI.Models;
 using MongoDB.Driver;
-using Newtonsoft.Json;
 
 namespace DBManager.Controllers
 {
