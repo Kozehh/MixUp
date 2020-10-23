@@ -7,6 +7,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["DBManager/DBManager.csproj", "DBManager/"]
+COPY ["ClassLibrary/ClassLibrary.csproj", "ClassLibrary/"]
 RUN dotnet restore "DBManager/DBManager.csproj"
 COPY . .
 WORKDIR "/src/DBManager"

@@ -3,12 +3,11 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
-ENV DB_MANAGER_ADDR=http://dbmanager
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["MixUpAPI/MixUpAPI.csproj", "MixUpAPI/"]
-COPY ["DBManager/DBManager.csproj", "DBManager/"]
+COPY ["ClassLibrary/ClassLibrary.csproj", "ClassLibrary/"]
 RUN dotnet restore "MixUpAPI/MixUpAPI.csproj"
 COPY . .
 WORKDIR "/src/MixUpAPI"
