@@ -1,10 +1,10 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
+using MongoDB.Bson;
 using Newtonsoft.Json;
 
-namespace DBManager.Models
+namespace ClassLibrary.Models
 {
-    /*
     public class Token
     {
         [BsonId]
@@ -27,5 +27,5 @@ namespace DBManager.Models
         [BsonElement("RefreshToken")]
         [JsonProperty("refresh_token")]
         public string RefreshToken { get; set; }
-    }*/
+    }
 }

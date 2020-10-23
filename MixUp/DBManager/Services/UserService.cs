@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using DBManager.Models;
+using ClassLibrary.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
 

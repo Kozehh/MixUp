@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using DBManager.Models;
+using ClassLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
@@ -39,23 +39,26 @@ namespace MixUpAPI.Controllers
 
         [HttpGet]
         [Route("callback")]
-        public void Callback([FromQuery] string code, [FromQuery] string state, [FromQuery] string error)
+        public ActionResult<Token> Callback([FromQuery] string code, [FromQuery] string state, [FromQuery] string error)
         {
             if (error != null)
             {
                 // TODO : Show error
                 Console.WriteLine(error);
+                return null;
             }
             else if (state == null || _state != state)
             {
                 // TODO : Error: State mismatch
                 Console.WriteLine("Error: State mismatch");
+                return null;
             }
             else
             {
                 Program.code = code;
-                RequestToken();
+                Token tok = RequestToken();
                 Program.authentificationFinished = true;
+                return tok;
             }
         }
 
@@ -78,7 +81,7 @@ namespace MixUpAPI.Controllers
 
         [HttpGet]
         [Route("requestToken")]
-        public void RequestToken()
+        public Token RequestToken()
         {
             string s = "authorization_code";
             var param = new Dictionary<string, string>()
@@ -91,9 +94,8 @@ namespace MixUpAPI.Controllers
             };
 
             var token = GetNewToken(param);
-            Console.WriteLine("Access token" + token.AccessToken);
             // Associate the member with his token in the db
-            PostDbManager("Token/Add", token);
+            return PostDbManager("Token/Add", token);
         }
 
         [HttpPost]
@@ -126,20 +128,21 @@ namespace MixUpAPI.Controllers
         }
 
 
-        public void PostDbManager(string apiPath, Token dataToSend)
+        public Token PostDbManager(string apiPath, Token dataToSend)
         {
             HttpClient client = new HttpClient();
             try
             {
                 var serialize = JsonConvert.SerializeObject(dataToSend);
                 var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
-                Console.WriteLine("ToSend" + toSend.ReadAsStringAsync().Result);
                 var result = client.PostAsync(dbManagerApi + "/db-manager/" + apiPath, toSend).Result;
-                Console.WriteLine(result.ReasonPhrase);
+                return JsonConvert.DeserializeObject<Token>(result.Content.ReadAsStringAsync().Result);
             }
             catch (Exception ex)
             {
+                
                 Console.WriteLine(ex.Message);
+                return null;
             }
         }
 

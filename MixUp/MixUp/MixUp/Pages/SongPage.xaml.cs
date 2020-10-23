@@ -1,14 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using ClassLibrary.Models;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
 
 namespace MixUp.Pages
@@ -48,10 +44,10 @@ namespace MixUp.Pages
 
             await Task.Run(async () =>
             {
-                var isFinished = await _client.GetAsync(mixupApi + "auth-finished");
-                while (String.Equals(isFinished.Content.ReadAsStringAsync().Result, "false"))
+                var isFinished = JsonConvert.DeserializeObject<Token>(getResult.Content.ReadAsStringAsync().Result);
+                while (String.IsNullOrEmpty(isFinished.Id))
                 {
-                    isFinished = await _client.GetAsync(mixupApi + "auth-finished");
+                    isFinished = JsonConvert.DeserializeObject<Token>(getResult.Content.ReadAsStringAsync().Result);
                 }
 
                 Device.BeginInvokeOnMainThread(() =>

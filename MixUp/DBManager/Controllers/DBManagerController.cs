@@ -1,5 +1,5 @@
 using System;
-using DBManager.Models;
+using ClassLibrary.Models;
 using DBManager.Services;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
@@ -41,11 +41,11 @@ namespace DBManager.Controllers
 
         [HttpPost]
         [Route("Token/Add")]
-        public void AddToken([FromBody] Token newToken)
+        public ActionResult<Token> AddToken([FromBody] Token newToken)
         {
             Console.WriteLine(newToken.RefreshToken);
             Console.WriteLine(newToken.ExpiresIn);
-            _userService.Create(newToken);
+            return _userService.Create(newToken);
         }
     }
 }
