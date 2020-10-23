@@ -45,26 +45,34 @@ namespace MixUp.Pages
                 Children = { loginView }
             };
 
-            var isFinished = _client.GetAsync(mixupApi + "auth-finished").Result;
-            while (isFinished.Content.ReadAsStringAsync().Result != "true")
-            {
-                Console.WriteLine(isFinished.Content.ReadAsStringAsync().Result);
-            }
-            Console.WriteLine(isFinished.Content.ReadAsStringAsync().Result);
 
-            StackLayout songsLayout = new StackLayout()
+            await Task.Run(async () =>
             {
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                Spacing = 0,
-                Children = {
-                    new Label()
-                    {
-                        Text = "Song Page",
-                        HorizontalOptions = LayoutOptions.Start
-                    }
-
+                var isFinished = await _client.GetAsync(mixupApi + "auth-finished");
+                while (String.Equals(isFinished.Content.ReadAsStringAsync().Result, "false"))
+                {
+                    isFinished = await _client.GetAsync(mixupApi + "auth-finished");
                 }
-            };
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Content = new StackLayout()
+                    {
+                        VerticalOptions = LayoutOptions.FillAndExpand,
+                        Spacing = 0,
+                        Children =
+                        {
+                            new Label()
+                            {
+                                Text = "Song Page",
+                                HorizontalOptions = LayoutOptions.Start
+                            }
+                        }
+                    };
+                });
+            });
+
+
 
         }
     }

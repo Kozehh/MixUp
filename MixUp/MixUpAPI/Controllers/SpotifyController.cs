@@ -27,7 +27,7 @@ namespace MixUpAPI.Controllers
         private string _code; // Code received from authorize access -> Will be exchange for an access
         
 
-        private readonly string _dbManagerApi = Environment.GetEnvironmentVariable("DB_MANAGER_ADDR");
+        private string dbManagerApi = Environment.GetEnvironmentVariable("DB_MANAGER_ADDR");
 
 
         [HttpGet]
@@ -134,7 +134,7 @@ namespace MixUpAPI.Controllers
                 var serialize = JsonConvert.SerializeObject(dataToSend);
                 var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
                 Console.WriteLine("ToSend" + toSend.ReadAsStringAsync().Result);
-                var result = client.PostAsync(_dbManagerApi + "/db-manager/" + apiPath, toSend).Result;
+                var result = client.PostAsync(dbManagerApi + "/db-manager/" + apiPath, toSend).Result;
                 Console.WriteLine(result.ReasonPhrase);
             }
             catch (Exception ex)
