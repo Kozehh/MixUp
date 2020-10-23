@@ -17,7 +17,6 @@ namespace MixUpAPI.Controllers
         private const string _authURL = "https://accounts.spotify.com/authorize?";
         private const string _tokenURL = "https://accounts.spotify.com/api/token";
         private const string _playlistURL = "https://api.spotify.com/v1/me/playlists";
-        private HttpClient _client = new HttpClient();
 
         public string client_secret = "e86971bae67043eaa474a084eab7b356";
         public string client_id = "d8235676727f4a1b9938a49627c86640";
@@ -26,36 +25,42 @@ namespace MixUpAPI.Controllers
         private string _state = "profile activity";
         public string scope = "user-read-private user-read-email";
         private string _code; // Code received from authorize access -> Will be exchange for an access
+        
 
-        private string _dbManagerApi = Environment.GetEnvironmentVariable("DB_MANAGER_ADDR");
-        //private string _dbManagerApi = "http://localhost:9000/db-manager/";
+        private readonly string _dbManagerApi = Environment.GetEnvironmentVariable("DB_MANAGER_ADDR");
 
 
         [HttpGet]
+        [Route("auth-finished")]
+        public bool AuhentificationFinished()
+        {
+            return Program.authentificationFinished;
+        }
+
+        [HttpGet]
         [Route("callback")]
-        public bool LoginFailed([FromQuery] string code, [FromQuery] string state, [FromQuery] string error)
+        public void Callback([FromQuery] string code, [FromQuery] string state, [FromQuery] string error)
         {
             if (error != null)
             {
                 // TODO : Show error
                 Console.WriteLine(error);
-                return false;
             }
             else if (state == null || _state != state)
             {
                 // TODO : Error: State mismatch
-                return false;
+                Console.WriteLine("Error: State mismatch");
             }
             else
             {
                 Program.code = code;
                 RequestToken();
-                return true;
+                Program.authentificationFinished = true;
             }
         }
 
         [HttpGet]
-        [Route("Authenticate")]
+        [Route("authenticate")]
         public string Authenticate()
         {
             var param = new Dictionary<string, string>()
@@ -72,7 +77,7 @@ namespace MixUpAPI.Controllers
         }
 
         [HttpGet]
-        [Route("RequestToken")]
+        [Route("requestToken")]
         public void RequestToken()
         {
             string s = "authorization_code";
@@ -92,7 +97,7 @@ namespace MixUpAPI.Controllers
         }
 
         [HttpPost]
-        [Route("RefreshToken")]
+        [Route("refreshToken")]
         public Token RefreshToken([FromBody] Token tokenToRefresh)
         {
 

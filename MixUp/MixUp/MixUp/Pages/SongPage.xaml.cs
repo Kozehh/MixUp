@@ -16,7 +16,7 @@ namespace MixUp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SongPage : ContentPage
     {
-        private string _mixUpApi = "http://10.44.88.242/mixup/Authenticate";
+        private string mixupApi = "http://10.44.88.242/mixup/";
         private HttpClient _client;
         public SongPage()
         {
@@ -26,7 +26,7 @@ namespace MixUp.Pages
 
         async void OnLoginButtonClicked(object sender, EventArgs args)
         { 
-            var getResult = _client.GetAsync(_mixUpApi).Result;
+            var getResult = _client.GetAsync(mixupApi + "authenticate").Result;
             var source = new UrlWebViewSource
             {
                 Url = getResult.Content.ReadAsStringAsync().Result
@@ -40,10 +40,32 @@ namespace MixUp.Pages
                 HeightRequest = 1000
             };
 
-            this.Content = new StackLayout()
+            Content = new StackLayout()
             {
                 Children = { loginView }
             };
+
+            var isFinished = _client.GetAsync(mixupApi + "auth-finished").Result;
+            while (isFinished.Content.ReadAsStringAsync().Result != "true")
+            {
+                Console.WriteLine(isFinished.Content.ReadAsStringAsync().Result);
+            }
+            Console.WriteLine(isFinished.Content.ReadAsStringAsync().Result);
+
+            StackLayout songsLayout = new StackLayout()
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                Spacing = 0,
+                Children = {
+                    new Label()
+                    {
+                        Text = "Song Page",
+                        HorizontalOptions = LayoutOptions.Start
+                    }
+
+                }
+            };
+
         }
     }
 }

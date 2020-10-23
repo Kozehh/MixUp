@@ -13,6 +13,8 @@ namespace MixUpAPI
     public class Program
     {
         public static string code { get; set; }
+        public static bool authentificationFinished = false;
+
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
