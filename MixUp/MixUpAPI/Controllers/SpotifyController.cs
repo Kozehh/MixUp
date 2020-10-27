@@ -39,7 +39,7 @@ namespace MixUpAPI.Controllers
 
         [HttpGet]
         [Route("callback")]
-        public ActionResult<Token> Callback([FromQuery] string code, [FromQuery] string state, [FromQuery] string error)
+        public string Callback([FromQuery] string code, [FromQuery] string state, [FromQuery] string error)
         {
             if (error != null)
             {
@@ -55,10 +55,7 @@ namespace MixUpAPI.Controllers
             }
             else
             {
-                Program.code = code;
-                Token tok = RequestToken();
-                Program.authentificationFinished = true;
-                return tok;
+                return code;
             }
         }
 
@@ -84,6 +81,7 @@ namespace MixUpAPI.Controllers
         public Token RequestToken()
         {
             string s = "authorization_code";
+            Console.WriteLine("code : " + Program.code);
             var param = new Dictionary<string, string>()
             {
                 {"code", Program.code },

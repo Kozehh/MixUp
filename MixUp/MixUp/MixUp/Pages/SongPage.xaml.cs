@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -36,20 +37,26 @@ namespace MixUp.Pages
                 HeightRequest = 1000
             };
 
+
             Content = new StackLayout()
             {
                 Children = { loginView }
             };
 
-
+            Console.WriteLine(loginView.Source);
+            /*
             await Task.Run(async () =>
             {
-                var isFinished = JsonConvert.DeserializeObject<Token>(getResult.Content.ReadAsStringAsync().Result);
-                while (String.IsNullOrEmpty(isFinished.Id))
+                //var res = await _client.GetAsync(mixupApi + "callback");
+                //var token = res.Content.ReadAsStringAsync().Result;
+                //Console.WriteLine(token);
+                /*
+                while (string.IsNullOrEmpty(JsonConvert.DeserializeObject<Token>(token).AccessToken))
                 {
-                    isFinished = JsonConvert.DeserializeObject<Token>(getResult.Content.ReadAsStringAsync().Result);
+                    token = res.Content.ReadAsStringAsync().Result;
                 }
-
+                
+                Console.WriteLine(getResult.Content.ReadAsStringAsync().Result);
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     Content = new StackLayout()
@@ -67,8 +74,7 @@ namespace MixUp.Pages
                     };
                 });
             });
-
-
+            */
 
         }
     }
