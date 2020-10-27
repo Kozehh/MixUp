@@ -26,6 +26,8 @@ namespace MixUp
             // Establish the remote endpoint for the socket. This example uses port 13000 on the local computer. 
             ipHost = Dns.GetHostEntry(Dns.GetHostName());
             ipAddr = ipHost.AddressList[0];
+            // HARDCODED IP ADRESS
+            ipAddr = System.Net.IPAddress.Parse("192.168.232.2");
             if (session.lobbyPage.ip != null)
             {
                 ipAddr = IPAddress.Parse(session.lobbyPage.ip.ToString());
