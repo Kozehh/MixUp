@@ -13,7 +13,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MixUp
 {
@@ -36,9 +36,15 @@ namespace MixUp
             connectionManager.ConnectToServer();
         }
 
-        public void UpdateLobby()
+        public void UpdateLobby(byte[] byteRecv)
         {
-            lobbyPage.Update();
+            Stream stream = new MemoryStream(byteRecv);
+            BinaryFormatter bf = new BinaryFormatter();
+            lobby = (Lobby)bf.Deserialize(stream);
+            stream.Close();
+
+            lobbyPage.Update(lobby);
+
         }
 
     }

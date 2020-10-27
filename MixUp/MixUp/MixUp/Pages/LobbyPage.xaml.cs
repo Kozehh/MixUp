@@ -15,7 +15,7 @@ namespace MixUp.Pages
     {
         Session session;
         public String ip;
-        public LobbyPage(String name, String ip)
+        public LobbyPage(String ip)
         {
             InitializeComponent();
             this.ip = ip;
@@ -33,8 +33,9 @@ namespace MixUp.Pages
             session.connectionManager.SendMessage(messageToSend);
         }
 
-        public void Update()
+        public void Update(Lobby lobby)
         {
+            lobbyIp.Text = lobby.ipAddress.ToString();
             // TO DO : REFRESH PAGE
         }
     }

@@ -57,11 +57,8 @@ namespace MixUp
                     Console.WriteLine("client receive blockk...");
                     byte[] messageReceived = new byte[1024];
                     int byteRecv = sender.Receive(messageReceived);
-                    if (Encoding.ASCII.GetString(messageReceived, 0, byteRecv) == "UPDATE LOBBY")
-                    {
-                        // TO DO : RAJOUTER LE LOBBY SERIALISED EN PARAMETRE
-                        session.UpdateLobby();
-                    }
+                    // TO DO : RAJOUTER LE LOBBY SERIALISED EN PARAMETRE
+                    session.UpdateLobby(messageReceived);
                     Console.WriteLine("Message from Server -> {0}", Encoding.ASCII.GetString(messageReceived, 0, byteRecv));
                 }
             }

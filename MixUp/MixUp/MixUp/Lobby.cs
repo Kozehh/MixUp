@@ -23,19 +23,21 @@ namespace MixUp
     public class Lobby : ISerializable
     {
         public List<String> connectedUsers;
+        public IPAddress ipAddress;
         public Lobby()
         {
             connectedUsers = new List<String>();
-            connectedUsers.Add("MathPelo");
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            info.AddValue("ipAddress", ipAddress);
             info.AddValue("connectedUsers", connectedUsers);
         }
 
         public Lobby(SerializationInfo info, StreamingContext context)
         {
+            ipAddress = (IPAddress)info.GetValue("ipAddress", typeof(IPAddress));
             connectedUsers = (List<String>)info.GetValue("connectedUsers", typeof(List<String>));
         }
     }

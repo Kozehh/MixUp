@@ -24,7 +24,7 @@ namespace MixUp.Pages
 
         async void OnJoinButtonClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new Pages.LobbyPage(nameEntry.Text, ipEntry.Text));
+            await Navigation.PushAsync(new Pages.LobbyPage(null));
         }
 
     }

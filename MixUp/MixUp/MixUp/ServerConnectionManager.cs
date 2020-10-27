@@ -13,7 +13,7 @@ namespace MixUp
     class ServerConnectionManager
     {
         IPHostEntry ipHost;
-        IPAddress ipAddr;
+        public IPAddress ipAddr;
         IPEndPoint localEndPoint;
         Socket listener;
         Server server;

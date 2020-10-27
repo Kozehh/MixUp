@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Linq;
 using System.Collections;
 
+
 namespace MixUp
 {
     class ServerThread
@@ -48,31 +49,61 @@ namespace MixUp
         {
             // TO DO :
             // 1. Serialiser le lobby.
-            Stream stream = File.Open("LobbyData.dat", FileMode.Create);
+            // SerializePath
+            string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            folder += "/LobbyData.dat";
+
+            Stream stream = File.Open(folder, FileMode.Create);
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, server.serverLobby);
             stream.Close();
 
 
-            server.serverLobby = null;
 
-            stream = File.Open("LobbyData.dat", FileMode.Open);
-            bf = new BinaryFormatter();
-            server.serverLobby = (Lobby)bf.Deserialize(stream);
-            stream.Close();
 
-            Console.WriteLine(server.serverLobby);
-            
+
+            Console.WriteLine(server.serverLobby.connectedUsers[0]);
+
+
+
+            stream = File.Open(folder, FileMode.Open);
+            byte[] message = ReadFully(stream);
+
             // 2. envoyer le lobby par message.
-            SendMessage(ref socket, "UPDATE LOBBY");
+            SendMessage(ref socket, message);
+
 
         }
 
-        private void SendMessage(ref Socket socket, String messageToServer)
-        {
-            byte[] message = Encoding.ASCII.GetBytes(messageToServer);
+        private void SendMessage(ref Socket socket, byte[] message)
+        { 
+
             // Send a message to Client using Send() method 
             socket.Send(message);
         }
-    } 
+
+        public static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
+
+    }
+
 }
+
+
+/*
+            
+            bf = new BinaryFormatter();
+            server.serverLobby = (Lobby)bf.Deserialize(stream);
+            stream.Close();
+*/
