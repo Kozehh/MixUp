@@ -18,18 +18,13 @@ namespace MixUp.Pages
         public LobbyPage(String name, String ip)
         {
             InitializeComponent();
-
             this.ip = ip;
-
             // Start the Session thread
             Session lobbySession = new Session(this);
             this.session = lobbySession;
-
-
             System.Threading.ThreadStart clientWork = lobbySession.ExecuteClient;
             Thread clientThread = new Thread(clientWork);
             clientThread.Start();
-
         }
 
         void OnSendButtonClicked(object sender, EventArgs args)

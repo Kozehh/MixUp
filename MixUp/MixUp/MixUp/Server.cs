@@ -13,15 +13,16 @@ namespace MixUp
 {
     class Server
     {
-
+        public Lobby serverLobby;
 
         public List<ServerThread> serverThreads;
 
         public List<Socket> connectedUsersList;
 
-        ServerConnectionManager serverConnectionManager;
+        public ServerConnectionManager serverConnectionManager;
         public Server()
         {
+            serverLobby = new Lobby();
             serverThreads = new List<ServerThread>();
             connectedUsersList = new List<Socket>();
             serverConnectionManager = new ServerConnectionManager(this);

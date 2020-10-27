@@ -25,9 +25,7 @@ namespace MixUp.Pages
             System.Threading.ThreadStart work = lobbyServer.ExecuteServer;
             Thread serverThread = new Thread(work);
             serverThread.Start();
-
             await Navigation.PushAsync(new Pages.LobbyPage(nameEntry.Text, null));
-            
         }
 
         async void OnSettingsButtonClicked(object sender, EventArgs args)
