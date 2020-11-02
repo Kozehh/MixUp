@@ -19,12 +19,12 @@ namespace MixUp.Pages
 
         async void OnHostButtonClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new Pages.HostPage());
+            await Navigation.PushAsync(new HostPage());
         }
 
         async void OnJoinButtonClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new Pages.LobbyPage(nameEntry.Text));
+            await Navigation.PushAsync(new LobbyPage(nameEntry.Text));
         }
 
     }

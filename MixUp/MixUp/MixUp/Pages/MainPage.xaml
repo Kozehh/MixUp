@@ -36,7 +36,7 @@
                         VerticalOptions="Center"
                         BackgroundColor="#1DB954"
                         TextColor="white"
-                        Clicked="OnLobbyShortcutButtonClicked" />
+                        Clicked="OnPlayerShortcutButtonClicked" />
 
             <Button Text="Song page"
                     HorizontalOptions="CenterAndExpand"

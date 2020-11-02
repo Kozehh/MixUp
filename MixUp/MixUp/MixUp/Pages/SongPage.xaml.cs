@@ -43,7 +43,7 @@ namespace MixUp.Pages
                 Children = { loginView }
             };
 
-            Console.WriteLine(loginView.Source);
+            await Navigation.PushAsync(new HomePage());
             /*
             await Task.Run(async () =>
             {

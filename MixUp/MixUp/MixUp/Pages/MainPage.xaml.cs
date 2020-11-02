@@ -13,9 +13,7 @@ namespace MixUp
         public MainPage()
         {
             InitializeComponent();
-
-           
-
+            
         }
 
         async void OnLoginButtonClicked(object sender, EventArgs args)
@@ -23,9 +21,9 @@ namespace MixUp
             await Navigation.PushAsync(new Pages.HomePage());
         }
 
-        async void OnLobbyShortcutButtonClicked(object sender, EventArgs args)
+        async void OnPlayerShortcutButtonClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new Pages.HomePage());
+            await Navigation.PushAsync(new Pages.MediaPlayer());
         }
 
         async void OnSongPageButtonClicked(object sender, EventArgs args)
