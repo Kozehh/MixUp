@@ -5,14 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Threading;
-using System;
 using Xamarin.Forms.Internals;
-
-
-using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MixUp
@@ -22,15 +15,16 @@ namespace MixUp
         public Lobby lobby;
         public ConnectionManager connectionManager;
         public MixUp.Pages.LobbyPage lobbyPage;
+        public String name;
 
-        public Session(MixUp.Pages.LobbyPage lobbyPage)
+        public Session(String name, MixUp.Pages.LobbyPage lobbyPage)
         {
             this.lobbyPage = lobbyPage;
             connectionManager = new ConnectionManager(this);
-            lobby = new Lobby();
+            lobby = new Lobby(null);
+            this.name = name;
         }
 
-        // ExecuteClient() Method 
         public void ExecuteClient()
         {
             connectionManager.ConnectToServer();
@@ -42,10 +36,23 @@ namespace MixUp
             BinaryFormatter bf = new BinaryFormatter();
             lobby = (Lobby)bf.Deserialize(stream);
             stream.Close();
-
             lobbyPage.Update(lobby);
-
         }
 
+        public void JoinLobby(String name) 
+        {
+            String command = "/cJoin:";
+            command += name;
+            SendMessage(command);
+        }
+
+        public void SendMessage(String message)
+        {
+            byte[] messageSent = Encoding.ASCII.GetBytes(message);
+            if (connectionManager.socket != null)
+            {
+                int byteSent = this.connectionManager.socket.Send(messageSent);
+            }
+        }
     }
 }

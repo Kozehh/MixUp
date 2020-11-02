@@ -26,39 +26,32 @@ namespace MixUp
             ipHost = Dns.GetHostEntry(Dns.GetHostName());
             ipAddr = ipHost.AddressList[0];
             localEndPoint = new IPEndPoint(ipAddr, 11000);
-
             // Creation TCP/IP Socket using Socket Class Costructor 
             listener = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
         }
 
         public void AcceptConnection()
         {
-
             try
-            {
-                // Using Bind() method we associate a network address to the Server Socket 
-                // All client that will connect to this Server Socket must know this network Address 
+            { 
                 listener.Bind(localEndPoint);
-
-                // Using Listen() method we create the Client list that will want 
-                // to connect to Server 
                 listener.Listen(10);
 
                 while (true)
                 {
-
                     Console.WriteLine("Waiting connection ... ");
-
                     try
                     {
+                        if (server.token.IsCancellationRequested) {
+                            break;
+                        }
                         // Suspend while waiting for  incoming connection Using Accept() method the server will accept connection of client 
                         Socket clientSocket = listener.Accept();
                         Console.WriteLine("Server accepted!!!");
                         ServerThread st = new ServerThread(clientSocket, this.server);
                         Thread serverThread = new Thread(new System.Threading.ThreadStart(st.ExecuteServerThread));
                         serverThread.Start();
-                        server.connectedUsersList.Add(clientSocket);
+                        server.serverThreads.Add(serverThread);
                     }
                     catch (Exception excep)
                     {
@@ -66,15 +59,6 @@ namespace MixUp
                     }
 
                 }
-                /*
-
-                // Data buffer 
-
-                // Close client Socket using the Close() method. After closing, 
-                // we can use the closed Socket for a new Client Connection 
-                clientSocket.Shutdown(SocketShutdown.Both);
-                clientSocket.Close();
-                }*/
             }
             catch (Exception e)
             {

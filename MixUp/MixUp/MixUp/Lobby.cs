@@ -24,7 +24,7 @@ namespace MixUp
     {
         public List<String> connectedUsers;
         public IPAddress ipAddress;
-        public Lobby()
+        public Lobby(String hostName)
         {
             connectedUsers = new List<String>();
         }

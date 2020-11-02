@@ -50,10 +50,10 @@
                         TextColor="white"
                         Clicked="OnSendButtonClicked" />
 
+                
+
             </StackLayout>
 
-            
-            
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -24,11 +24,11 @@ namespace MixUp
             this.server = lobbyServer;
         }
 
-        
         public void ExecuteServerThread()
         {
             byte[] bytes = new Byte[1024];
 
+            // server receiving loop 
             while (true)
             {
                 string data = null;
@@ -38,7 +38,14 @@ namespace MixUp
                 Console.WriteLine("Text received -> {0} ", data);
 
                 // 1. INTERPRETER LE MESSAGE/COMMANDE RECU
-                // EST CE QU'IL S'AGIT D'UNE CHACON RAJOUTER, ...
+                if (data.Length > 1)
+                {
+                    if (data.Substring(0, 2) == "/c")
+                    {
+                        CommandInterpreter(data.Substring(2));
+                    }
+                }
+
                 // 2. UPDATE LE LOBBY TOUT LE TEMPS 
                 UpdateLobby();
             }
@@ -47,37 +54,26 @@ namespace MixUp
 
         public void UpdateLobby()
         {
-            // TO DO :
             // 1. Serialiser le lobby.
             // SerializePath
             string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             folder += "/LobbyData.dat";
 
-            Stream stream = File.Open(folder, FileMode.Create);
+            Stream stream = File.Open(folder, FileMode.OpenOrCreate);
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, server.serverLobby);
             stream.Close();
 
-
-
-
-
-            Console.WriteLine(server.serverLobby.connectedUsers[0]);
-
-
-
             stream = File.Open(folder, FileMode.Open);
             byte[] message = ReadFully(stream);
+            stream.Close();
 
             // 2. envoyer le lobby par message.
             SendMessage(ref socket, message);
-
-
         }
 
         private void SendMessage(ref Socket socket, byte[] message)
         { 
-
             // Send a message to Client using Send() method 
             socket.Send(message);
         }
@@ -96,14 +92,21 @@ namespace MixUp
             }
         }
 
+        public void CommandInterpreter(String commandLine)
+        {
+            string command = commandLine.Substring(0, commandLine.IndexOf(":"));
+            string parameters = commandLine.Substring(commandLine.IndexOf(":") + 1);
+            switch (command)
+            {
+                case "Join":
+                    server.serverLobby.connectedUsers.Add(parameters);
+                    return;
+
+                default:
+                    return;
+            }
+        }
+
     }
 
 }
-
-
-/*
-            
-            bf = new BinaryFormatter();
-            server.serverLobby = (Lobby)bf.Deserialize(stream);
-            stream.Close();
-*/

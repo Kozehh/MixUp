@@ -15,19 +15,29 @@ namespace MixUp
     {
         public Lobby serverLobby;
 
-        public List<ServerThread> serverThreads;
+        public List<Thread> serverThreads;
 
         public List<Socket> connectedUsersList;
 
         public ServerConnectionManager serverConnectionManager;
-        public Server()
+
+        public String hostName;
+
+        public CancellationTokenSource _tokenSource;
+        public CancellationToken token;
+
+        public Server(String hostName)
         {
-            serverLobby = new Lobby();
-            serverThreads = new List<ServerThread>();
+            _tokenSource = new CancellationTokenSource();
+            token = _tokenSource.Token;
+            this.hostName = hostName;
+            serverLobby = new Lobby(hostName);
+            serverThreads = new List<Thread>();
             connectedUsersList = new List<Socket>();
             serverConnectionManager = new ServerConnectionManager(this);
             serverLobby.connectedUsers.Add("MathPelo");
             serverLobby.connectedUsers.Add("AnthoRicher");
+            serverLobby.connectedUsers.Add("AnthoRicher2");
             serverLobby.ipAddress = serverConnectionManager.ipAddr;
         }
 
