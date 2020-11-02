@@ -19,31 +19,41 @@ namespace MixUp.Pages
         {
             InitializeComponent();
             _client = new HttpClient();
+            _client.Timeout = TimeSpan.FromSeconds(4);
         }
 
         async void OnLoginButtonClicked(object sender, EventArgs args)
-        { 
-            var getResult = _client.GetAsync(mixupApi + "authenticate").Result;
-            var source = new UrlWebViewSource
+        {
+            try
             {
-                Url = getResult.Content.ReadAsStringAsync().Result
-            };
+                var getResult = await _client.GetAsync(mixupApi + "authenticate");
+                var source = new UrlWebViewSource
+                {
+                    Url = getResult.Content.ReadAsStringAsync().Result
+                };
 
-            WebView loginView = new WebView()
+                WebView loginView = new WebView()
+                {
+                    Source = source,
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    WidthRequest = 1000,
+                    HeightRequest = 1000
+                };
+
+
+                Content = new StackLayout()
+                {
+                    Children = {loginView}
+                };
+
+                await Navigation.PushAsync(new HomePage());
+            }
+            catch (Exception ex)
             {
-                Source = source,
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                WidthRequest = 1000,
-                HeightRequest = 1000
-            };
-
-
-            Content = new StackLayout()
-            {
-                Children = { loginView }
-            };
-
-            await Navigation.PushAsync(new HomePage());
+                await DisplayAlert("Error", ex.Message, "OK");
+                await Navigation.PushAsync(new MainPage());
+            }
+                
             /*
             await Task.Run(async () =>
             {
