@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClassLibrary.Models;
 using Xamarin.Forms;
 
 namespace MixUp
@@ -18,7 +19,7 @@ namespace MixUp
 
         async void OnLoginButtonClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new Pages.HomePage());
+            await Navigation.PushAsync(new Pages.HomePage(new Token()));
         }
 
         async void OnPlayerShortcutButtonClicked(object sender, EventArgs args)
