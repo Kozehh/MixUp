@@ -15,67 +15,59 @@ namespace MixUp.Pages
     {
         private string mixupApi = "http://10.44.88.242/mixup/";
         private HttpClient _client;
+        static WebView loginView;
         public SongPage()
         {
             InitializeComponent();
-            _client = new HttpClient();
+            _client = new HttpClient
+            {
+                Timeout = TimeSpan.FromSeconds(4)
+            };
         }
 
         async void OnLoginButtonClicked(object sender, EventArgs args)
-        { 
-            var getResult = _client.GetAsync(mixupApi + "authenticate").Result;
-            var source = new UrlWebViewSource
+        {
+            
+            try
             {
-                Url = getResult.Content.ReadAsStringAsync().Result
-            };
-
-            WebView loginView = new WebView()
-            {
-                Source = source,
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                WidthRequest = 1000,
-                HeightRequest = 1000
-            };
-
-
-            Content = new StackLayout()
-            {
-                Children = { loginView }
-            };
-
-            await Navigation.PushAsync(new HomePage());
-            /*
-            await Task.Run(async () =>
-            {
-                //var res = await _client.GetAsync(mixupApi + "callback");
-                //var token = res.Content.ReadAsStringAsync().Result;
-                //Console.WriteLine(token);
-                /*
-                while (string.IsNullOrEmpty(JsonConvert.DeserializeObject<Token>(token).AccessToken))
+                var getResult = _client.GetAsync(mixupApi + "authenticate").Result;
+                var source = new UrlWebViewSource
                 {
-                    token = res.Content.ReadAsStringAsync().Result;
-                }
+                    Url = getResult.Content.ReadAsStringAsync().Result
+                };
+
+                loginView = new WebView()
+                {
+                    Source = source,
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    WidthRequest = 1000,
+                    HeightRequest = 1000
+                };
+                loginView.Navigated += view_Navigated;
+
+                Content = new StackLayout()
+                {
+                    Children = {loginView}
+                };
                 
-                Console.WriteLine(getResult.Content.ReadAsStringAsync().Result);
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    Content = new StackLayout()
-                    {
-                        VerticalOptions = LayoutOptions.FillAndExpand,
-                        Spacing = 0,
-                        Children =
-                        {
-                            new Label()
-                            {
-                                Text = "Song Page",
-                                HorizontalOptions = LayoutOptions.Start
-                            }
-                        }
-                    };
-                });
-            });
-            */
 
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+                await Navigation.PushAsync(new MainPage());
+            }
+        }
+
+        // Get the token from the Spotify rediret
+        public async void view_Navigated(object sender, EventArgs e)
+        {
+            Token token = new Token()
+            {
+                AccessToken = await loginView.EvaluateJavaScriptAsync("document.body.innerText")
+            };
+
+            await Navigation.PushAsync(new HomePage(token));
         }
     }
 }
