@@ -17,9 +17,14 @@ namespace MixUp.Pages
         public String ip;
         public String name;
         private Thread clientThread;
-        public LobbyPage(String name)
+        private Thread serverThread;
+        private Server server;
+        public LobbyPage(String name, String ip, Thread st, Server server)
         {
             InitializeComponent();
+            this.server = server;
+            this.serverThread = st;
+            this.ip = ip;
             this.name = name;
             // Start the Session thread
             Session lobbySession = new Session(name, this);
@@ -29,6 +34,21 @@ namespace MixUp.Pages
             clientThread.Start();
         }
         
+        async void OnDisconnectButtonClicked(object sender, EventArgs args)
+        {
+            if(serverThread != null)
+            {
+                foreach(Thread t in server.serverThreads)
+                {
+                    t.Abort();
+                }
+                serverThread.Abort();
+            }
+            
+            clientThread.Abort();
+            await Navigation.PopAsync();
+        }
+
 
         void OnSendButtonClicked(object sender, EventArgs args)
         {

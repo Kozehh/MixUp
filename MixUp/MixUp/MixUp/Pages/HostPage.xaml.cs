@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,17 +22,16 @@ namespace MixUp.Pages
         async void OnCreateLobbyButtonClicked(object sender, EventArgs args)
         {
             // Start Server thread
-            Server lobbyServer = new Server(nameEntry.Text);
+            Server lobbyServer = new Server(null);
             System.Threading.ThreadStart work = lobbyServer.ExecuteServer;
             Thread serverThread = new Thread(work);
             serverThread.Start();
 
-            await Navigation.PushAsync(new Pages.LobbyPage(nameEntry.Text));
-        }
-
-        async void OnSettingsButtonClicked(object sender, EventArgs args)
-        {
-            await Navigation.PopAsync();
+            IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
+            IPAddress ipAddr = ipHost.AddressList[0];
+            String ip = ipAddr.ToString();
+            
+            await Navigation.PushAsync(new Pages.LobbyPage(null, ip, serverThread, lobbyServer));
         }
 
 

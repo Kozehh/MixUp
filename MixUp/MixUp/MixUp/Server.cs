@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace MixUp
 {
-    class Server
+    public class Server
     {
         public Lobby serverLobby;
 
@@ -23,13 +23,8 @@ namespace MixUp
 
         public String hostName;
 
-        public CancellationTokenSource _tokenSource;
-        public CancellationToken token;
-
         public Server(String hostName)
         {
-            _tokenSource = new CancellationTokenSource();
-            token = _tokenSource.Token;
             this.hostName = hostName;
             serverLobby = new Lobby(hostName);
             serverThreads = new List<Thread>();

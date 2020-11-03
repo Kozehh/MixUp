@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace MixUp
 {
-    class ServerConnectionManager
+    public class ServerConnectionManager
     {
         IPHostEntry ipHost;
         public IPAddress ipAddr;
@@ -42,9 +42,6 @@ namespace MixUp
                     Console.WriteLine("Waiting connection ... ");
                     try
                     {
-                        if (server.token.IsCancellationRequested) {
-                            break;
-                        }
                         // Suspend while waiting for  incoming connection Using Accept() method the server will accept connection of client 
                         Socket clientSocket = listener.Accept();
                         Console.WriteLine("Server accepted!!!");

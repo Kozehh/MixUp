@@ -52,7 +52,16 @@
 
                 
 
+
+
             </StackLayout>
+
+            <Button Text="Disconnect from Server!"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="Center"
+                        BackgroundColor="#red"
+                        TextColor="white"
+                        Clicked="OnDisconnectButtonClicked" />
 
         </Grid>
     </ContentPage.Content>

@@ -23,7 +23,8 @@ namespace MixUp
         {
             this.session = session;
             ipHost = Dns.GetHostEntry(Dns.GetHostName());
-            ipAddr = ipHost.AddressList[0];
+            //ipAddr = ipHost.AddressList[0];
+            ipAddr = IPAddress.Parse(session.lobbyPage.ip);
             localEndPoint = new IPEndPoint(ipAddr, port);
             sender = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
         }
