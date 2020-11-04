@@ -60,18 +60,23 @@ namespace MixUp.Pages
             }
         }
 
-        // Get the token from the Spotify rediret
+        // Get the auth code from the Spotify redirect
+        // And get the token afterward
         public async void view_Navigated(object sender, EventArgs e)
         {
-            Token token = new Token()
-            {
-                AccessToken = await loginView.EvaluateJavaScriptAsync("document.body.innerText")
-            };
+            var authCode = await loginView.EvaluateJavaScriptAsync("document.body.innerText");
 
-            var serialize = JsonConvert.SerializeObject(token);
+            var serialize = JsonConvert.SerializeObject(authCode);
             var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
-            var result = _client.PostAsync(mixupApi + "user", toSend).Result;
-            var user = JsonConvert.DeserializeObject<User>(result.Content.ReadAsStringAsync().Result);
+            var result = _client.PostAsync(mixupApi + "requestToken", toSend).Result;
+            var json = result.Content.ReadAsStringAsync().Result;
+            var token = JsonConvert.DeserializeObject<Token>(json);
+
+            serialize = JsonConvert.SerializeObject(token);
+            toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
+            result = _client.PostAsync(mixupApi + "user", toSend).Result;
+            json = result.Content.ReadAsStringAsync().Result;
+            var user = JsonConvert.DeserializeObject<User>(json);
             //var res = _client.GetAsync()
             await Navigation.PushAsync(new HomePage(token));
         }

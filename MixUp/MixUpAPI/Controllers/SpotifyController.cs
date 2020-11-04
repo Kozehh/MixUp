@@ -78,15 +78,15 @@ namespace MixUpAPI.Controllers
             return newUrl;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("requestToken")]
-        public Token RequestToken()
+        public Token RequestToken([FromBody] string code)
         {
             string s = "authorization_code";
-            Console.WriteLine("code : " + Program.code);
+            Console.WriteLine("code : " + code);
             var param = new Dictionary<string, string>()
             {
-                {"code", Program.code },
+                {"code", code },
                 {"redirect_uri", redirect_uri},
                 {"grant_type", s},
                 {"client_id", client_id},
@@ -117,18 +117,28 @@ namespace MixUpAPI.Controllers
             return tokenRefreshed;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("user")]
         public async Task<User> GetUser([FromBody] Token token)
         {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
-
-            var res = await client.GetAsync(_userURL);
-            var json = await res.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<User>(json);
-            Console.WriteLine("xd");
-            return user;
+            try
+            {
+                Console.WriteLine(token.AccessToken);
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+                
+                var res = client.GetAsync(_userURL).Result;
+                var json = res.Content.ReadAsStringAsync().Result;
+                var user = JsonConvert.DeserializeObject<User>(json);
+                Console.WriteLine(user.Email);
+                return user;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+            
         }
 
         public Token GetNewToken(Dictionary<string, string> requestBody)

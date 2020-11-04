@@ -42,10 +42,10 @@ namespace ClassLibrary.Models
         
         [JsonProperty("images")]
         public List<Image> ProfileImages { get; set; }
-
+        /*
         [JsonProperty("explicit_content")]
         public bool Explicit { get; set; }
-
+        */
         [JsonProperty("external_urls")]
         public ExternalUrl Urls { get; set; }
 
@@ -53,6 +53,7 @@ namespace ClassLibrary.Models
         public Follower Followers { get; set; }
     }
 
+    [JsonArray]
     public class Image
     {
         [JsonProperty("height")]
@@ -71,7 +72,7 @@ namespace ClassLibrary.Models
         public string UserApi { get; set; }
 
         [JsonProperty("total")]
-        public int followers { get; set; }
+        public int Followers { get; set; }
     }
 
     public class ExternalUrl
