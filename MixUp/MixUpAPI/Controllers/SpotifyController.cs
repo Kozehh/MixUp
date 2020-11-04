@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using ClassLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -17,6 +18,7 @@ namespace MixUpAPI.Controllers
         private const string _authURL = "https://accounts.spotify.com/authorize?";
         private const string _tokenURL = "https://accounts.spotify.com/api/token";
         private const string _playlistURL = "https://api.spotify.com/v1/me/playlists";
+        private const string _userURL = "https://api.spotify.com/v1/me";
 
         public string client_secret = "e86971bae67043eaa474a084eab7b356";
         public string client_id = "d8235676727f4a1b9938a49627c86640";
@@ -115,6 +117,20 @@ namespace MixUpAPI.Controllers
             return tokenRefreshed;
         }
 
+        [HttpGet]
+        [Route("user")]
+        public async Task<User> GetUser([FromBody] Token token)
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+
+            var res = await client.GetAsync(_userURL);
+            var json = await res.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<User>(json);
+            Console.WriteLine("xd");
+            return user;
+        }
+
         public Token GetNewToken(Dictionary<string, string> requestBody)
         {
             HttpClient client = new HttpClient();
@@ -154,6 +170,7 @@ namespace MixUpAPI.Controllers
             var xd = JsonConvert.DeserializeObject(json);
             Console.WriteLine("xd");
         }
+        
 
     }
 }

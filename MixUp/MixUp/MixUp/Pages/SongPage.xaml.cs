@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -67,6 +68,11 @@ namespace MixUp.Pages
                 AccessToken = await loginView.EvaluateJavaScriptAsync("document.body.innerText")
             };
 
+            var serialize = JsonConvert.SerializeObject(token);
+            var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
+            var result = _client.PostAsync(mixupApi + "user", toSend).Result;
+            var user = JsonConvert.DeserializeObject<User>(result.Content.ReadAsStringAsync().Result);
+            //var res = _client.GetAsync()
             await Navigation.PushAsync(new HomePage(token));
         }
     }
