@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Newtonsoft.Json.Serialization;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -64,21 +64,23 @@ namespace MixUp.Pages
         // And get the token afterward
         public async void view_Navigated(object sender, EventArgs e)
         {
+            HttpClient c = new HttpClient();
             var authCode = await loginView.EvaluateJavaScriptAsync("document.body.innerText");
 
             var serialize = JsonConvert.SerializeObject(authCode);
             var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
-            var result = _client.PostAsync(mixupApi + "requestToken", toSend).Result;
+            var result = c.PostAsync(mixupApi + "requestToken", toSend).Result;
             var json = result.Content.ReadAsStringAsync().Result;
             var token = JsonConvert.DeserializeObject<Token>(json);
 
-            serialize = JsonConvert.SerializeObject(token);
-            toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
-            result = _client.PostAsync(mixupApi + "user", toSend).Result;
-            json = result.Content.ReadAsStringAsync().Result;
-            var user = JsonConvert.DeserializeObject<User>(json);
-            //var res = _client.GetAsync()
-            await Navigation.PushAsync(new HomePage(token));
+            // Get Spotify's user info
+            HttpClient client = new HttpClient();
+            var s = JsonConvert.SerializeObject(token);
+            var send = new StringContent(s, Encoding.UTF8, "application/json");
+            var r = client.PostAsync(mixupApi + "user", send).Result;
+            var user = JsonConvert.DeserializeObject<User>(r.Content.ReadAsStringAsync().Result);
+            user.token = token;
+            await Navigation.PushAsync(new HomePage(user));
         }
     }
 }
