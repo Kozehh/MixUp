@@ -94,15 +94,11 @@ namespace MixUpAPI.Controllers
             };
 
             var token = GetNewToken(param);
-            Console.WriteLine("access token: " + token.AccessToken);
             // Associate the member with his token in the db
             Token ll = PostDbManager("Token/Add", token);
 
-            Console.WriteLine("After db token :" + ll.AccessToken);
-            Console.WriteLine(ll.Id);
             var json = JsonConvert.SerializeObject(ll);
 
-            Console.WriteLine("json : " + json);
             return json;
         }
 

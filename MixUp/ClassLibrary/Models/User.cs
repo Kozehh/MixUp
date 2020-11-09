@@ -13,7 +13,7 @@ namespace ClassLibrary.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        public Token token;
+        public Token Token;
 
         [BsonElement("Name")]
         [JsonProperty("display_name")]

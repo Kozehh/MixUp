@@ -79,7 +79,10 @@ namespace MixUp.Pages
             var send = new StringContent(s, Encoding.UTF8, "application/json");
             var r = client.PostAsync(mixupApi + "user", send).Result;
             var user = JsonConvert.DeserializeObject<User>(r.Content.ReadAsStringAsync().Result);
-            user.token = token;
+            user.Token = token;
+
+            // TODO: Save user info in DB
+
             await Navigation.PushAsync(new HomePage(user));
         }
     }
