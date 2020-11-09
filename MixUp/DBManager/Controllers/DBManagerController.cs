@@ -41,9 +41,8 @@ namespace DBManager.Controllers
 
         [HttpPost]
         [Route("Token/Add")]
-        public ActionResult<Token> AddToken([FromBody] Token newToken)
+        public Token AddToken([FromBody] Token newToken)
         {
-            Console.WriteLine(newToken.RefreshToken);
             Console.WriteLine(newToken.ExpiresIn);
             return _userService.Create(newToken);
         }

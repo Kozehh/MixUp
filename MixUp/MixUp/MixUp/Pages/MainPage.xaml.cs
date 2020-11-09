@@ -19,7 +19,7 @@ namespace MixUp
 
         async void OnLoginButtonClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new Pages.HomePage(new Token()));
+            await Navigation.PushAsync(new Pages.HomePage(new User()));
         }
 
         async void OnPlayerShortcutButtonClicked(object sender, EventArgs args)

@@ -13,11 +13,11 @@ namespace MixUp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HomePage : ContentPage
     {
-        private Token userToken;
-        public HomePage(Token token)
+        private readonly User _user;
+        public HomePage(User user)
         {
             InitializeComponent();
-            userToken = token;
+            _user = user;
         }
 
         async void OnHostButtonClicked(object sender, EventArgs args)
