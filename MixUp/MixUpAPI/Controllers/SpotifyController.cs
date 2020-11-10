@@ -144,8 +144,6 @@ namespace MixUpAPI.Controllers
 
         public Token GetNewToken(Dictionary<string, string> requestBody)
         {
-            //JsonSerializerSettings settings = new JsonSerializerSettings();
-            //settings.ContractResolver = new DefaultContractResolver();
             HttpClient client = new HttpClient();
             var response = client.PostAsync(_tokenURL, new FormUrlEncodedContent(requestBody)).Result;
             var jsonContent = response.Content.ReadAsStringAsync().Result;

@@ -16,9 +16,9 @@
             </Grid.ColumnDefinitions>
 
 
-            <StackLayout Grid.Column="1"
+            <StackLayout x:Name="Login"
+                         Grid.Column="1"
                          Grid.Row="0">
-
                 <Button Text="Login to Spotify"
                         HorizontalOptions="CenterAndExpand"
                         VerticalOptions="Center"
@@ -28,13 +28,17 @@
                         Clicked="OnLoginButtonClicked" />
 
             </StackLayout>
+            <StackLayout x:Name="log"
+                         IsVisible="False">
+                <ActivityIndicator IsRunning="{Binding Load}" IsVisible="{Binding Load}"></ActivityIndicator>
+                <WebView x:Name="loginview"
+                         VerticalOptions="FillAndExpand"
+                         HeightRequest="1000"
+                         WidthRequest="1000"
+                         IsVisible="{Binding Web}">
 
-            <WebView
-                HorizontalOptions="CenterAndExpand"
-                VerticalOptions="Center"
-                ></WebView>
-
-
+                </WebView>
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
