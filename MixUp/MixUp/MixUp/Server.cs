@@ -25,6 +25,10 @@ namespace MixUp
             serverThreads = new List<ServerThread>();
             connectedUsersList = new List<Socket>();
             serverConnectionManager = new ServerConnectionManager(this);
+            //serverLobby.connectedUsers.Add("MathPelo");
+            //serverLobby.connectedUsers.Add("AnthoRicher");
+            //serverLobby.connectedUsers.Add("AnthoRicher2");
+            //serverLobby.ipAddress = serverConnectionManager.ipAddr;
         }
 
         public void ExecuteServer()

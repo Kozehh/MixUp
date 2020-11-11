@@ -43,17 +43,31 @@
                        x:Name="messageEntry"/>
 
 
-                <Button Text="Send Message to Server!"
+                <!--Button Text="Send Message to Server!"
                         HorizontalOptions="CenterAndExpand"
                         VerticalOptions="Center"
                         BackgroundColor="#1DB954"
                         TextColor="white"
-                        Clicked="OnSendButtonClicked" />
+                        Clicked="OnSendButtonClicked" /-->
+
+                <Button Text="Add song to queue !"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="Center"
+                        BackgroundColor="DarkOrange"
+                        TextColor="White"
+                        Clicked="OnAddSongClicked"/>
+
+
 
             </StackLayout>
 
-            
-            
+            <Button Text="Disconnect from Server!"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="Center"
+                        BackgroundColor="red"
+                        TextColor="white"
+                        Clicked="OnDisconnectButtonClicked" />
+
         </Grid>
     </ContentPage.Content>
 </ContentPage>

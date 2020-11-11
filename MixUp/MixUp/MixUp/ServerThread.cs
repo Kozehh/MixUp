@@ -50,5 +50,36 @@ namespace MixUp
             // Send a message to Client using Send() method 
             socket.Send(message);
         }
-    } 
+
+        public static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
+
+        public void CommandInterpreter(String commandLine)
+        {
+            string command = commandLine.Substring(0, commandLine.IndexOf(":"));
+            string parameters = commandLine.Substring(commandLine.IndexOf(":") + 1);
+            switch (command)
+            {
+                case "Join":
+                    //server.serverLobby.connectedUsers.Add(parameters);
+                    return;
+
+                default:
+                    return;
+            }
+        }
+
+    }
+
 }
