@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using ClassLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace MixUpAPI.Controllers
 {
@@ -76,15 +78,14 @@ namespace MixUpAPI.Controllers
             return newUrl;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("requestToken")]
-        public Token RequestToken()
+        public string RequestToken([FromBody] string code)
         {
             string s = "authorization_code";
-            Console.WriteLine("code : " + Program.code);
             var param = new Dictionary<string, string>()
             {
-                {"code", Program.code },
+                {"code", code },
                 {"redirect_uri", redirect_uri},
                 {"grant_type", s},
                 {"client_id", client_id},
@@ -93,7 +94,11 @@ namespace MixUpAPI.Controllers
 
             var token = GetNewToken(param);
             // Associate the member with his token in the db
-            return PostDbManager("Token/Add", token);
+            Token ll = PostDbManager("Token/Add", token);
+
+            var json = JsonConvert.SerializeObject(ll);
+
+            return json;
         }
 
         [HttpPost]
@@ -109,10 +114,31 @@ namespace MixUpAPI.Controllers
             };
 
             Token tokenRefreshed = GetNewToken(param);
-
             // Update the users token in the db
             PostDbManager("Token/Update", tokenRefreshed);
             return tokenRefreshed;
+        }
+
+        [HttpPost]
+        [Route("user")]
+        public User GetUser([FromBody] Token token)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+                
+                var res = client.GetAsync(_userURL).Result;
+                var userJson = res.Content.ReadAsStringAsync().Result;
+                
+                return JsonConvert.DeserializeObject<User>(userJson);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+            
         }
 
         public Token GetNewToken(Dictionary<string, string> requestBody)

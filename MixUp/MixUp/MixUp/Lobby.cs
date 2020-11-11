@@ -7,6 +7,8 @@ using System.IO;
 using System.Threading;
 using System;
 using Xamarin.Forms.Internals;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 
 using System;
@@ -18,7 +20,8 @@ using ClassLibrary.Models;
 
 namespace MixUp
 {
-    public class Lobby 
+    [Serializable()]
+    public class Lobby : ISerializable
     {
         public List<User> connectedUsers;
         public List<Song> songList;
@@ -29,8 +32,12 @@ namespace MixUp
             songList = new List<Song>();
         }
 
-        public Lobby()
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            info.AddValue("ipAddress", ipAddress);
+            info.AddValue("connectedUsers", connectedUsers);
+            info.AddValue("songList", songList);
+        }
 
         public Lobby(SerializationInfo info, StreamingContext context)
         {
@@ -38,7 +45,5 @@ namespace MixUp
             connectedUsers = (List<User>)info.GetValue("connectedUsers", typeof(List<User>));
             songList = (List<Song>)info.GetValue("songList", typeof(List<Song>));
         }
-
-
     }
 }

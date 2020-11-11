@@ -36,15 +36,12 @@ namespace DBManager.Controllers
         public void UpdateToken([FromBody] Token newToken)
         {
             UserService service = new UserService();
-            service.Update("xd", newToken);
         }
 
         [HttpPost]
         [Route("Token/Add")]
-        public ActionResult<Token> AddToken([FromBody] Token newToken)
+        public Token AddToken([FromBody] Token newToken)
         {
-            Console.WriteLine(newToken.RefreshToken);
-            Console.WriteLine(newToken.ExpiresIn);
             return _userService.Create(newToken);
         }
     }

@@ -43,23 +43,40 @@ namespace MixUp.Pages
             this.name = name;
 
             // Start the Session thread
-            Session lobbySession = new Session(this);
+            Session lobbySession = new Session(name, this);
             this.session = lobbySession;
             ThreadStart clientWork = lobbySession.ExecuteClient;
             clientThread = new Thread(clientWork);
             clientThread.Start();
-
         }
+        
+        async void OnDisconnectButtonClicked(object sender, EventArgs args)
+        {
+            if(serverThread != null)
+            {
+                foreach(Thread t in server.serverThreads)
+                {
+                    t.Abort();
+                }
+                serverThread.Abort();
+            }
+            
+            clientThread.Abort();
+            await Navigation.PopAsync();
+        }
+
 
         void OnSendButtonClicked(object sender, EventArgs args)
         {
             String messageToSend = messageEntry.Text;
-            session.connectionManager.SendMessage(messageToSend);
+            session.SendMessage(messageToSend);
         }
 
-        public void Update()
+        void OnAddSongButtonClicked(object sender, EventArgs args)
         {
-            // TO DO : REFRESH PAGE
+            String songToAdd = "/cAddSong:";
+            songToAdd += songEntry.Text;
+            session.SendMessage(songToAdd);
         }
 
         async void OnAddSongClicked(object sender, EventArgs args)

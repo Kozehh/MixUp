@@ -1,81 +1,114 @@
 ﻿using ClassLibrary.Models;
 using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Newtonsoft.Json.Serialization;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
 
 namespace MixUp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SongPage : ContentPage
+    public partial class SongPage : ContentPage, INotifyPropertyChanged
     {
-        private string mixupApi = "http://10.44.88.242/mixup/";
+        private string mixupApi = "http://10.44.88.242:80/mixup/";
         private HttpClient _client;
+        private User _user;
+        public event PropertyChangedEventHandler PropertyChanged;
+        private bool _web;
+        private bool _load;
+        private WebView _loginView;
+        private StackLayout stack;
+
+        public bool Load
+        {
+            get { return _load; }
+            set { _load = value; OnPropertyChanged();}
+        }
+
+        
+        public bool Web
+        {
+            get { return _web; }
+            set { _web = value; OnPropertyChanged(); }
+        }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public SongPage()
         {
             InitializeComponent();
-            _client = new HttpClient();
+            BindingContext = this;
+            _load = false;
+            _web = true;
+            stack = this.FindByName<StackLayout>("log");
+            _loginView = this.FindByName<WebView>("loginview");
+            _client = new HttpClient
+            {
+                Timeout = TimeSpan.FromSeconds(4)
+            };
         }
 
         async void OnLoginButtonClicked(object sender, EventArgs args)
-        { 
-            var getResult = _client.GetAsync(mixupApi + "authenticate").Result;
-            var source = new UrlWebViewSource
+        {
+            try
             {
-                Url = getResult.Content.ReadAsStringAsync().Result
-            };
-
-            WebView loginView = new WebView()
-            {
-                Source = source,
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                WidthRequest = 1000,
-                HeightRequest = 1000
-            };
-
-
-            Content = new StackLayout()
-            {
-                Children = { loginView }
-            };
-
-            Console.WriteLine(loginView.Source);
-            /*
-            await Task.Run(async () =>
-            {
-                //var res = await _client.GetAsync(mixupApi + "callback");
-                //var token = res.Content.ReadAsStringAsync().Result;
-                //Console.WriteLine(token);
-                /*
-                while (string.IsNullOrEmpty(JsonConvert.DeserializeObject<Token>(token).AccessToken))
+                var getResult = _client.GetAsync(mixupApi + "authenticate").Result;
+                var source = new UrlWebViewSource
                 {
-                    token = res.Content.ReadAsStringAsync().Result;
-                }
-                
-                Console.WriteLine(getResult.Content.ReadAsStringAsync().Result);
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    Content = new StackLayout()
-                    {
-                        VerticalOptions = LayoutOptions.FillAndExpand,
-                        Spacing = 0,
-                        Children =
-                        {
-                            new Label()
-                            {
-                                Text = "Song Page",
-                                HorizontalOptions = LayoutOptions.Start
-                            }
-                        }
-                    };
-                });
-            });
-            */
+                    Url = getResult.Content.ReadAsStringAsync().Result
+                };
+                _loginView.Source = source;
+                _loginView.Navigated += View_Navigated;
+                stack.IsVisible = true;
+                Content = stack;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+                await Navigation.PushAsync(new MainPage());
+            }
+        }
 
+        // Get the auth code from the Spotify redirect
+        // And get the token afterward
+        public async void View_Navigated(object sender, EventArgs e)
+        {
+            Web = false;
+            Load = true;
+            await GetCode();
+            // TODO: Save user info in DB
+            Load = false;
+            await Navigation.PushAsync(new HomePage(_user));
+
+        }
+
+        public async Task GetCode()
+        {
+                HttpClient c = new HttpClient();
+                var authCode = await _loginView.EvaluateJavaScriptAsync("document.body.innerText");
+                var serialize = JsonConvert.SerializeObject(authCode);
+                var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
+                var result = c.PostAsync(mixupApi + "requestToken", toSend).Result;
+                var json = result.Content.ReadAsStringAsync().Result;
+                var token = JsonConvert.DeserializeObject<Token>(json);
+
+                // Get Spotify's user info
+                HttpClient client = new HttpClient();
+                var s = JsonConvert.SerializeObject(token);
+                var send = new StringContent(s, Encoding.UTF8, "application/json");
+                var r = client.PostAsync(mixupApi + "user", send).Result;
+                _user = JsonConvert.DeserializeObject<User>(r.Content.ReadAsStringAsync().Result);
+                _user.Token = token;
         }
     }
 }

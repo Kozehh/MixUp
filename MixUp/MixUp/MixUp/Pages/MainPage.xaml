@@ -24,21 +24,9 @@
         <StackLayout Grid.Column="1"
                          Grid.Row="1">
 
-            <Button Text="Login!"
-                        HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="Center"
-                        BackgroundColor="#1DB954"
-                        TextColor="white"
-                        Clicked="OnLoginButtonClicked" />
 
-            <Button Text="Lobby shortcut"
-                        HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="Center"
-                        BackgroundColor="#1DB954"
-                        TextColor="white"
-                        Clicked="OnLobbyShortcutButtonClicked" />
 
-            <Button Text="Song page"
+            <Button Text="Login"
                     HorizontalOptions="CenterAndExpand"
                     VerticalOptions="Center"
                     BackgroundColor="#1DB954"

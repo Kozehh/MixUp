@@ -11,18 +11,23 @@ using System.Threading;
 
 namespace MixUp
 {
-    class Server
+    public class Server
     {
+        public Lobby serverLobby;
 
-
-        public List<ServerThread> serverThreads;
+        public List<Thread> serverThreads;
 
         public List<Socket> connectedUsersList;
 
-        ServerConnectionManager serverConnectionManager;
-        public Server()
+        public ServerConnectionManager serverConnectionManager;
+
+        public String hostName;
+
+        public Server(String hostName)
         {
-            serverThreads = new List<ServerThread>();
+            this.hostName = hostName;
+            serverLobby = new Lobby(hostName);
+            serverThreads = new List<Thread>();
             connectedUsersList = new List<Socket>();
             serverConnectionManager = new ServerConnectionManager(this);
             //serverLobby.connectedUsers.Add("MathPelo");

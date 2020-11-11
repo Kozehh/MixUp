@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,11 +33,6 @@ namespace MixUp.Pages
             IPAddress ipAddr = ipHost.AddressList[0];
             
             await Navigation.PushAsync(new LobbyPage(null, ipAddr.ToString(), serverThread, lobbyServer, _user));
-        }
-
-        async void OnSettingsButtonClicked(object sender, EventArgs args)
-        {
-            await Navigation.PopAsync();
         }
 
 

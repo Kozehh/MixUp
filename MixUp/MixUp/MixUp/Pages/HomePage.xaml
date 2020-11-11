@@ -39,20 +39,6 @@
                         TextColor="white"
                         Clicked="OnJoinButtonClicked" />
 
-                <Entry Placeholder="Enter your name"
-                       x:Name="nameEntry"/>
-
-                <Entry Placeholder="Enter Ip Address"
-                       x:Name="ipEntry"/>
-
-                <Entry Placeholder="Enter port"
-                       x:Name="portEntry"/>
-
-
-
-
-                
-            
             </StackLayout>
             
         </Grid>

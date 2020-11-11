@@ -24,7 +24,7 @@
                     VerticalOptions="Center" 
                     HorizontalOptions="Center" />
 
-                <Label Text="Lobby id : "
+                <Label Text="Lobby ip : "
                     
                     VerticalOptions="Center" 
                     HorizontalOptions="Center" />
