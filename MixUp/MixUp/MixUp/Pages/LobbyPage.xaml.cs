@@ -75,7 +75,7 @@ namespace MixUp.Pages
         void OnAddSongButtonClicked(object sender, EventArgs args)
         {
             String songToAdd = "/cAddSong:";
-            songToAdd += songEntry.Text;
+            //songToAdd += songEntry.Text;
             session.SendMessage(songToAdd);
         }
 
