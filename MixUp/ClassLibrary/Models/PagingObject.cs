@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using ClassLibrary.Util;
+using Newtonsoft.Json;
 
 namespace ClassLibrary.Models
 {
@@ -9,7 +11,8 @@ namespace ClassLibrary.Models
         public string Href { get; set; }
 
         [JsonProperty("items")]
-        public object[] Items { get; set; }
+        [JsonConverter(typeof(JsonListConverter))]
+        public List<object> Items { get; set; }
 
         [JsonProperty("limit")]
         public int Limit { get; set; }
