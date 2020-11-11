@@ -56,10 +56,18 @@ namespace MixUp.Pages
             session.SendMessage(messageToSend);
         }
 
+        void OnAddSongButtonClicked(object sender, EventArgs args)
+        {
+            String songToAdd = "/cAddSong:";
+            songToAdd += songEntry.Text;
+            session.SendMessage(songToAdd);
+        }
+
         public void Update(Lobby lobby)
         {
             // REFRESH PAGE
             lobbyIp.Text = lobby.ipAddress.ToString();
+            return;
         }
     }
 }

@@ -37,6 +37,7 @@ namespace MixUp
             lobby = (Lobby)bf.Deserialize(stream);
             stream.Close();
             lobbyPage.Update(lobby);
+            return;
         }
 
         public void JoinLobby(String name) 

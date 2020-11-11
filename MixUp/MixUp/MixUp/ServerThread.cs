@@ -102,6 +102,10 @@ namespace MixUp
                     server.serverLobby.connectedUsers.Add(parameters);
                     return;
 
+                case "AddSong":
+                    server.serverLobby.songList.Add(parameters);
+                    return;
+
                 default:
                     return;
             }

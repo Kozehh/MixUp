@@ -35,7 +35,7 @@ namespace MixUp
         {
             info.AddValue("ipAddress", ipAddress);
             info.AddValue("connectedUsers", connectedUsers);
-            info.AddValue("connectedUsers", songList);
+            info.AddValue("songList", songList);
         }
 
         public Lobby(SerializationInfo info, StreamingContext context)
