@@ -11,8 +11,7 @@ namespace ClassLibrary.Models
         public string Href { get; set; }
 
         [JsonProperty("items")]
-        [JsonConverter(typeof(JsonListConverter))]
-        public List<object> Items { get; set; }
+        public object[] Items { get; set; }
 
         [JsonProperty("limit")]
         public int Limit { get; set; }

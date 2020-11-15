@@ -15,7 +15,7 @@ namespace ClassLibrary.Util
             var itemType = objectType.GenericTypeArguments[0];
             foreach (var child in token.Values())
             {
-                var childToken = child.Children().First();
+                var childToken = child.Children().FirstOrDefault();
                 var newObject = Activator.CreateInstance(itemType);
                 serializer.Populate(childToken.CreateReader(), newObject);
                 list.Add(newObject);
