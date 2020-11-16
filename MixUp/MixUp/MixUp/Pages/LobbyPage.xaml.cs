@@ -27,12 +27,6 @@ namespace MixUp.Pages
         private User HostUser;
         private PlaylistService PlaylistService;
 
-        private JsonSerializer Settings = new JsonSerializer()
-        {
-            NullValueHandling = NullValueHandling.Ignore,
-            MissingMemberHandling = MissingMemberHandling.Ignore
-        };
-
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
             InitializeComponent();
@@ -41,7 +35,7 @@ namespace MixUp.Pages
             HostUser = user;
             this.ip = ip;
             this.name = name;
-
+            Queue = new List<Song>();
             // Start the Session thread
             Session lobbySession = new Session(name, this);
             this.session = lobbySession;
@@ -83,17 +77,14 @@ namespace MixUp.Pages
         {
             List<Playlist> playlists = new List<Playlist>();
             PlaylistService = new PlaylistService();
-            var playlist = await PlaylistService.GetPlaylists(HostUser.Token);
-            foreach (var obj in playlist.Items)
+            var userPlaylists = await PlaylistService.GetPlaylists(HostUser.Token);
+            foreach (var playlist in userPlaylists.Items)
             {
-                var o = JObject.FromObject(obj);
-                var x = o.ToObject<Playlist>(Settings);
-                playlists.Add(x);
+                playlists.Add(playlist);
             }
 
-            Song song = playlists[1].Songs[1];
-            Queue.Add(song);
-            Console.WriteLine(playlist.Items);
+            var playlistSongs = await PlaylistService.GetPlaylistSongs(HostUser.Token, playlists[0].Id);
+            Queue.Add(playlistSongs.Items[0].PlaylistSongs);
         }
     }
 }

@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ClassLibrary.Util
 {
+    /*
     public class JsonListConverter: JsonConverter
     {
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -29,5 +30,5 @@ namespace ClassLibrary.Util
         }
         public override bool CanWrite => false;
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) => throw new NotImplementedException();
-    }
+    }*/
 }

@@ -13,7 +13,6 @@ namespace ClassLibrary.Models
         public int DurationMs { get; set; }
 
         [JsonProperty("artists")]
-        [JsonConverter(typeof(JsonListConverter))]
         public List<Artist> Artists { get; set; }
 
         [JsonProperty("name")]

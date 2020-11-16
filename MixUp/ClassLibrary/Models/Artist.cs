@@ -10,7 +10,6 @@ namespace ClassLibrary.Models
         public string Id { get; set; }
 
         [JsonProperty("images")]
-        [JsonConverter(typeof(JsonListConverter))]
         public List<Image> Images { get; set; }
 
         [JsonProperty("name")]

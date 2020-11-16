@@ -12,11 +12,7 @@ namespace ClassLibrary.Models
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("tracks")]
-        [JsonConverter(typeof(JsonListConverter))]
-        public List<Song> Songs { get; set; }
-
         [JsonProperty("images")]
-        public Image[] Images { get; set; }
+        public List<Image> Images { get; set; }
     }
 }
