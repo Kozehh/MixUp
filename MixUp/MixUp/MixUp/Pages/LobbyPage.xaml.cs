@@ -69,17 +69,7 @@ namespace MixUp.Pages
 
         async void OnAddSongClicked(object sender, EventArgs args)
         {
-            List<Playlist> playlists = new List<Playlist>();
-            PlaylistService = new PlaylistService();
-            var userPlaylists = await PlaylistService.GetPlaylists(HostUser.Token);
-            foreach (var playlist in userPlaylists.Items)
-            {
-                playlists.Add(playlist);
-            }
-
-            var playlistSongs = await PlaylistService.GetPlaylistSongs(HostUser.Token, playlists[0].Id);
-            //Queue.Add(playlistSongs.Items[0].Song);
-            session.SendMessage(songToAdd + playlistSongs.Items[0].Song.Id);
+            session.SendMessage(songToAdd + "2gHA5uelC4cmT0Rn91rTm1");
         }
 
         async void OnMusicPageClicked(object sender, EventArgs args)
