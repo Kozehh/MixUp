@@ -26,6 +26,7 @@ namespace MixUp.Pages
         private Server server;
         private User HostUser;
         private PlaylistService PlaylistService;
+        public string songToAdd = "/cAddSong:";
 
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
@@ -66,13 +67,6 @@ namespace MixUp.Pages
             session.SendMessage(messageToSend);
         }
 
-        void OnAddSongButtonClicked(object sender, EventArgs args)
-        {
-            String songToAdd = "/cAddSong:";
-            //songToAdd += songEntry.Text;
-            session.SendMessage(songToAdd);
-        }
-
         async void OnAddSongClicked(object sender, EventArgs args)
         {
             List<Playlist> playlists = new List<Playlist>();
@@ -84,7 +78,13 @@ namespace MixUp.Pages
             }
 
             var playlistSongs = await PlaylistService.GetPlaylistSongs(HostUser.Token, playlists[0].Id);
-            Queue.Add(playlistSongs.Items[0].PlaylistSongs);
+            //Queue.Add(playlistSongs.Items[0].Song);
+            session.SendMessage(songToAdd + playlistSongs.Items[0].Song.Id);
+        }
+
+        async void OnMusicPageClicked(object sender, EventArgs args)
+        {
+            await Navigation.PushAsync(new MusicPage(HostUser));
         }
     }
 }

@@ -5,6 +5,6 @@ namespace ClassLibrary.Models
     public class PlaylistSong<T>
     {
         [JsonProperty("track")]
-        public T PlaylistSongs { get ; set; }
+        public T Song { get ; set; }
     }
 }

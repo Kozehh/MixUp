@@ -15,7 +15,7 @@ using Xamarin.Forms.Xaml;
 namespace MixUp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SongPage : ContentPage, INotifyPropertyChanged
+    public partial class LoginPage : ContentPage, INotifyPropertyChanged
     {
         private string mixupApi = "http://10.44.88.242:80/mixup/";
         private HttpClient _client;
@@ -44,7 +44,7 @@ namespace MixUp.Pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public SongPage()
+        public LoginPage()
         {
             InitializeComponent();
             BindingContext = this;

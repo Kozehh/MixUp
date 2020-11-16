@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClassLibrary.Models;
+using MixUp.Pages;
 using Xamarin.Forms;
 
 namespace MixUp
@@ -17,19 +18,9 @@ namespace MixUp
             
         }
 
-        async void OnLoginButtonClicked(object sender, EventArgs args)
+        async void OnLoginPageButtonClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new Pages.HomePage(new User()));
-        }
-
-        async void OnPlayerShortcutButtonClicked(object sender, EventArgs args)
-        {
-            await Navigation.PushAsync(new Pages.MediaPlayer());
-        }
-
-        async void OnSongPageButtonClicked(object sender, EventArgs args)
-        {
-            await Navigation.PushAsync(new Pages.SongPage());
+            await Navigation.PushAsync(new LoginPage());
         }
 
     }

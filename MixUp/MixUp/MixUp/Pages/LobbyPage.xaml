@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MixUp.Pages.LobbyPage">
     <ContentPage.Content>
+        <!--
         <Grid Margin="20,35,20,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -14,11 +15,10 @@
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-
+        -->
             
 
-            <StackLayout Grid.Column="1"
-                         Grid.Row="1">
+            <StackLayout>
                 <Label Text="LobbyPage!"
                     
                     VerticalOptions="Center" 
@@ -42,13 +42,13 @@
                 <Entry Placeholder="Enter message to send"
                        x:Name="messageEntry"/>
 
-
-                <!--Button Text="Send Message to Server!"
+                <Button Text="Send Message to Server!"
                         HorizontalOptions="CenterAndExpand"
                         VerticalOptions="Center"
                         BackgroundColor="#1DB954"
                         TextColor="white"
-                        Clicked="OnSendButtonClicked" /-->
+                        Clicked="OnSendButtonClicked" />
+
 
                 <Button Text="Add song to queue !"
                         HorizontalOptions="CenterAndExpand"
@@ -57,17 +57,26 @@
                         TextColor="White"
                         Clicked="OnAddSongClicked"/>
 
+                <Button Text="MUSIC PAGE"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="Center"
+                        BackgroundColor="DeepPink"
+                        TextColor="white"
+                        Clicked="OnMusicPageClicked"/>
 
+            
 
-            </StackLayout>
+            
 
-            <Button Text="Disconnect from Server!"
+                <Button Text="Disconnect from Server!"
                         HorizontalOptions="CenterAndExpand"
                         VerticalOptions="Center"
                         BackgroundColor="red"
                         TextColor="white"
                         Clicked="OnDisconnectButtonClicked" />
+            </StackLayout>
 
-        </Grid>
+
+        <!--/Grid-->
     </ContentPage.Content>
 </ContentPage>
