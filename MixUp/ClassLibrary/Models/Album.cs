@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace ClassLibrary.Models
 {
+    [Serializable]
     public class Album
     {
         [JsonProperty("id")]

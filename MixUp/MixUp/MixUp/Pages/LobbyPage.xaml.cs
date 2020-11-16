@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,6 +44,10 @@ namespace MixUp.Pages
             ThreadStart clientWork = lobbySession.ExecuteClient;
             clientThread = new Thread(clientWork);
             clientThread.Start();
+
+
+            HttpClient client = new HttpClient();
+
         }
         
         async void OnDisconnectButtonClicked(object sender, EventArgs args)
@@ -60,6 +65,10 @@ namespace MixUp.Pages
             await Navigation.PopAsync();
         }
 
+        public void Update(Lobby lobby)
+        {
+            lobbyIp.Text = lobby.ipAddress.ToString();
+        }
 
         void OnSendButtonClicked(object sender, EventArgs args)
         {

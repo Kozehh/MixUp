@@ -93,7 +93,7 @@ namespace MixUp
             }
         }
 
-        public async System.Threading.Tasks.Task CommandInterpreterAsync(String commandLine)
+        public void CommandInterpreterAsync(String commandLine)
         {
             string command = commandLine.Substring(0, commandLine.IndexOf(":"));
             string parameters = commandLine.Substring(commandLine.IndexOf(":") + 1);
@@ -102,16 +102,14 @@ namespace MixUp
                 case "Join":
                     //server.serverLobby.connectedUsers.Add(parameters);
                     return;
-
                 case "AddSong":
                     User user = server._userHost;
                     SongService service = new SongService();
-                    Song song = await service.GetSongById(server._userHost.Token, parameters);
+                    Song song = service.GetSongById(server._userHost.Token, parameters).Result;
                     //server.serverLobby.connectedUsers.Add(parameters);
                     //server.serverLobby.songList.Add();
                     server.serverLobby.songList.Add(song);
                     return;
-
                 default:
                     return;
             }

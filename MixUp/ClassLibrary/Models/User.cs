@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace ClassLibrary.Models
 {
-    [JsonObject]
+    [Serializable]
     public class User
     {
         [BsonId]

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 
 namespace ClassLibrary.Models
 {
+    [Serializable]
     public class Token
     {
         [BsonId]
