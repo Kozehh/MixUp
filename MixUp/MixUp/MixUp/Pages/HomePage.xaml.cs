@@ -22,7 +22,7 @@ namespace MixUp.Pages
 
         async void OnHostButtonClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new HostPage());
+            await Navigation.PushAsync(new HostPage(_user));
         }
 
         async void OnJoinButtonClicked(object sender, EventArgs args)

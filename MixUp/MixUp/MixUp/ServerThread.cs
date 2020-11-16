@@ -99,7 +99,7 @@ namespace MixUp
             switch (command)
             {
                 case "Join":
-                    server.serverLobby.connectedUsers.Add(parameters);
+                    //server.serverLobby.connectedUsers.Add(parameters);
                     return;
 
                 default:

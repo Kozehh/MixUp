@@ -36,7 +36,8 @@ namespace MixUp
             BinaryFormatter bf = new BinaryFormatter();
             lobby = (Lobby)bf.Deserialize(stream);
             stream.Close();
-            lobbyPage.Update(lobby);
+            //lobbyPage.Update(lobby);
+            return;
         }
 
         public void JoinLobby(String name) 

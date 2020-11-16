@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using ClassLibrary.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -19,7 +19,7 @@ namespace MixUp.Pages
 
         async void OnJoinClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new LobbyPage(null, ipEntry.Text, null, null));
+            await Navigation.PushAsync(new LobbyPage(null, ipEntry.Text, null, null, new User()));
         }
     }
 }

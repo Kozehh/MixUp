@@ -18,7 +18,6 @@ namespace MixUpAPI.Controllers
     {
         private const string _authURL = "https://accounts.spotify.com/authorize?";
         private const string _tokenURL = "https://accounts.spotify.com/api/token";
-        private const string _playlistURL = "https://api.spotify.com/v1/me/playlists";
         private const string _userURL = "https://api.spotify.com/v1/me";
 
         public string client_secret = "e86971bae67043eaa474a084eab7b356";
@@ -171,16 +170,7 @@ namespace MixUpAPI.Controllers
             }
         }
 
-        static async void GetPlaylists(Token token)
-        {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
-
-            var res = await client.GetAsync(_playlistURL);
-            var json = await res.Content.ReadAsStringAsync();
-            var xd = JsonConvert.DeserializeObject(json);
-            Console.WriteLine("xd");
-        }
+        
         
 
     }

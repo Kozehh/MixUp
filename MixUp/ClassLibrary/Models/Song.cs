@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using ClassLibrary.Util;
+using Newtonsoft.Json;
 
 namespace ClassLibrary.Models
 {
@@ -11,7 +13,7 @@ namespace ClassLibrary.Models
         public int DurationMs { get; set; }
 
         [JsonProperty("artists")]
-        public Artist[] Artists { get; set; }
+        public List<Artist> Artists { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }

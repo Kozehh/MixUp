@@ -15,6 +15,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using ClassLibrary.Models;
 
 
 namespace MixUp
@@ -22,27 +23,27 @@ namespace MixUp
     [Serializable()]
     public class Lobby : ISerializable
     {
-        public List<String> connectedUsers;
-        public List<String> songList;
+        public List<User> connectedUsers;
+        public List<Song> songList;
         public IPAddress ipAddress;
         public Lobby(String hostName)
         {
-            connectedUsers = new List<String>();
-            songList = new List<String>();
+            connectedUsers = new List<User>();
+            songList = new List<Song>();
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("ipAddress", ipAddress);
             info.AddValue("connectedUsers", connectedUsers);
-            info.AddValue("connectedUsers", songList);
+            info.AddValue("songList", songList);
         }
 
         public Lobby(SerializationInfo info, StreamingContext context)
         {
             ipAddress = (IPAddress)info.GetValue("ipAddress", typeof(IPAddress));
-            connectedUsers = (List<String>)info.GetValue("connectedUsers", typeof(List<String>));
-            songList = (List<String>)info.GetValue("songList", typeof(List<String>));
+            connectedUsers = (List<User>)info.GetValue("connectedUsers", typeof(List<User>));
+            songList = (List<Song>)info.GetValue("songList", typeof(List<Song>));
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using ClassLibrary.Util;
+using Newtonsoft.Json;
 
 namespace ClassLibrary.Models
 {
@@ -10,10 +12,7 @@ namespace ClassLibrary.Models
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("tracks")]
-        public Song[] Songs { get; set; }
-
         [JsonProperty("images")]
-        public Image[] Images { get; set; }
+        public List<Image> Images { get; set; }
     }
 }
