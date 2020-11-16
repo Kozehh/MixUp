@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using ClassLibrary.Models;
 
 namespace MixUp
 {
@@ -20,13 +21,12 @@ namespace MixUp
         public List<Socket> connectedUsersList;
 
         public ServerConnectionManager serverConnectionManager;
+        public User _userHost;
 
-        public String hostName;
-
-        public Server(String hostName)
+        public Server(User user)
         {
-            this.hostName = hostName;
-            serverLobby = new Lobby(hostName);
+            _userHost = user;
+            serverLobby = new Lobby(user);
             serverThreads = new List<Thread>();
             connectedUsersList = new List<Socket>();
             serverConnectionManager = new ServerConnectionManager(this);

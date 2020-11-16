@@ -26,7 +26,7 @@ namespace MixUp
         public List<User> connectedUsers;
         public List<Song> songList;
         public IPAddress ipAddress;
-        public Lobby(String hostName)
+        public Lobby(User host)
         {
             connectedUsers = new List<User>();
             songList = new List<Song>();

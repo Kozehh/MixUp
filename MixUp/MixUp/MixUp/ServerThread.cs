@@ -9,7 +9,8 @@ using System.Runtime.Serialization;
 
 using System.Linq;
 using System.Collections;
-
+using ClassLibrary.Models;
+using MixUp.Services;
 
 namespace MixUp
 {
@@ -42,7 +43,7 @@ namespace MixUp
                 {
                     if (data.Substring(0, 2) == "/c")
                     {
-                        CommandInterpreter(data.Substring(2));
+                        CommandInterpreterAsync(data.Substring(2));
                     }
                 }
 
@@ -92,7 +93,7 @@ namespace MixUp
             }
         }
 
-        public void CommandInterpreter(String commandLine)
+        public async System.Threading.Tasks.Task CommandInterpreterAsync(String commandLine)
         {
             string command = commandLine.Substring(0, commandLine.IndexOf(":"));
             string parameters = commandLine.Substring(commandLine.IndexOf(":") + 1);
@@ -100,6 +101,15 @@ namespace MixUp
             {
                 case "Join":
                     //server.serverLobby.connectedUsers.Add(parameters);
+                    return;
+
+                case "AddSong":
+                    User user = server._userHost;
+                    SongService service = new SongService();
+                    Song song = await service.GetSongById(server._userHost.Token, parameters);
+                    //server.serverLobby.connectedUsers.Add(parameters);
+                    //server.serverLobby.songList.Add();
+                    server.serverLobby.songList.Add(song);
                     return;
 
                 default:

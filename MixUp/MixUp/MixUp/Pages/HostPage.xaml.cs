@@ -24,7 +24,7 @@ namespace MixUp.Pages
         async void OnCreateLobbyButtonClicked(object sender, EventArgs args)
         {
             // Start Server thread
-            Server lobbyServer = new Server(null);
+            Server lobbyServer = new Server(_user);
             ThreadStart work = lobbyServer.ExecuteServer;
             Thread serverThread = new Thread(work);
             serverThread.Start();
