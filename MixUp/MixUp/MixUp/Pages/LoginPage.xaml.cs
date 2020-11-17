@@ -1,4 +1,5 @@
-﻿using ClassLibrary.Models;
+﻿using Android.Webkit;
+using ClassLibrary.Models;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using WebView = Xamarin.Forms.WebView;
 
 namespace MixUp.Pages
 {
@@ -69,6 +71,8 @@ namespace MixUp.Pages
             {
                 Timeout = TimeSpan.FromSeconds(4)
             };
+
+            //ClearCookies();
         }
 
         // Login to spotify
@@ -132,5 +136,11 @@ namespace MixUp.Pages
             return JsonConvert.DeserializeObject<User>(result.Content.ReadAsStringAsync().Result);
         }
 
+        // Clear the webview cookies
+        public void ClearCookies()
+        {
+            var cookieManager = CookieManager.Instance;
+            cookieManager.RemoveAllCookie();
+        }
     }
 }
