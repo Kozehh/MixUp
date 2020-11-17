@@ -17,7 +17,7 @@ namespace MixUp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage : ContentPage, INotifyPropertyChanged
     {
-        private string mixupApi = "http://10.44.88.242:80/mixup/";
+        private string mixupApi = @"http://10.44.88.242/mixup/";
         private HttpClient _client;
         private User _user;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -25,6 +25,7 @@ namespace MixUp.Pages
         private bool _load;
         private WebView _loginView;
         private StackLayout stack;
+        private bool finishedLogin;
 
         public bool Load
         {
@@ -32,7 +33,6 @@ namespace MixUp.Pages
             set { _load = value; OnPropertyChanged();}
         }
 
-        
         public bool Web
         {
             get { return _web; }
@@ -50,6 +50,7 @@ namespace MixUp.Pages
             BindingContext = this;
             _load = false;
             _web = true;
+            finishedLogin = false;
             stack = this.FindByName<StackLayout>("log");
             _loginView = this.FindByName<WebView>("loginview");
             _client = new HttpClient
@@ -69,6 +70,13 @@ namespace MixUp.Pages
                 };
                 _loginView.Source = source;
                 _loginView.Navigated += View_Navigated;
+                _loginView.Navigating += (sen, e) =>
+                {
+                    if (e.Url.Contains(mixupApi))
+                    {
+                        finishedLogin = true;
+                    }
+                };
                 stack.IsVisible = true;
                 Content = stack;
             }
@@ -83,13 +91,15 @@ namespace MixUp.Pages
         // And get the token afterward
         public async void View_Navigated(object sender, EventArgs e)
         {
-            Web = false;
-            Load = true;
-            await GetCode();
-            // TODO: Save user info in DB
-            Load = false;
-            await Navigation.PushAsync(new HomePage(_user));
-
+            if (finishedLogin)
+            {
+                Web = false;
+                Load = true;
+                await GetCode();
+                // TODO: Save user info in DB
+                Load = false;
+                await Navigation.PushAsync(new HomePage(_user));
+            }
         }
 
         public async Task GetCode()
