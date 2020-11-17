@@ -19,7 +19,6 @@ namespace MixUp.Pages
     {
         private string mixupApi = @"http://10.44.88.242/mixup/";
         private HttpClient _client;
-        private User _user;
         public event PropertyChangedEventHandler PropertyChanged;
         private bool _web;
         private bool _load;
@@ -27,23 +26,28 @@ namespace MixUp.Pages
         private StackLayout stack;
         private bool finishedLogin;
 
+        // Display the loading overlay when property is set to true
         public bool Load
         {
             get { return _load; }
             set { _load = value; OnPropertyChanged();}
         }
 
+        // Stop displaying the web view when property is set to false
+        // We do that because the token received is shown on the view
         public bool Web
         {
             get { return _web; }
             set { _web = value; OnPropertyChanged(); }
         }
 
+        // Update the property on the UI
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        // LoginPage constructor
         public LoginPage()
         {
             InitializeComponent();
@@ -53,30 +57,37 @@ namespace MixUp.Pages
             finishedLogin = false;
             stack = this.FindByName<StackLayout>("log");
             _loginView = this.FindByName<WebView>("loginview");
+            // Handle Navigated and Navigating events of our webview
+            _loginView.Navigated += View_Navigated;
+            _loginView.Navigating += (sen, e) =>
+            {
+                // If we are naviagting to the callback URL, the login is finished
+                if (e.Url.Contains(mixupApi))
+                {
+                    finishedLogin = true;
+                }
+            };
+            // Create an http client and set a 4 sec timeout
             _client = new HttpClient
             {
                 Timeout = TimeSpan.FromSeconds(4)
             };
         }
 
+        // Login to spotify
         async void OnLoginButtonClicked(object sender, EventArgs args)
         {
             try
             {
+                // Call our API to handle the authentification request
                 var getResult = _client.GetAsync(mixupApi + "authenticate").Result;
+
+                // Receive the URL to login to spotify and update our webview source
                 var source = new UrlWebViewSource
                 {
                     Url = getResult.Content.ReadAsStringAsync().Result
                 };
                 _loginView.Source = source;
-                _loginView.Navigated += View_Navigated;
-                _loginView.Navigating += (sen, e) =>
-                {
-                    if (e.Url.Contains(mixupApi))
-                    {
-                        finishedLogin = true;
-                    }
-                };
                 stack.IsVisible = true;
                 Content = stack;
             }
@@ -91,34 +102,38 @@ namespace MixUp.Pages
         // And get the token afterward
         public async void View_Navigated(object sender, EventArgs e)
         {
+            // If the login process is finished, we redirect the user to the HomePage
             if (finishedLogin)
             {
                 Web = false;
                 Load = true;
-                await GetCode();
-                // TODO: Save user info in DB
+                var token = await GetToken();
+                var user = GetUser(token);
+                user.Token = token;
                 Load = false;
-                await Navigation.PushAsync(new HomePage(_user));
+                await Navigation.PushAsync(new HomePage(user));
             }
         }
 
-        public async Task GetCode()
+        // Getting the user code
+        private async Task<Token> GetToken()
         {
-                HttpClient c = new HttpClient();
                 var authCode = await _loginView.EvaluateJavaScriptAsync("document.body.innerText");
                 var serialize = JsonConvert.SerializeObject(authCode);
                 var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
-                var result = c.PostAsync(mixupApi + "requestToken", toSend).Result;
+                var result = _client.PostAsync(mixupApi + "requestToken", toSend).Result;
                 var json = result.Content.ReadAsStringAsync().Result;
-                var token = JsonConvert.DeserializeObject<Token>(json);
-
-                // Get Spotify's user info
-                HttpClient client = new HttpClient();
-                var s = JsonConvert.SerializeObject(token);
-                var send = new StringContent(s, Encoding.UTF8, "application/json");
-                var r = client.PostAsync(mixupApi + "user", send).Result;
-                _user = JsonConvert.DeserializeObject<User>(r.Content.ReadAsStringAsync().Result);
-                _user.Token = token;
+                return JsonConvert.DeserializeObject<Token>(json);
         }
+
+        // Get Spotify's user info
+        private User GetUser(Token token)
+        {
+            var serialize = JsonConvert.SerializeObject(token);
+            var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
+            var result = _client.PostAsync(mixupApi + "user", toSend).Result;
+            return JsonConvert.DeserializeObject<User>(result.Content.ReadAsStringAsync().Result);
+        }
+
     }
 }
