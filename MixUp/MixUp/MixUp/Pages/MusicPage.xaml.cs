@@ -20,6 +20,7 @@ namespace MixUp.Pages
         private PlaylistService _playlistService;
         private User User;
         private Playlist _playlist;
+        public static PagingObject<PlaylistSong<Song>> playlistSongs;
 
         public Playlist Playlist
         {
@@ -36,7 +37,7 @@ namespace MixUp.Pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private ObservableCollection<PlaylistSong<Song>> songList;
+        public static ObservableCollection<PlaylistSong<Song>> songList;
         public ObservableCollection<PlaylistSong<Song>> SongList
         {
             get { return songList; }
@@ -50,6 +51,7 @@ namespace MixUp.Pages
         public MusicPage(User user)
         {
             InitializeComponent();
+            // à garder !!!!!!!!
             BindingContext = this;
             User = user;
             ShowUserPlaylists();
@@ -68,8 +70,14 @@ namespace MixUp.Pages
             Playlist = playlists[0];
 
 
-            var playlistSongs = await _playlistService.GetPlaylistSongs(User.Token, Playlist.Id);
+            playlistSongs = await _playlistService.GetPlaylistSongs(User.Token, Playlist.Id);
             SongList = new ObservableCollection<PlaylistSong<Song>>(playlistSongs.Items);
         }
+
+        void OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            searchResults.ItemsSource = new ObservableCollection<PlaylistSong<Song>>(SearchBarHandler.GetSearchResults(e.NewTextValue));
+        }
+
     }
 }

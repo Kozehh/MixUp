@@ -8,5 +8,10 @@ namespace ClassLibrary.Models
     {
         [JsonProperty("track")]
         public T Song { get ; set; }
+
+        public override string ToString()
+        {
+            return this.Song.ToString();
+        }
     }
 }

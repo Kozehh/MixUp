@@ -4,6 +4,7 @@
              x:Class="MixUp.Pages.MusicPage"
              xmlns:pv="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView">
 
+
     <pv:PancakeView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
         <pv:PancakeView.BackgroundGradientStops>
             <pv:GradientStopCollection>
@@ -33,7 +34,7 @@
                     </Grid>
                 </pv:PancakeView>
                 <pv:PancakeView HeightRequest="40" WidthRequest="40" CornerRadius="20" Margin="0,-25,40,0" 
-                            HorizontalOptions="End" VerticalOptions="Start" >
+                                HorizontalOptions="End" VerticalOptions="Start" >
                     <pv:PancakeView.BackgroundGradientStops>
                         <pv:GradientStopCollection>
                             <pv:GradientStop Color="#D4420C" Offset="0" />
@@ -43,10 +44,13 @@
                     <Image Source="play.png" HeightRequest="15" WidthRequest="15" HorizontalOptions="Center" VerticalOptions="Center"/>
                 </pv:PancakeView>
             </StackLayout>
-            <CollectionView Grid.Row="1" Margin="20,0" ItemsSource="{Binding SongList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" SelectionMode="Single">
+            <CollectionView Grid.Row="1" Margin="20,-20" ItemsSource="{Binding SongList}" x:Name="searchResults"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" SelectionMode="Single">
                 <!--SelectedItem="{Binding SelectedMusic}" SelectionChangedCommand="{Binding SelectionCommand}"-->
                 <CollectionView.Header>
-                    <Label Text="YOUR PLAYLIST" TextColor="Black" Opacity="0.5" Margin="15,10"/>
+                    <SearchBar x:Name="searchBar"
+                               Placeholder="Search in playlist"
+                               PlaceholderColor="Orange"
+                               TextChanged="OnTextChanged"/>
                 </CollectionView.Header>
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="1"/>
