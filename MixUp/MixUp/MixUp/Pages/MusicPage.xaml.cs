@@ -16,11 +16,20 @@ namespace MixUp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MusicPage : ContentPage, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         private PlaylistService _playlistService;
         private User User;
-        public Playlist Playlist;
+        private Playlist _playlist;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public Playlist Playlist
+        {
+            get { return _playlist;}
+            set
+            {
+                _playlist = value;
+                OnPropertyChanged();
+            }
+        }
 
         public void OnPropertyChanged([CallerMemberName] string name = "")
         {
@@ -28,7 +37,6 @@ namespace MixUp.Pages
         }
 
         private ObservableCollection<PlaylistSong<Song>> songList;
-
         public ObservableCollection<PlaylistSong<Song>> SongList
         {
             get { return songList; }
@@ -42,6 +50,7 @@ namespace MixUp.Pages
         public MusicPage(User user)
         {
             InitializeComponent();
+            BindingContext = this;
             User = user;
             ShowUserPlaylists();
         }
@@ -60,7 +69,7 @@ namespace MixUp.Pages
 
 
             var playlistSongs = await _playlistService.GetPlaylistSongs(User.Token, Playlist.Id);
-            songList = new ObservableCollection<PlaylistSong<Song>>(playlistSongs.Items.Take(5));
+            SongList = new ObservableCollection<PlaylistSong<Song>>(playlistSongs.Items);
         }
     }
 }

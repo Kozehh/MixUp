@@ -5,11 +5,8 @@ using System.ComponentModel;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Serialization;
 using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
 
 namespace MixUp.Pages
