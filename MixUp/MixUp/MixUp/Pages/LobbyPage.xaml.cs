@@ -26,8 +26,7 @@ namespace MixUp.Pages
         private Thread serverThread;
         private Server server;
         private User HostUser;
-        private PlaylistService PlaylistService;
-        public string songToAdd = "/cAddSong:";
+        public const string songToAdd = "/cAddSong:";
 
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
@@ -44,10 +43,6 @@ namespace MixUp.Pages
             ThreadStart clientWork = lobbySession.ExecuteClient;
             clientThread = new Thread(clientWork);
             clientThread.Start();
-
-
-            HttpClient client = new HttpClient();
-
         }
         
         async void OnDisconnectButtonClicked(object sender, EventArgs args)
@@ -60,20 +55,27 @@ namespace MixUp.Pages
                 }
                 serverThread.Abort();
             }
-            
             clientThread.Abort();
             await Navigation.PopAsync();
         }
 
         public void Update(Lobby lobby)
         {
+            if (lobby.songList.Count > 0)
+            {
+                foreach(Song s in lobby.songList)
+                {
+                    Label label = new Label { Text = s.Name, CharacterSpacing = 10 };
+                    //songList.Children.Add(label);
+                }
+            }
             lobbyIp.Text = lobby.ipAddress.ToString();
         }
 
         void OnSendButtonClicked(object sender, EventArgs args)
         {
-            String messageToSend = messageEntry.Text;
-            session.SendMessage(messageToSend);
+            //String messageToSend = messageEntry.Text;
+            //session.SendMessage(messageToSend);
         }
 
         async void OnAddSongClicked(object sender, EventArgs args)

@@ -15,7 +15,6 @@ namespace MixUp
         public MainPage()
         {
             InitializeComponent();
-            
         }
 
         async void OnLoginPageButtonClicked(object sender, EventArgs args)

@@ -15,14 +15,12 @@ namespace MixUp
         public Lobby lobby;
         public ConnectionManager connectionManager;
         public MixUp.Pages.LobbyPage lobbyPage;
-        public String name;
 
         public Session(String name, MixUp.Pages.LobbyPage lobbyPage)
         {
             this.lobbyPage = lobbyPage;
             connectionManager = new ConnectionManager(this);
             lobby = new Lobby(null);
-            this.name = name;
         }
 
         public void ExecuteClient()

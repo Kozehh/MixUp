@@ -1,54 +1,60 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="MixUp.Pages.LobbyPage">
     <ContentPage.Content>
-        <!--
+        
         <Grid Margin="20,35,20,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="5*" />
+                <RowDefinition Height="2*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="6*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-        -->
-            
-
-            <StackLayout>
-                <Label Text="LobbyPage!"
+                 
+            <StackLayout
+                    Grid.Column="1"
+                    Grid.Row="0">
+            <Label Text="Lobby name "
                     
                     VerticalOptions="Center" 
                     HorizontalOptions="Center" />
 
-                <Label Text="Lobby ip : "
-                    
-                    VerticalOptions="Center" 
-                    HorizontalOptions="Center" />
-
-                <Label Text="placeholder"
+            <Label Text="ip address" 
                     x:Name="lobbyIp"
                     VerticalOptions="Center" 
                     HorizontalOptions="Center" />
 
-                <Label Text=""
-                    x:Name="joinName"
+            </StackLayout>
+
+
+            <StackLayout
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    BackgroundColor="LightGray"
+                    VerticalOptions="FillAndExpand" 
+                    HorizontalOptions="FillAndExpand"
+                    x:Name="songList">
+
+                <Label Text="Song list" 
                     VerticalOptions="Center" 
-                    HorizontalOptions="Center" />
-
-                <Entry Placeholder="Enter message to send"
-                       x:Name="messageEntry"/>
-
-                <Button Text="Send Message to Server!"
-                        HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="Center"
-                        BackgroundColor="#1DB954"
-                        TextColor="white"
-                        Clicked="OnSendButtonClicked" />
-
+                    HorizontalOptions="Center"
+                    TextColor="Black"/>
+                
+                
+            </StackLayout>
+            
+            
+            
+            
+            
+            <StackLayout
+                    Grid.Column="1"
+                    Grid.Row="2">
 
                 <Button Text="Add song to queue !"
                         HorizontalOptions="CenterAndExpand"
@@ -64,19 +70,9 @@
                         TextColor="white"
                         Clicked="OnMusicPageClicked"/>
 
-            
-
-            
-
-                <Button Text="Disconnect from Server!"
-                        HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="Center"
-                        BackgroundColor="red"
-                        TextColor="white"
-                        Clicked="OnDisconnectButtonClicked" />
             </StackLayout>
 
 
-        <!--/Grid-->
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

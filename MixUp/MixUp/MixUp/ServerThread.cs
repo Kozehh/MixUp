@@ -46,7 +46,6 @@ namespace MixUp
                         CommandInterpreterAsync(data.Substring(2));
                     }
                 }
-
                 // 2. UPDATE LE LOBBY TOUT LE TEMPS 
                 UpdateLobby();
             }
@@ -99,17 +98,13 @@ namespace MixUp
             string parameters = commandLine.Substring(commandLine.IndexOf(":") + 1);
             switch (command)
             {
-                case "Join":
-                    //server.serverLobby.connectedUsers.Add(parameters);
-                    return;
                 case "AddSong":
                     User user = server._userHost;
                     SongService service = new SongService();
                     Song song = service.GetSongById(server._userHost.Token, parameters).Result;
-                    //server.serverLobby.connectedUsers.Add(parameters);
-                    //server.serverLobby.songList.Add();
                     server.serverLobby.songList.Add(song);
                     return;
+
                 default:
                     return;
             }

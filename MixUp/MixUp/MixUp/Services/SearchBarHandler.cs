@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using ClassLibrary.Models;
 using MixUp.Pages;
-using MixUp.Views;
+//using MixUp.Views;
 using Xamarin.Forms;
 
 namespace MixUp.Services

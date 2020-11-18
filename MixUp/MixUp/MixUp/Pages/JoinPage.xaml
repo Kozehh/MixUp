@@ -27,8 +27,6 @@
                 <Button Text="Join!"
                             HorizontalOptions="CenterAndExpand"
                             VerticalOptions="Center"
-                            BackgroundColor="#1DB954"
-                            TextColor="white"
                             Clicked="OnJoinClicked"/>
 
             </StackLayout>
