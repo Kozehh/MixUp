@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
@@ -29,10 +30,12 @@ namespace MixUp.Pages
         private Server server;
         private User HostUser;
         public const string songToAdd = "/cAddSong:";
+        public Lobby lobbyPagelobby;
 
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
             InitializeComponent();
+            BindingContext = this;
             lobbyIp.Text = "TESTTING";
             this.server = server;
             this.serverThread = st;
@@ -62,10 +65,11 @@ namespace MixUp.Pages
 
         public void Update(Lobby lobby)
         {
-            
+            lobbyPagelobby = lobby;
+            SongList = new ObservableCollection<Song>(lobby.songList);
             Device.BeginInvokeOnMainThread(() =>
             {
-                if (lobby.songList.Count > 0)
+/*                if (lobby.songList.Count > 0)
                 {
                     songList.Children.Clear();
                     foreach (Song s in lobby.songList)
@@ -74,7 +78,7 @@ namespace MixUp.Pages
                         this.songList.Children.Add(label);
                     }
                 }
-
+*/
                 lobbyIp.Text = lobby.ipAddress.ToString();
                 });
         }
@@ -95,6 +99,23 @@ namespace MixUp.Pages
         async void OnMusicPageClicked(object sender, EventArgs args)
         {
             await Navigation.PushAsync(new MusicPage(HostUser));
+        }
+
+        public void OnPropertyChanged([CallerMemberName] string name = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+
+        public static ObservableCollection<Song> songList;
+        public ObservableCollection<Song> SongList
+        {
+            get { return songList; }
+            set
+            {
+                songList = value;
+                OnPropertyChanged();
+            }
         }
     }
 }
