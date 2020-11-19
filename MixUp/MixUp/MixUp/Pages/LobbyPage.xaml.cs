@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,16 +14,16 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using WebView = Xamarin.Forms.WebView;
 
 namespace MixUp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LobbyPage : ContentPage
+    public partial class LobbyPage : ContentPage, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         Session session;
         public string ip;
-        public string name;
-        private List<Song> Queue;
         private Thread clientThread;
         private Thread serverThread;
         private Server server;
@@ -31,12 +33,11 @@ namespace MixUp.Pages
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
             InitializeComponent();
+            lobbyIp.Text = "TESTTING";
             this.server = server;
             this.serverThread = st;
             HostUser = user;
             this.ip = ip;
-            this.name = name;
-            Queue = new List<Song>();
             // Start the Session thread
             Session lobbySession = new Session(name, this);
             this.session = lobbySession;
@@ -61,16 +62,24 @@ namespace MixUp.Pages
 
         public void Update(Lobby lobby)
         {
-            if (lobby.songList.Count > 0)
+            
+            Device.BeginInvokeOnMainThread(() =>
             {
-                foreach(Song s in lobby.songList)
+                if (lobby.songList.Count > 0)
                 {
-                    Label label = new Label { Text = s.Name, CharacterSpacing = 10 };
-                    //songList.Children.Add(label);
+                    songList.Children.Clear();
+                    foreach (Song s in lobby.songList)
+                    {
+                        Label label = new Label { Text = s.Name, CharacterSpacing = 10 };
+                        this.songList.Children.Add(label);
+                    }
                 }
-            }
-            lobbyIp.Text = lobby.ipAddress.ToString();
+
+                lobbyIp.Text = lobby.ipAddress.ToString();
+                });
         }
+
+
 
         void OnSendButtonClicked(object sender, EventArgs args)
         {
@@ -78,7 +87,7 @@ namespace MixUp.Pages
             //session.SendMessage(messageToSend);
         }
 
-        async void OnAddSongClicked(object sender, EventArgs args)
+        void OnAddSongClicked(object sender, EventArgs args)
         {
             session.SendMessage(songToAdd + "2gHA5uelC4cmT0Rn91rTm1");
         }

@@ -22,6 +22,11 @@ namespace MixUp
             // Dns.GetHostName returns the name of the host running the application. 
             ipHost = Dns.GetHostEntry(Dns.GetHostName());
             ipAddr = ipHost.AddressList[0];
+
+            ///
+            server.serverLobby.ipAddress = ipAddr;
+            ///
+
             localEndPoint = new IPEndPoint(ipAddr, 11000);
             // Creation TCP/IP Socket using Socket Class Costructor 
             listener = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -46,6 +51,7 @@ namespace MixUp
                         Thread serverThread = new Thread(new System.Threading.ThreadStart(st.ExecuteServerThread));
                         serverThread.Start();
                         server.serverThreads.Add(serverThread);
+                        server.connectedUsersList.Add(clientSocket);
                     }
                     catch (Exception excep)
                     {

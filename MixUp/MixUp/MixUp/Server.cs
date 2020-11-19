@@ -21,6 +21,7 @@ namespace MixUp
 
         public Server(User user)
         {
+            
             _userHost = user;
             serverLobby = new Lobby(user);
             serverThreads = new List<Thread>();

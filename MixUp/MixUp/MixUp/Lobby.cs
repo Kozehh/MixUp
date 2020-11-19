@@ -5,16 +5,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Threading;
-using System;
 using Xamarin.Forms.Internals;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-
-
-using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using ClassLibrary.Models;
 
 

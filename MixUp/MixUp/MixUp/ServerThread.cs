@@ -69,10 +69,15 @@ namespace MixUp
             stream.Close();
 
             // 2. envoyer le lobby par message.
-            SendMessage(ref socket, message);
+            foreach (Socket sock in server.connectedUsersList)
+            {
+                SendMessage(sock, message);
+            }
+
+            
         }
 
-        private void SendMessage(ref Socket socket, byte[] message)
+        private void SendMessage(Socket socket, byte[] message)
         { 
             // Send a message to Client using Send() method 
             socket.Send(message);
