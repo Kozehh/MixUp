@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Image = Xamarin.Forms.Image;
 using WebView = Xamarin.Forms.WebView;
 
 namespace MixUp.Pages
@@ -31,12 +32,12 @@ namespace MixUp.Pages
         private User HostUser;
         public const string songToAdd = "/cAddSong:";
         public Lobby lobbyPagelobby;
-        private ObservableCollection<Song> songList;
+        public static ObservableCollection<Song> songList;
 
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
             InitializeComponent();
-            BindingContext = this;
+            
             lobbyIp.Text = "TESTTING";
             this.server = server;
             this.serverThread = st;
@@ -48,6 +49,7 @@ namespace MixUp.Pages
             ThreadStart clientWork = lobbySession.ExecuteClient;
             clientThread = new Thread(clientWork);
             clientThread.Start();
+            BindingContext = this;
         }
         
         async void OnDisconnectButtonClicked(object sender, EventArgs args)
@@ -73,8 +75,6 @@ namespace MixUp.Pages
                 lobbyIp.Text = lobby.ipAddress.ToString();
             });
         }
-
-
 
         void OnSendButtonClicked(object sender, EventArgs args)
         {

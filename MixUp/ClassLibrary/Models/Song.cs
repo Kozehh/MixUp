@@ -11,7 +11,7 @@ namespace ClassLibrary.Models
         [JsonProperty("id")]
         public string Id { get; set; }
 
-        [JsonProperty("album")] 
+        [JsonProperty("album")]
         public Album SongAlbum { get; set; }
 
         [JsonProperty("duration_ms")]
@@ -22,10 +22,5 @@ namespace ClassLibrary.Models
 
         [JsonProperty("name")]
         public string Name { get; set; }
-
-        public override string ToString()
-        {
-            return Name;
-        }
     }
 }
