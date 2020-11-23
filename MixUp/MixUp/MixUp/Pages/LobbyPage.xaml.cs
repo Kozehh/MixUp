@@ -82,11 +82,6 @@ namespace MixUp.Pages
             //session.SendMessage(messageToSend);
         }
 
-        void OnAddSongClicked(object sender, EventArgs args)
-        {
-            session.SendMessage(songToAdd + "2gHA5uelC4cmT0Rn91rTm1");
-        }
-
         async void OnMusicPageClicked(object sender, EventArgs args)
         {
             await Navigation.PushAsync(new MusicPage(HostUser, session));

@@ -59,21 +59,11 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            
-            
-            
-            
-            
+
+
             <StackLayout
                     Grid.Column="1"
                     Grid.Row="2">
-
-                <Button Text="Add song to queue !"
-                        HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="Center"
-                        BackgroundColor="DarkOrange"
-                        TextColor="White"
-                        Clicked="OnAddSongClicked"/>
 
                 <Button Text="MUSIC PAGE"
                         HorizontalOptions="CenterAndExpand"
