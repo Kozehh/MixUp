@@ -8,5 +8,10 @@ namespace ClassLibrary.Models
     {
         [JsonProperty("url")]
         public string Url { get; set; }
+
+        public override string ToString()
+        {
+            return Url;
+        }
     }
 }

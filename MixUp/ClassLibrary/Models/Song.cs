@@ -11,6 +11,9 @@ namespace ClassLibrary.Models
         [JsonProperty("id")]
         public string Id { get; set; }
 
+        [JsonProperty("album")] 
+        public Album SongAlbum { get; set; }
+
         [JsonProperty("duration_ms")]
         public int DurationMs { get; set; }
 

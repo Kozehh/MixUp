@@ -31,6 +31,7 @@ namespace MixUp.Pages
         private User HostUser;
         public const string songToAdd = "/cAddSong:";
         public Lobby lobbyPagelobby;
+        private ObservableCollection<Song> songList;
 
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
@@ -69,18 +70,8 @@ namespace MixUp.Pages
             SongList = new ObservableCollection<Song>(lobby.songList);
             Device.BeginInvokeOnMainThread(() =>
             {
-/*                if (lobby.songList.Count > 0)
-                {
-                    songList.Children.Clear();
-                    foreach (Song s in lobby.songList)
-                    {
-                        Label label = new Label { Text = s.Name, CharacterSpacing = 10 };
-                        this.songList.Children.Add(label);
-                    }
-                }
-*/
                 lobbyIp.Text = lobby.ipAddress.ToString();
-                });
+            });
         }
 
 
@@ -106,8 +97,6 @@ namespace MixUp.Pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-
-        public static ObservableCollection<Song> songList;
         public ObservableCollection<Song> SongList
         {
             get { return songList; }
