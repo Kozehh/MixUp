@@ -89,7 +89,7 @@ namespace MixUp.Pages
 
         async void OnMusicPageClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new MusicPage(HostUser));
+            await Navigation.PushAsync(new MusicPage(HostUser, session));
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = "")
