@@ -39,7 +39,7 @@ namespace MixUp.Pages
             SongList = new ObservableCollection<Song>();
             playerService = new MediaPlayerService();
             HostUser = user;
-            HostUser.Devices = playerService.GetUserDevices(HostUser).Result;
+            HostUser.Devices = playerService.GetUserDevices(HostUser);
             lobbyIp.Text = "TESTTING";
             this.server = server;
             serverThread = st;
@@ -107,7 +107,6 @@ namespace MixUp.Pages
             set
             {
                 songList = value;
-                
                 OnPropertyChanged();
             }
         }

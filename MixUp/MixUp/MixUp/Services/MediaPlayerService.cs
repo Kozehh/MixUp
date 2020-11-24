@@ -29,10 +29,10 @@ namespace MixUp.Services
             Console.WriteLine("helloo");
         }
 
-        public async Task<List<PlayerDevice>> GetUserDevices(User user)
+        public List<PlayerDevice> GetUserDevices(User user)
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Token.AccessToken);
-            var res = await client.GetAsync(userDevices);
+            var res = client.GetAsync(userDevices).Result;
             var devices = JsonConvert.DeserializeObject<PayloadObject>(res.Content.ReadAsStringAsync().Result);
             return devices.Devices;
         }
