@@ -12,14 +12,16 @@ namespace MixUp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class JoinPage : ContentPage
     {
-        public JoinPage()
+        private User user;
+        public JoinPage(User user)
         {
             InitializeComponent();
+            this.user = user;
         }
 
         async void OnJoinClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new LobbyPage(null, ipEntry.Text, null, null, new User()));
+            await Navigation.PushAsync(new LobbyPage(null, ipEntry.Text, null, null, user));
         }
     }
 }

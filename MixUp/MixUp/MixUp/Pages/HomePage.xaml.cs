@@ -27,7 +27,7 @@ namespace MixUp.Pages
 
         async void OnJoinButtonClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new JoinPage());
+            await Navigation.PushAsync(new JoinPage(_user));
         }
 
     }
