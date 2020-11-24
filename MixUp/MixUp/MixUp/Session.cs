@@ -20,7 +20,7 @@ namespace MixUp
         {
             this.lobbyPage = lobbyPage;
             connectionManager = new ConnectionManager(this);
-            lobby = new Lobby(null);
+            lobby = new Lobby(null, null);
         }
 
         public void ExecuteClient()

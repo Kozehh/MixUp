@@ -81,6 +81,7 @@ namespace MixUp.Pages
             SongList = new ObservableCollection<Song>(lobby.songList);
             Device.BeginInvokeOnMainThread(() =>
             {
+                lobbyName.Text = lobby.name.ToString();
                 lobbyIp.Text = lobby.ipAddress.ToString();
             });
         }

@@ -25,6 +25,11 @@
             <StackLayout Grid.Column="1"
                          Grid.Row="1">
 
+                <Entry Placeholder="Enter an epic name"
+                       x:Name="lobbyNameEntry"/>
+
+
+
                 <Button Text="Create Lobby!"
                         HorizontalOptions="CenterAndExpand"
                         VerticalOptions="Center"
