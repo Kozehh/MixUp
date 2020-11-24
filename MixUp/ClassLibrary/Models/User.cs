@@ -13,6 +13,8 @@ namespace ClassLibrary.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
+        public List<PlayerDevice> Devices { get; set; }
+
         public Token Token;
 
         [BsonElement("Name")]
