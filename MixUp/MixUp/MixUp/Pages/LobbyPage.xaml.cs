@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using ClassLibrary.Models;
 using MixUp.Services;
 using MongoDB.Bson;
@@ -36,7 +37,12 @@ namespace MixUp.Pages
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
             InitializeComponent();
+
+            Title = "Browse";
+            RefreshCommand = new Command(ExecuteRefreshCommand);
             SongList = new ObservableCollection<Song>();
+
+
             playerService = new MediaPlayerService();
             HostUser = user;
             HostUser.Devices = playerService.GetUserDevices(HostUser);
@@ -103,6 +109,28 @@ namespace MixUp.Pages
                 songList = value;
                 OnPropertyChanged();
             }
+        }
+
+        public ICommand RefreshCommand { get; }
+
+        bool isRefreshing;
+        public bool IsRefreshing
+        {
+            get => isRefreshing;
+            set
+            {
+                isRefreshing = value;
+                OnPropertyChanged(nameof(IsRefreshing));
+            }
+        }
+
+        void ExecuteRefreshCommand()
+        {
+            SongList.Clear();
+            SongList.Add(new Song { Id = "Refreshed Data"});
+            session.SendMessage("refresh");
+            // Stop refreshing
+            IsRefreshing = false;
         }
     }
 }

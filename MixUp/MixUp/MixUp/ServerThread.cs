@@ -106,7 +106,7 @@ namespace MixUp
                 case "AddSong":
                     SongService service = new SongService();
                     Song song = service.GetSongById(server._userHost.Token, parameters).Result;
-                    //server.serverLobby.songList.Add(song);
+                    server.serverLobby.songList.Add(song);
 
                     MediaPlayerService playerService = new MediaPlayerService();
                     playerService.AddToQueue(song, server._userHost.Token);
