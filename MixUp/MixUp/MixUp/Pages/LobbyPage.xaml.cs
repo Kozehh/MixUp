@@ -126,8 +126,6 @@ namespace MixUp.Pages
 
         void ExecuteRefreshCommand()
         {
-            SongList.Clear();
-            SongList.Add(new Song { Id = "Refreshed Data"});
             session.SendMessage("refresh");
             // Stop refreshing
             IsRefreshing = false;
