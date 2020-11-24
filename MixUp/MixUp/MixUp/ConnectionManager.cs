@@ -41,10 +41,11 @@ namespace MixUp
                 while (true)
                 {
                     Console.WriteLine("client receive blockk...");
-                    byte[] messageReceived = new byte[8192];
+                    byte[] messageReceived = new byte[16384];
                     int byteRecv = sender.Receive(messageReceived);
-                    session.UpdateLobby(messageReceived);
                     Console.WriteLine("Message from Server -> {0}", Encoding.ASCII.GetString(messageReceived, 0, byteRecv));
+                    session.UpdateLobby(messageReceived);
+                    
                 }
             }
 

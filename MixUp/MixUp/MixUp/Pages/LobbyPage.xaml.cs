@@ -71,13 +71,7 @@ namespace MixUp.Pages
         public void Update(Lobby lobby)
         {
             lobbyPagelobby = lobby;
-            foreach (Song song in lobby.songList)
-            {
-                if (!SongList.Contains(song))
-                {
-                    playerService.AddToQueue(song, HostUser.Token);
-                }
-            }
+
             SongList = new ObservableCollection<Song>(lobby.songList);
             Device.BeginInvokeOnMainThread(() =>
             {

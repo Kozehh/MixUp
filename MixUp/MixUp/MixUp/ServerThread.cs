@@ -104,10 +104,15 @@ namespace MixUp
             switch (command)
             {
                 case "AddSong":
-                    User user = server._userHost;
                     SongService service = new SongService();
                     Song song = service.GetSongById(server._userHost.Token, parameters).Result;
-                    server.serverLobby.songList.Add(song);
+                    //server.serverLobby.songList.Add(song);
+
+                    MediaPlayerService playerService = new MediaPlayerService();
+                    playerService.AddToQueue(song, server._userHost.Token);
+
+                    // Va chercher la queue
+                    //server.serverLobby.songList = queue;
                     return;
 
                 default:
