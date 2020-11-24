@@ -15,8 +15,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Image = Xamarin.Forms.Image;
-using WebView = Xamarin.Forms.WebView;
 
 namespace MixUp.Pages
 {
@@ -33,19 +31,21 @@ namespace MixUp.Pages
         public const string songToAdd = "/cAddSong:";
         public Lobby lobbyPagelobby;
         public static ObservableCollection<Song> songList;
+        private MediaPlayerService playerService;
 
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
             InitializeComponent();
-            
+            SongList = new ObservableCollection<Song>();
+            playerService = new MediaPlayerService();
             lobbyIp.Text = "TESTTING";
             this.server = server;
-            this.serverThread = st;
+            serverThread = st;
             HostUser = user;
             this.ip = ip;
             // Start the Session thread
             Session lobbySession = new Session(name, this);
-            this.session = lobbySession;
+            session = lobbySession;
             ThreadStart clientWork = lobbySession.ExecuteClient;
             clientThread = new Thread(clientWork);
             clientThread.Start();
@@ -69,6 +69,13 @@ namespace MixUp.Pages
         public void Update(Lobby lobby)
         {
             lobbyPagelobby = lobby;
+            foreach (Song song in lobby.songList)
+            {
+                if (!SongList.Contains(song))
+                {
+                    playerService.AddToQueue(song, HostUser.Token);
+                }
+            }
             SongList = new ObservableCollection<Song>(lobby.songList);
             Device.BeginInvokeOnMainThread(() =>
             {
@@ -98,6 +105,7 @@ namespace MixUp.Pages
             set
             {
                 songList = value;
+                
                 OnPropertyChanged();
             }
         }
