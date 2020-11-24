@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ClassLibrary.Models;
+using MixUp.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using ClassLibrary.Models;
-using MixUp.Services;
-using MongoDB.Bson;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Linq;
 
 namespace MixUp.Pages
 {
@@ -23,34 +16,32 @@ namespace MixUp.Pages
     public partial class LobbyPage : ContentPage, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        Session session;
-        public string ip;
+        
+        public const string songToAddCommand = "/cAddSong:";
+        public static ObservableCollection<Song> songList;
+        public String ip;
+
+        private Lobby lobbyPagelobby;
+        private MediaPlayerService playerService;
         private Thread clientThread;
         private Thread serverThread;
         private Server server;
         private User HostUser;
-        public const string songToAdd = "/cAddSong:";
-        public Lobby lobbyPagelobby;
-        public static ObservableCollection<Song> songList;
-        private MediaPlayerService playerService;
+        private Session session;
 
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
             InitializeComponent();
-
-            Title = "Browse";
             RefreshCommand = new Command(ExecuteRefreshCommand);
             SongList = new ObservableCollection<Song>();
-
-
             playerService = new MediaPlayerService();
-            HostUser = user;
+
+            this.HostUser = user;
             HostUser.Devices = playerService.GetUserDevices(HostUser);
-            lobbyIp.Text = "TESTTING";
             this.server = server;
-            serverThread = st;
-            
+            this.serverThread = st;
             this.ip = ip;
+
             // Start the Session thread
             Session lobbySession = new Session(name, this);
             session = lobbySession;
@@ -58,38 +49,21 @@ namespace MixUp.Pages
             clientThread = new Thread(clientWork);
             clientThread.Start();
             BindingContext = this;
-        }
-        
-        async void OnDisconnectButtonClicked(object sender, EventArgs args)
-        {
-            if(serverThread != null)
-            {
-                foreach(Thread t in server.serverThreads)
-                {
-                    t.Abort();
-                }
-                serverThread.Abort();
-            }
-            clientThread.Abort();
-            await Navigation.PopAsync();
+            
+            // Trigger initial refresh for the page
+            session.SendMessage("refresh");
         }
 
         public void Update(Lobby lobby)
         {
+            // Visually Update the lobby
             lobbyPagelobby = lobby;
-
             SongList = new ObservableCollection<Song>(lobby.songList);
             Device.BeginInvokeOnMainThread(() =>
             {
                 lobbyName.Text = lobby.name.ToString();
                 lobbyIp.Text = lobby.ipAddress.ToString();
             });
-        }
-
-        void OnSendButtonClicked(object sender, EventArgs args)
-        {
-            //String messageToSend = messageEntry.Text;
-            //session.SendMessage(messageToSend);
         }
 
         async void OnMusicPageClicked(object sender, EventArgs args)
@@ -131,5 +105,20 @@ namespace MixUp.Pages
             // Stop refreshing
             IsRefreshing = false;
         }
+
+
+        /*async void OnDisconnectButtonClicked(object sender, EventArgs args)
+        {
+            if (serverThread != null)
+            {
+                foreach (Thread t in server.serverThreads)
+                {
+                    t.Abort();
+                }
+                serverThread.Abort();
+            }
+            clientThread.Abort();
+            await Navigation.PopAsync();
+        }*/
     }
 }

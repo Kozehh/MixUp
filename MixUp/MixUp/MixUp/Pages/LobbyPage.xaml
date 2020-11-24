@@ -20,21 +20,29 @@
             <StackLayout
                     Grid.Column="1"
                     Grid.Row="0">
-            <Label Text="Lobby name "
-                    x:Name="lobbyName"
-                    VerticalOptions="Center" 
-                    HorizontalOptions="Center" />
+                <Label Text="Lobby name "
+                        x:Name="lobbyName"
+                        VerticalOptions="Start" 
+                        HorizontalOptions="Center"
+                        FontSize="24"
+                        TextColor="Black"/>
 
-            <Label Text="ip address" 
-                    x:Name="lobbyIp"
-                    VerticalOptions="Center" 
-                    HorizontalOptions="Center" />
+                <Label Text="ip address" 
+                        x:Name="lobbyIp"
+                        VerticalOptions="StartAndExpand" 
+                        HorizontalOptions="Center" 
+                        Margin="0,-10"/>
 
             </StackLayout>
 
-
-            
-                <CollectionView Grid.Row="1" Grid.Column="1" Margin="20,-20" ItemsSource="{Binding SongList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" SelectionMode="Single" BackgroundColor="LightGray">
+                <CollectionView Grid.Row="1" Grid.Column="1" 
+                                Margin="20,-20" 
+                                ItemsSource="{Binding SongList}" 
+                                HorizontalOptions="FillAndExpand" 
+                                VerticalOptions="FillAndExpand" 
+                                SelectionMode="Single" 
+                                BackgroundColor="LightGray"
+                                >
                     
                     <CollectionView.Header>
 
@@ -44,7 +52,9 @@
                                 TextColor="White"
                                 BackgroundColor="#1DB954"
                                 FontAttributes="Bold"
-                                HorizontalTextAlignment="Center"/>
+                                HorizontalTextAlignment="Center"
+                                FontSize="18"
+                               />
                     </CollectionView.Header>
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="1"/>

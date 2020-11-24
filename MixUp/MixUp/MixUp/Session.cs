@@ -38,13 +38,6 @@ namespace MixUp
             return;
         }
 
-        public void JoinLobby(String name) 
-        {
-            String command = "/cJoin:";
-            command += name;
-            SendMessage(command);
-        }
-
         public void SendMessage(String message)
         {
             byte[] messageSent = Encoding.ASCII.GetBytes(message);
