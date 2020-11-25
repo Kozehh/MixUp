@@ -24,16 +24,25 @@ namespace MixUp.Pages
         async void OnCreateLobbyButtonClicked(object sender, EventArgs args)
         {
             // Start Server thread
-            
-            Server lobbyServer = new Server(_user, lobbyNameEntry.Text);
-            ThreadStart work = lobbyServer.ExecuteServer;
-            Thread serverThread = new Thread(work);
-            serverThread.Start();
+            if (lobbyNameEntry.Text != null)
+            {
+                Server lobbyServer = new Server(_user, lobbyNameEntry.Text);
+                ThreadStart work = lobbyServer.ExecuteServer;
+                Thread serverThread = new Thread(work);
+                serverThread.Start();
 
-            IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddr = ipHost.AddressList[0];
-            
-            await Navigation.PushAsync(new LobbyPage(null, ipAddr.ToString(), serverThread, lobbyServer, _user));
+                IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
+                IPAddress ipAddr = ipHost.AddressList[0];
+
+                await Navigation.PushAsync(new LobbyPage(null, ipAddr.ToString(), serverThread, lobbyServer, _user));
+            }
+            else
+            {
+                await DisplayAlert("Invalid Name", "Please enter a valid room name", "OK");
+                return;
+            }
+
+           
         }
 
 

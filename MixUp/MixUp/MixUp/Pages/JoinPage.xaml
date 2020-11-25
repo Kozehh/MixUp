@@ -18,11 +18,12 @@
             <StackLayout Grid.Column="1"
                          Grid.Row="1">
 
-                <Entry Placeholder="Ip address"
+                <Entry Placeholder="Enter Room  Ip Address"
                             x:Name="ipEntry"
                             HorizontalOptions="CenterAndExpand"
                             VerticalOptions="Center"
-                            TextColor="black" />
+                            TextColor="black"
+                            MaxLength="20"/>
 
                 <Button Text="Join!"
                             HorizontalOptions="CenterAndExpand"

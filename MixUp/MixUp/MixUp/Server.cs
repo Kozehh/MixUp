@@ -21,7 +21,6 @@ namespace MixUp
 
         public Server(User user, String serverName)
         {
-            
             _userHost = user;
             serverLobby = new Lobby(user, serverName);
             serverThreads = new List<Thread>();
