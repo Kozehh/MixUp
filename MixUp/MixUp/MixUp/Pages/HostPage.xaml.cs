@@ -26,13 +26,14 @@ namespace MixUp.Pages
             // Start Server thread
             if (lobbyNameEntry.Text != null)
             {
-                Server lobbyServer = new Server(_user, lobbyNameEntry.Text);
+                IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
+                IPAddress ipAddr = ipHost.AddressList[0];
+                RoomCodeGenerator rcg = new RoomCodeGenerator();
+                String roomCode = rcg.GenerateAndInsertCode(ipAddr);
+                Server lobbyServer = new Server(_user, lobbyNameEntry.Text, roomCode);
                 ThreadStart work = lobbyServer.ExecuteServer;
                 Thread serverThread = new Thread(work);
                 serverThread.Start();
-
-                IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
-                IPAddress ipAddr = ipHost.AddressList[0];
 
                 await Navigation.PushAsync(new LobbyPage(null, ipAddr.ToString(), serverThread, lobbyServer, _user));
             }

@@ -62,7 +62,7 @@ namespace MixUp.Pages
             Device.BeginInvokeOnMainThread(() =>
             {
                 lobbyName.Text = lobby.name.ToString();
-                lobbyIp.Text = lobby.ipAddress.ToString();
+                lobbyIp.Text = lobby.roomCode.ToString();
             });
         }
 

@@ -18,7 +18,7 @@
             <StackLayout Grid.Column="1"
                          Grid.Row="1">
 
-                <Entry Placeholder="Enter Room  Ip Address"
+                <Entry Placeholder="Enter Room Code"
                             x:Name="ipEntry"
                             HorizontalOptions="CenterAndExpand"
                             VerticalOptions="Center"

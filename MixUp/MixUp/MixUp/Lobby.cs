@@ -20,8 +20,10 @@ namespace MixUp
         public List<User> connectedUsers;
         public List<Song> songList;
         public IPAddress ipAddress;
-        public Lobby(User host, String lobbyName)
+        public String roomCode;
+        public Lobby(User host, String lobbyName, String code)
         {
+            roomCode = code;
             name = lobbyName;
             connectedUsers = new List<User>();
             songList = new List<Song>();
@@ -29,6 +31,7 @@ namespace MixUp
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            info.AddValue("roomCode", roomCode);
             info.AddValue("name", name);
             info.AddValue("ipAddress", ipAddress);
             info.AddValue("connectedUsers", connectedUsers);
@@ -37,6 +40,7 @@ namespace MixUp
 
         public Lobby(SerializationInfo info, StreamingContext context)
         {
+            roomCode = (String)info.GetValue("roomCode", typeof(String));
             name = (String)info.GetValue("name", typeof(String));
             ipAddress = (IPAddress)info.GetValue("ipAddress", typeof(IPAddress));
             connectedUsers = (List<User>)info.GetValue("connectedUsers", typeof(List<User>));
