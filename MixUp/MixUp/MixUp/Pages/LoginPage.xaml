@@ -20,15 +20,16 @@
                          Grid.Column="1"
                          Grid.Row="1">
                 <Button Text="Login With Spotify"
-                        HorizontalOptions="CenterAndExpand"
+                        HorizontalOptions="FillAndExpand"
                         VerticalOptions="Center"
-                        Clicked="OnLoginButtonClicked" />
+                        Clicked="OnLoginButtonClicked"
+                        FontSize="16"/>
 
             </StackLayout>
             <StackLayout x:Name="log"
                          IsVisible="False">
-                <ActivityIndicator IsRunning="{Binding Load}" IsVisible="{Binding Load}"></ActivityIndicator>
-                <WebView x:Name="loginview"
+                <ActivityIndicator VerticalOptions="Center" HorizontalOptions="Center" IsRunning="{Binding Load}" IsVisible="{Binding Load} "/>
+                    <WebView x:Name="loginview"
                          VerticalOptions="FillAndExpand"
                          HeightRequest="1000"
                          WidthRequest="1000"

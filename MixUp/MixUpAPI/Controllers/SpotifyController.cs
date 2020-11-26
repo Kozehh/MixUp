@@ -23,7 +23,7 @@ namespace MixUpAPI.Controllers
         public string client_secret = "e86971bae67043eaa474a084eab7b356";
         public string client_id = "d8235676727f4a1b9938a49627c86640";
         public string response_type = "code";
-        public string redirect_uri = "http://10.44.88.242:80/mixup/callback";
+        public string redirect_uri = "http://192.168.0.162:9000/mixup/callback";
         private string _state = "profile activity";
         public string scope = "user-read-private user-read-email user-modify-playback-state user-read-playback-state";
         private string _code; // Code received from authorize access -> Will be exchange for an access
@@ -94,9 +94,9 @@ namespace MixUpAPI.Controllers
 
             var token = GetNewToken(param);
             // Associate the member with his token in the db
-            Token ll = PostDbManager("Token/Add", token);
+            //Token ll = PostDbManager("Token/Add", token);
 
-            var json = JsonConvert.SerializeObject(ll);
+            var json = JsonConvert.SerializeObject(token);
 
             return json;
         }
@@ -116,7 +116,7 @@ namespace MixUpAPI.Controllers
             Token tokenRefreshed = GetNewToken(param);
             // Update the users token in the db
             PostDbManager("Token/Update", tokenRefreshed);
-            return tokenRefreshed;
+            return null;
         }
 
         [HttpPost]

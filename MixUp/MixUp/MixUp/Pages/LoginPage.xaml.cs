@@ -16,7 +16,8 @@ namespace MixUp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage : ContentPage, INotifyPropertyChanged
     {
-        private string mixupApi = @"http://10.44.88.242/mixup/";
+        private const string mixupApi = @"http://10.0.2.2:9000/mixup/";
+        private const string callback = "http://192.168.0.162:9000/mixup/callback";
         private HttpClient _client;
         public event PropertyChangedEventHandler PropertyChanged;
         private bool _web;
@@ -61,7 +62,7 @@ namespace MixUp.Pages
             _loginView.Navigating += (sen, e) =>
             {
                 // If we are naviagting to the callback URL, the login is finished
-                if (e.Url.Contains(mixupApi))
+                if (e.Url.Contains(callback))
                 {
                     finishedLogin = true;
                 }
@@ -71,7 +72,7 @@ namespace MixUp.Pages
             {
                 Timeout = TimeSpan.FromSeconds(4)
             };
-
+            
             //ClearCookies();
         }
 
@@ -82,11 +83,11 @@ namespace MixUp.Pages
             {
                 // Call our API to handle the authentification request
                 var getResult = _client.GetAsync(mixupApi + "authenticate").Result;
-
+                var re = await getResult.Content.ReadAsStringAsync();
                 // Receive the URL to login to spotify and update our webview source
                 var source = new UrlWebViewSource
                 {
-                    Url = getResult.Content.ReadAsStringAsync().Result
+                    Url = re
                 };
                 _loginView.Source = source;
                 stack.IsVisible = true;

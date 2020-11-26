@@ -26,7 +26,6 @@ namespace MixUp.Services
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
             var res = await client.PostAsync(url, null);
-            Console.WriteLine("helloo");
         }
 
         public List<PlayerDevice> GetUserDevices(User user)
