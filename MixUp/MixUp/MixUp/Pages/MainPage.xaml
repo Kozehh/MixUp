@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MixUp.MainPage">
-
+    
     <Grid Margin="20,35,20,20">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -11,28 +11,25 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="4*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Label Text="LOGIN PAGE!"
+        <Label Text="Welcome to mixup !"
+                    Style="{StaticResource WelcomeLabel}"
                     Grid.Column="1"
                     Grid.Row="0"
                     VerticalOptions="Center" 
-                    HorizontalOptions="Center" />
+                    HorizontalOptions="Center">
+        </Label>
 
-        <StackLayout Grid.Column="1"
+            <StackLayout Grid.Column="1"
                          Grid.Row="1">
-
-
 
             <Button Text="Login"
                     HorizontalOptions="CenterAndExpand"
                     VerticalOptions="Center"
-                    BackgroundColor="#1DB954"
-                    TextColor="white"
-                    Clicked="OnSongPageButtonClicked" />
-
+                    Clicked="OnLoginPageButtonClicked" />
 
         </StackLayout>
 

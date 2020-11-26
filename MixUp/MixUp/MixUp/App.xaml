@@ -3,6 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MixUp.App">
     <Application.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label" x:Key="WelcomeLabel">
+                <Setter Property="TextColor" Value="#1DB954"/>
+                <Setter Property="FontSize" Value="24"/>
+                <Setter Property="FontAttributes" Value="Bold, Italic"/>
+            </Style>
 
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="#1DB954"/>
+                <Setter Property="CornerRadius" Value="20"/>
+
+                <Setter Property="TextColor" Value="white"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="WidthRequest" Value="130"/>
+
+            </Style>
+
+            <Style TargetType="ContentPage">
+                <Setter Property="BackgroundColor" Value="#f2f2f2"/>
+            </Style>
+
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

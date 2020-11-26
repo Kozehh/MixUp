@@ -9,7 +9,8 @@ using System.Runtime.Serialization;
 
 using System.Linq;
 using System.Collections;
-
+using ClassLibrary.Models;
+using MixUp.Services;
 
 namespace MixUp
 {
@@ -42,10 +43,9 @@ namespace MixUp
                 {
                     if (data.Substring(0, 2) == "/c")
                     {
-                        CommandInterpreter(data.Substring(2));
+                        CommandInterpreterAsync(data.Substring(2));
                     }
                 }
-
                 // 2. UPDATE LE LOBBY TOUT LE TEMPS 
                 UpdateLobby();
             }
@@ -69,10 +69,15 @@ namespace MixUp
             stream.Close();
 
             // 2. envoyer le lobby par message.
-            SendMessage(ref socket, message);
+            foreach (Socket sock in server.connectedUsersList)
+            {
+                SendMessage(sock, message);
+            }
+
+            
         }
 
-        private void SendMessage(ref Socket socket, byte[] message)
+        private void SendMessage(Socket socket, byte[] message)
         { 
             // Send a message to Client using Send() method 
             socket.Send(message);
@@ -92,14 +97,22 @@ namespace MixUp
             }
         }
 
-        public void CommandInterpreter(String commandLine)
+        public void CommandInterpreterAsync(String commandLine)
         {
             string command = commandLine.Substring(0, commandLine.IndexOf(":"));
             string parameters = commandLine.Substring(commandLine.IndexOf(":") + 1);
             switch (command)
             {
-                case "Join":
-                    //server.serverLobby.connectedUsers.Add(parameters);
+                case "AddSong":
+                    SongService service = new SongService();
+                    Song song = service.GetSongById(server._userHost.Token, parameters).Result;
+                    server.serverLobby.songList.Add(song);
+
+                    MediaPlayerService playerService = new MediaPlayerService();
+                    playerService.AddToQueue(song, server._userHost.Token);
+
+                    // Va chercher la queue
+                    //server.serverLobby.songList = queue;
                     return;
 
                 default:

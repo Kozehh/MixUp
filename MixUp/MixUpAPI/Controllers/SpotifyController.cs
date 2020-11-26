@@ -25,7 +25,7 @@ namespace MixUpAPI.Controllers
         public string response_type = "code";
         public string redirect_uri = "http://10.44.88.242:80/mixup/callback";
         private string _state = "profile activity";
-        public string scope = "user-read-private user-read-email";
+        public string scope = "user-read-private user-read-email user-modify-playback-state user-read-playback-state";
         private string _code; // Code received from authorize access -> Will be exchange for an access
         
 

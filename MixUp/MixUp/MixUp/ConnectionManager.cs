@@ -41,14 +41,15 @@ namespace MixUp
                 while (true)
                 {
                     Console.WriteLine("client receive blockk...");
-                    byte[] messageReceived = new byte[1024];
+                    byte[] messageReceived = new byte[16384];
                     int byteRecv = sender.Receive(messageReceived);
-                    session.UpdateLobby(messageReceived);
                     Console.WriteLine("Message from Server -> {0}", Encoding.ASCII.GetString(messageReceived, 0, byteRecv));
+                    session.UpdateLobby(messageReceived);
+                    
                 }
             }
 
-            // Manage of Socket's Exceptions 
+            // Manage of Socket's Exceptions y
             catch (ArgumentNullException ane)
             {
                 Console.WriteLine("ArgumentNullException : {0}", ane.ToString());

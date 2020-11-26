@@ -16,7 +16,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label Text="HostLobbyPage!"
+            <Label Text="Get started and host your private Lobby by pressing Create Lobby."
                     Grid.Column="1"
                     Grid.Row="0"
                     VerticalOptions="Center" 
@@ -25,12 +25,14 @@
             <StackLayout Grid.Column="1"
                          Grid.Row="1">
 
+                <Entry Placeholder="Enter an epic name"
+                       x:Name="lobbyNameEntry"/>
+
+
+
                 <Button Text="Create Lobby!"
                         HorizontalOptions="CenterAndExpand"
                         VerticalOptions="Center"
-                        BackgroundColor="#1DB954"
-                        TextColor="white"
-                        FontAttributes="Bold"
                         Clicked="OnCreateLobbyButtonClicked" />
 
             </StackLayout>

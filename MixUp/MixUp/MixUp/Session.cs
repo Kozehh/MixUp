@@ -15,14 +15,12 @@ namespace MixUp
         public Lobby lobby;
         public ConnectionManager connectionManager;
         public MixUp.Pages.LobbyPage lobbyPage;
-        public String name;
 
         public Session(String name, MixUp.Pages.LobbyPage lobbyPage)
         {
             this.lobbyPage = lobbyPage;
             connectionManager = new ConnectionManager(this);
-            lobby = new Lobby(null);
-            this.name = name;
+            lobby = new Lobby(null, null);
         }
 
         public void ExecuteClient()
@@ -36,7 +34,7 @@ namespace MixUp
             BinaryFormatter bf = new BinaryFormatter();
             lobby = (Lobby)bf.Deserialize(stream);
             stream.Close();
-            //lobbyPage.Update(lobby);
+            lobbyPage.Update(lobby);
             return;
         }
 
