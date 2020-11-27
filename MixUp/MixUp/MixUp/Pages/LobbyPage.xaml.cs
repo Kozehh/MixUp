@@ -28,7 +28,7 @@ namespace MixUp.Pages
         private Thread clientThread;
         private Thread serverThread;
         private Server server;
-        private User HostUser;
+        private User user;
         public const string songToAdd = "/cAddSong:";
         public Lobby lobbyPagelobby;
         public static ObservableCollection<Song> songList;
@@ -37,19 +37,20 @@ namespace MixUp.Pages
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
             InitializeComponent();
-
             Title = "Browse";
             RefreshCommand = new Command(ExecuteRefreshCommand);
             SongList = new ObservableCollection<Song>();
-
-
-            playerService = new MediaPlayerService();
-            HostUser = user;
-            HostUser.Devices = playerService.GetUserDevices(HostUser);
+            this.user = user;
             lobbyIp.Text = "TESTTING";
-            this.server = server;
-            serverThread = st;
-            
+
+            // Get info of the Host playback
+            if (server != null && st != null)
+            {
+                this.server = server;
+                serverThread = st;
+                playerService = new MediaPlayerService(user);
+            }
+
             this.ip = ip;
             // Start the Session thread
             Session lobbySession = new Session(name, this);
@@ -94,7 +95,7 @@ namespace MixUp.Pages
 
         async void OnMusicPageClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new MusicPage(HostUser, session));
+            await Navigation.PushAsync(new MusicPage(user, session));
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = "")

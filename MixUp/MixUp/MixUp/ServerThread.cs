@@ -18,6 +18,7 @@ namespace MixUp
     {
         protected Socket socket;
         public Server server;
+        public static Song currentPlayingSong = null;
 
         public ServerThread(Socket clientSocket, Server lobbyServer)
         {
@@ -105,11 +106,18 @@ namespace MixUp
             {
                 case "AddSong":
                     SongService service = new SongService();
+                    MediaPlayerService playerService = new MediaPlayerService(server._userHost);
                     Song song = service.GetSongById(server._userHost.Token, parameters).Result;
+                    
                     server.serverLobby.songList.Add(song);
+                    if (currentPlayingSong == null)
+                    {
+                        currentPlayingSong = song;
+                        playerService.PlaySong(song);
+                    }
+                        
+                    
 
-                    MediaPlayerService playerService = new MediaPlayerService();
-                    playerService.AddToQueue(song, server._userHost.Token);
 
                     // Va chercher la queue
                     //server.serverLobby.songList = queue;

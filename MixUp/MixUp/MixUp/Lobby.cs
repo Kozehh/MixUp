@@ -13,7 +13,7 @@ using ClassLibrary.Models;
 
 namespace MixUp
 {
-    [Serializable()]
+    [Serializable]
     public class Lobby : ISerializable
     {
         public String name;
