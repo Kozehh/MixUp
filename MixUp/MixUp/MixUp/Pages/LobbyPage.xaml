@@ -27,11 +27,12 @@
                         FontSize="24"
                         TextColor="Black"/>
 
-                <Label Text="ip address" 
+                <Label Text="room Code" 
                         x:Name="lobbyIp"
                         VerticalOptions="StartAndExpand" 
                         HorizontalOptions="Center" 
-                        Margin="0,-10"/>
+                        Margin="0,-10"
+                        TextColor="#696969"/>
 
             </StackLayout>
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
+using MixUp.Pages;
 
 namespace MixUp
 {
@@ -11,7 +11,7 @@ namespace MixUp
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new LoginPage());
 
             
         }

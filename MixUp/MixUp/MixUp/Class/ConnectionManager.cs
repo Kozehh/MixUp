@@ -7,14 +7,12 @@ using System.IO;
 using System.Threading;
 using Xamarin.Forms.Internals;
 
-
 namespace MixUp
 {
     public class ConnectionManager
     {
         public Session session;
         public Socket socket;
-        IPHostEntry ipHost;
         IPAddress ipAddr;
         IPEndPoint localEndPoint;
         Socket sender;
@@ -22,7 +20,6 @@ namespace MixUp
         public ConnectionManager(Session session)
         {
             this.session = session;
-            ipHost = Dns.GetHostEntry(Dns.GetHostName());
             ipAddr = IPAddress.Parse(session.lobbyPage.ip);
             localEndPoint = new IPEndPoint(ipAddr, port);
             sender = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -39,12 +36,11 @@ namespace MixUp
                 // receiving message loop
                 while (true)
                 {
-                    Console.WriteLine("client receive blockk...");
+                    Console.WriteLine("client receive block...");
                     byte[] messageReceived = new byte[16384];
                     int byteRecv = sender.Receive(messageReceived);
                     Console.WriteLine("Message from Server -> {0}", Encoding.ASCII.GetString(messageReceived, 0, byteRecv));
                     session.UpdateLobby(messageReceived);
-                    
                 }
             }
 

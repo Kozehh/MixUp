@@ -1,15 +1,8 @@
-﻿using System;
+﻿using ClassLibrary.Models;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Net;
-using System.Net.Sockets;
-using System.IO;
-using System.Threading;
-using Xamarin.Forms.Internals;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using ClassLibrary.Models;
-
 
 namespace MixUp
 {

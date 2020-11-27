@@ -8,7 +8,6 @@ using System.Threading;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using System.Linq;
 
 namespace MixUp.Pages
 {

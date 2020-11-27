@@ -95,7 +95,7 @@ namespace MixUp.Pages
             catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
-                await Navigation.PushAsync(new MainPage());
+                await Navigation.PushAsync(new LoginPage());
             }
         }
 

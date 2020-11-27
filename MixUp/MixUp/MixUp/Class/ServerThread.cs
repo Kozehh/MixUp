@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ClassLibrary.Models;
+using MixUp.Services;
+using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
-
-using System.Linq;
-using System.Collections;
-using ClassLibrary.Models;
-using MixUp.Services;
 
 namespace MixUp
 {
     class ServerThread
     {
-        protected Socket socket;
+        private Socket socket;
         public Server server;
 
         public ServerThread(Socket clientSocket, Server lobbyServer)
@@ -38,7 +32,7 @@ namespace MixUp
                 data += Encoding.ASCII.GetString(bytes, 0, numByte);
                 Console.WriteLine("Text received -> {0} ", data);
 
-                // 1. INTERPRETER LE MESSAGE/COMMANDE RECU
+                // Command Interpreter
                 if (data.Length > 1)
                 {
                     if (data.Substring(0, 2) == "/c")
@@ -46,7 +40,7 @@ namespace MixUp
                         CommandInterpreterAsync(data.Substring(2));
                     }
                 }
-                // 2. UPDATE LE LOBBY TOUT LE TEMPS 
+                // 2. Always Update Lobby
                 UpdateLobby();
             }
             
