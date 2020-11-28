@@ -1,24 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
 
-using System.Linq;
-using System.Collections;
+using Android.App;
+using Android.Content;
+using Android.Icu.Util;
+using Android.OS;
 using ClassLibrary.Models;
+using Java.Lang;
+using Java.Interop;
 using MixUp.Services;
+using Byte = System.Byte;
+using String = System.String;
 
 namespace MixUp
 {
-    class ServerThread
+    [BroadcastReceiver]
+    public class ServerThread : BroadcastReceiver
     {
         protected Socket socket;
         public Server server;
         public static Song currentPlayingSong = null;
+
+        public ServerThread()
+        {
+        }
 
         public ServerThread(Socket clientSocket, Server lobbyServer)
         {
@@ -128,6 +136,27 @@ namespace MixUp
             }
         }
 
+        // Handle the alarm manager event
+        // Used for adding the next song in queue when the current playing song is finishing
+        public override void OnReceive(Context context, Intent intent)
+        {
+            intent.Extras.Clear();
+            var alarmIntent = new Intent(context, typeof(ServerThread));
+            AlarmManager alarmManager = (AlarmManager)context.ApplicationContext.GetSystemService(Context.AlarmService);
+            var currentTime = Calendar.GetInstance(Android.Icu.Util.TimeZone.Default).TimeInMillis;
+
+            if (currentPlayingSong == null)
+            {
+                var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.UpdateCurrent);
+                alarmManager.Set(AlarmType.Rtc, currentTime + (long)TimeSpan.FromSeconds(2).TotalMilliseconds, pending);
+            }
+            else
+            {
+                var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.CancelCurrent);
+                alarmManager.Cancel(pending);
+                alarmManager.SetExact(AlarmType.Rtc, (currentTime + currentPlayingSong.DurationMs) - 10000, pending);
+            }
+        }
     }
 
 }
