@@ -8,7 +8,6 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Java.Lang;
-using MixUp.Util;
 
 namespace MixUp.Droid
 {

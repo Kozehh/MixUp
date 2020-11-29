@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.IO;
@@ -23,6 +24,10 @@ namespace MixUp
         protected Socket socket;
         public Server server;
         public static Song currentPlayingSong = null;
+        public static Song nextInQueue = null;
+        public static MediaPlayerService playerService;
+        public static bool notPlayed;
+        public static List<Song> queueList;
 
         public ServerThread()
         {
@@ -32,12 +37,13 @@ namespace MixUp
         {
             this.socket = clientSocket;
             this.server = lobbyServer;
+            playerService = new MediaPlayerService(server._userHost);
+            queueList = new List<Song>();
         }
 
         public void ExecuteServerThread()
         {
             byte[] bytes = new Byte[1024];
-
             // server receiving loop 
             while (true)
             {
@@ -65,6 +71,7 @@ namespace MixUp
         {
             // 1. Serialiser le lobby.
             // SerializePath
+            server.serverLobby.songList = queueList;
             string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             folder += "/LobbyData.dat";
 
@@ -110,25 +117,25 @@ namespace MixUp
         {
             string command = commandLine.Substring(0, commandLine.IndexOf(":"));
             string parameters = commandLine.Substring(commandLine.IndexOf(":") + 1);
+            server.serverLobby.songList = queueList;
             switch (command)
             {
                 case "AddSong":
                     SongService service = new SongService();
-                    MediaPlayerService playerService = new MediaPlayerService(server._userHost);
                     Song song = service.GetSongById(server._userHost.Token, parameters).Result;
-                    
                     server.serverLobby.songList.Add(song);
                     if (currentPlayingSong == null)
                     {
                         currentPlayingSong = song;
-                        playerService.PlaySong(song);
+                        notPlayed = true;
+                        server.serverLobby.songList.Remove(song);
                     }
-                        
-                    
+                    if (nextInQueue == null && server.serverLobby.songList.Count > 0)
+                    {
+                        nextInQueue = server.serverLobby.songList[0];
+                    }
 
-
-                    // Va chercher la queue
-                    //server.serverLobby.songList = queue;
+                    queueList = server.serverLobby.songList;
                     return;
 
                 default:
@@ -152,9 +159,36 @@ namespace MixUp
             }
             else
             {
-                var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.CancelCurrent);
-                alarmManager.Cancel(pending);
-                alarmManager.SetExact(AlarmType.Rtc, (currentTime + currentPlayingSong.DurationMs) - 10000, pending);
+                if (nextInQueue != null)
+                {
+                    playerService.AddToQueue(nextInQueue);
+                    currentPlayingSong = nextInQueue;
+                    queueList.Remove(currentPlayingSong);
+                    if (queueList.Count > 0)
+                    {
+                        nextInQueue = queueList[0];
+                    }
+                    else
+                    {
+                        nextInQueue = null;
+                    }
+                    var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.CancelCurrent);
+                    alarmManager.Cancel(pending);
+                    alarmManager.SetExact(AlarmType.Rtc, (currentTime + currentPlayingSong.DurationMs) - 10000, pending);
+                    
+                }
+                else if (notPlayed)
+                {
+                    playerService.PlaySong(currentPlayingSong);
+                    var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.CancelCurrent);
+                    alarmManager.Cancel(pending);
+                    alarmManager.SetExact(AlarmType.Rtc, (currentTime + currentPlayingSong.DurationMs), pending);
+                    notPlayed = false;
+                }
+                else
+                {
+                    currentPlayingSong = null;
+                }
             }
         }
     }
