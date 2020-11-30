@@ -71,7 +71,6 @@ namespace MixUp
         {
             // 1. Serialiser le lobby.
             // SerializePath
-            server.serverLobby.songList = queueList;
             string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             folder += "/LobbyData.dat";
 

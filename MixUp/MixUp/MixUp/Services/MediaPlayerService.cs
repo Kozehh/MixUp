@@ -17,11 +17,16 @@ namespace MixUp.Services
         private const string startPlayback = "https://api.spotify.com/v1/me/player/play";
         private HttpClient client = new HttpClient();
         private string deviceId;
+        private List<PlayerDevice> devices = new List<PlayerDevice>();
 
         public MediaPlayerService(User host)
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", host.Token.AccessToken);
-            deviceId = GetUserDevices()[0].DeviceId;
+            devices = GetUserDevices();
+            if (devices.Count > 0)
+            {
+                deviceId = devices[0].DeviceId;
+            }
         }
 
         public async void AddToQueue(Song song)
@@ -41,7 +46,8 @@ namespace MixUp.Services
         public List<PlayerDevice> GetUserDevices()
         {
             var res = client.GetAsync(userDevices).Result;
-            var devices = JsonConvert.DeserializeObject<PayloadObject>(res.Content.ReadAsStringAsync().Result);
+            var json = res.Content.ReadAsStringAsync().Result;
+            var devices = JsonConvert.DeserializeObject<PayloadObject>(json);
             return devices.Devices;
         }
 
@@ -50,9 +56,12 @@ namespace MixUp.Services
         {
             var builder = new UriBuilder(startPlayback);
             builder.Port = -1;
-            var query = HttpUtility.ParseQueryString(builder.Query);
-            query["device_id"] = deviceId;
-            builder.Query = query.ToString();
+            if (deviceId != null)
+            {
+                var query = HttpUtility.ParseQueryString(builder.Query);
+                query["device_id"] = deviceId;
+                builder.Query = query.ToString();
+            }
             string url = builder.ToString();
 
             var body = new Dictionary<string, List<string>>()

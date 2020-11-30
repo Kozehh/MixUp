@@ -49,7 +49,7 @@ namespace MixUp
                         Socket clientSocket = listener.Accept();
                         Console.WriteLine("Server accepted!!!");
                         ServerThread st = new ServerThread(clientSocket, this.server);
-                        Thread serverThread = new Thread(new System.Threading.ThreadStart(st.ExecuteServerThread));
+                        Thread serverThread = new Thread(st.ExecuteServerThread);
                         serverThread.Start();
                         server.serverThreads.Add(serverThread);
                         server.connectedUsersList.Add(clientSocket);

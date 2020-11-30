@@ -22,13 +22,14 @@ namespace MixUp.Pages
         public event PropertyChangedEventHandler PropertyChanged;
         private PlaylistService _playlistService;
         private User User;
-        private Playlist _playlist;
+        public static Playlist _playlist;
         private PlaylistSong<Song> selectedSong;
         public static ObservableCollection<PlaylistSong<Song>> songList;
-        public static PagingObject<PlaylistSong<Song>> playlistSongs;
         public const string songToAdd = "/cAddSong:";
 
         // Variables qui modifient propriétés du UI quand elles changent
+        
+
         public Playlist Playlist
         {
             get { return _playlist;}
@@ -60,35 +61,19 @@ namespace MixUp.Pages
         }
 
         // Constructeur de la page
-        public MusicPage(User user, Session lobbySession)
+        public MusicPage(User user, Session lobbySession, Playlist playlist)
         {
             InitializeComponent();
             BindingContext = this;
             session = lobbySession;
             User = user;
-            ShowUserPlaylists();
+            Playlist = playlist;
+            SongList = new ObservableCollection<PlaylistSong<Song>>(playlist.PlaylistSongs.Items);
         }
 
 
         // Méthodes
-        private async void ShowUserPlaylists()
-        {
-            List<Playlist> playlists = new List<Playlist>();
-            _playlistService = new PlaylistService();
-            var userPlaylists = await _playlistService.GetPlaylists(User.Token);
-            foreach (var playlist in userPlaylists.Items)
-            {
-                playlists.Add(playlist);
-            }
-
-            Playlist = playlists[0];
-
-
-            playlistSongs = await _playlistService.GetPlaylistSongs(User.Token, Playlist.Id);
-            SongList = new ObservableCollection<PlaylistSong<Song>>(playlistSongs.Items);
-        }
-
-
+        
         // Événements 
         void OnTextChanged(object sender, TextChangedEventArgs e)
         {

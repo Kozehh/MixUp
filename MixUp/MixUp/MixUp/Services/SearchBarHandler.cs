@@ -22,7 +22,7 @@ namespace MixUp.Services
             var normalizeQuery = query?.ToLower() ?? "";
             if (normalizeQuery.Equals(""))
             {
-                MusicPage.songList = new ObservableCollection<PlaylistSong<Song>>(MusicPage.playlistSongs.Items);
+                MusicPage.songList = new ObservableCollection<PlaylistSong<Song>>(MusicPage._playlist.PlaylistSongs.Items);
                 return MusicPage.songList.OrderBy(item => item.Song.Name).ToList<PlaylistSong<Song>>();
             }
             else

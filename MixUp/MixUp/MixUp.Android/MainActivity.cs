@@ -21,7 +21,7 @@ namespace MixUp.Droid
 
             base.OnCreate(savedInstanceState);
 
-            var alarmIntent = new Intent(this.ApplicationContext, typeof(ServerThread));
+            var alarmIntent = new Intent(this, typeof(ServerThread));
 
             var pending = PendingIntent.GetBroadcast(this, 0, alarmIntent, PendingIntentFlags.UpdateCurrent);
 

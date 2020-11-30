@@ -36,5 +36,7 @@ namespace ClassLibrary.Models
 
         [JsonProperty("uri")]
         public string UserUri { get; set; }
+
+        public List<Playlist> UserPlaylists { get; set; }
     }
 }
