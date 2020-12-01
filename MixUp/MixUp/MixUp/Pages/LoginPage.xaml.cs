@@ -16,7 +16,7 @@ namespace MixUp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage : ContentPage, INotifyPropertyChanged
     {
-        private const string mixupApi = @"http://10.0.2.2:9000/mixup/";
+        private const string mixupApi = @"http://192.168.0.162:9000/mixup/";
         private const string callback = "http://192.168.0.162:9000/mixup/callback";
         private HttpClient _client;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -73,7 +73,7 @@ namespace MixUp.Pages
                 Timeout = TimeSpan.FromSeconds(4)
             };
             
-            //ClearCookies();
+            ClearCookies();
         }
 
         // Login to spotify
