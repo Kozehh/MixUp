@@ -16,4 +16,15 @@ services:
         build:
             context: ./MixUp
             dockerfile: DBManager/Dockerfile
+
+    # Ngrok Service
+    ngrok:
+        image: shkoliar/ngrok:latest
+        ports:
+        - 4551:4551
+        links:
+        - mixupapi
+        environment:
+        - DOMAIN=mixupapi
+        - PORT=80
         
