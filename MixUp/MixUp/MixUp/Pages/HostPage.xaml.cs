@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ClassLibrary.Models;
+using System;
 using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
-using ClassLibrary.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -35,7 +32,6 @@ namespace MixUp.Pages
                 Thread serverThread = new Thread(work);
                 serverThread.Start();
 
-            await Navigation.PushAsync(new LobbyPage(null, ipAddr.ToString(), serverThread, lobbyServer, _user));
                 await Navigation.PushAsync(new LobbyPage(null, ipAddr.ToString(), serverThread, lobbyServer, _user));
             }
             else
