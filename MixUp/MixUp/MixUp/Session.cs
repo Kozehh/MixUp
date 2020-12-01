@@ -16,7 +16,7 @@ namespace MixUp
         public ConnectionManager connectionManager;
         public MixUp.Pages.LobbyPage lobbyPage;
 
-        public Session(String name, MixUp.Pages.LobbyPage lobbyPage)
+        public Session(string name, Pages.LobbyPage lobbyPage)
         {
             this.lobbyPage = lobbyPage;
             connectionManager = new ConnectionManager(this);
@@ -35,7 +35,6 @@ namespace MixUp
             lobby = (Lobby)bf.Deserialize(stream);
             stream.Close();
             lobbyPage.Update(lobby);
-            return;
         }
 
         public void JoinLobby(String name) 

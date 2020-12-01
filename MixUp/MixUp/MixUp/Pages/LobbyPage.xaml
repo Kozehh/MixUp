@@ -8,33 +8,50 @@
         <Grid Margin="20,35,20,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="5*" />
+                <RowDefinition Height="4*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="42*" />
+                <ColumnDefinition Width="38*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-                 
-            <StackLayout
+
+                <StackLayout
                     Grid.Column="1"
-                    Grid.Row="0">
-            <Label Text="Lobby name "
-                    x:Name="lobbyName"
-                    VerticalOptions="Center" 
-                    HorizontalOptions="Center" />
+                    Grid.Row="0"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    Margin="20,-30,20,0">
+                    <Grid HorizontalOptions="FillAndExpand">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackLayout VerticalOptions="Center">
+                            <StackLayout>
+                                <Label Text="Currently Playing"
+                                   HorizontalOptions="Center"
+                                   TextColor="#1DB954"
+                                   FontSize="20"/>
+                            </StackLayout>
+                        <Label Text="{Binding CurrentlyPlaying.Name}" FontSize="16"/>
+                        <Label Text="{Binding CurrentlyPlaying.Artists[0].Name}" FontSize="16" />
+                        </StackLayout>
+                        <Frame CornerRadius="20"
+                               Padding="0"
+                               HorizontalOptions="End" VerticalOptions="End" HeightRequest="55">
+                            <Image Margin="0,0,0,3"  Source="{Binding CurrentlyPlaying.SongAlbum.Images[0].Url}"/>
+                        </Frame>
+                        
+                    </Grid>
+                    
 
-            <Label Text="ip address" 
-                    x:Name="lobbyIp"
-                    VerticalOptions="Center" 
-                    HorizontalOptions="Center" />
-
-            </StackLayout>
+                </StackLayout>
 
 
             
-                <CollectionView Grid.Row="1" Grid.Column="1" Margin="20,-20" ItemsSource="{Binding SongList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" SelectionMode="Single" BackgroundColor="LightGray">
+                <CollectionView Grid.Row="1" Grid.Column="1" Margin="20,0,20,-20" ItemsSource="{Binding SongList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" SelectionMode="Single" BackgroundColor="LightGray" >
                     
                     <CollectionView.Header>
 
@@ -69,21 +86,28 @@
                 </CollectionView>
 
 
-
-            <StackLayout
-                    Grid.Column="1"
-                    Grid.Row="3">
-
-                <Button Text="My Playlists"
-                        HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="Center"
-                        BackgroundColor="#1DB954"
-                        TextColor="white"
-                        Clicked="OnMusicPageClicked"/>
-
-            </StackLayout>
-
-
+                <CollectionView Grid.Column="1"
+                                Grid.Row="3"
+                                ItemsSource="{Binding Playlists}"
+                                Margin="0,-40,0,0"
+                                SelectionMode="Single">
+                    <CollectionView.Header>
+                        <Label Text="My Playlists" FontSize="16"
+                               TextColor="#1DB954"
+                               FontAttributes="Bold"/>
+                    </CollectionView.Header>
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Horizontal" VerticalItemSpacing="1"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Label Text="{Binding Name}" HorizontalOptions="CenterAndExpand" FontSize="16"/>
+                                <ImageButton Aspect="AspectFill" BackgroundColor="AliceBlue" CornerRadius="20" Source="{Binding Images[0].Url}" Clicked="OnPlaylistClicked" CommandParameter="{Binding Name}" HeightRequest="85" WidthRequest="85" Margin="10,-5,10,0"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
         </Grid>
         </RefreshView>
     </ContentPage.Content>

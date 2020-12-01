@@ -19,12 +19,17 @@ namespace MixUp.Services
             MissingMemberHandling = MissingMemberHandling.Ignore
         };
 
+        private HttpClient client;
+
+        public PlaylistService(Token token)
+        { 
+            client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+        }
+
         // Get a list of current user's playlists
         public async Task<PagingObject<Playlist>> GetPlaylists(Token token)
         {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
-
             var res = await client.GetAsync(_playlistURL);
             var json = await res.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<PagingObject<Playlist>>(json, Settings);
@@ -32,13 +37,19 @@ namespace MixUp.Services
 
         public async Task<PagingObject<PlaylistSong<Song>>> GetPlaylistSongs(Token token, string id)
         {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
-
-            var url = _playlistTracksURL.Replace("playlist_id", id);
-            var res = await client.GetAsync(url);
-            var json = await res.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<PagingObject<PlaylistSong<Song>>>(json);
+            try
+            {
+                var url = _playlistTracksURL.Replace("playlist_id", id);
+                var res = await client.GetAsync(url);
+                var json = await res.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<PagingObject<PlaylistSong<Song>>>(json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+            
         }
     }
 }

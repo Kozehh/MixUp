@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Android.Provider;
 using ClassLibrary.Models;
+using MixUp.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,6 +18,7 @@ namespace MixUp.Pages
     public partial class HostPage : ContentPage
     {
         private User _user;
+
         public HostPage(User user)
         {
             InitializeComponent();
@@ -32,10 +36,8 @@ namespace MixUp.Pages
 
             IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
             IPAddress ipAddr = ipHost.AddressList[0];
-            
+
             await Navigation.PushAsync(new LobbyPage(null, ipAddr.ToString(), serverThread, lobbyServer, _user));
         }
-
-
     }
 }

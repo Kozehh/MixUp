@@ -2,33 +2,48 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
 
-using System.Linq;
-using System.Collections;
+using Android.App;
+using Android.Content;
+using Android.Icu.Util;
+using Android.OS;
 using ClassLibrary.Models;
+using Java.Lang;
+using Java.Interop;
 using MixUp.Services;
+using Byte = System.Byte;
+using String = System.String;
 
 namespace MixUp
 {
-    class ServerThread
+    [BroadcastReceiver]
+    public class ServerThread : BroadcastReceiver
     {
         protected Socket socket;
         public Server server;
+        public static Song currentPlayingSong = null;
+        public static Song nextInQueue = null;
+        public static MediaPlayerService playerService;
+        public static bool notPlayed;
+        public static List<Song> queueList;
+
+        public ServerThread()
+        {
+        }
 
         public ServerThread(Socket clientSocket, Server lobbyServer)
         {
             this.socket = clientSocket;
             this.server = lobbyServer;
+            playerService = new MediaPlayerService(server._userHost);
+            queueList = new List<Song>();
         }
 
         public void ExecuteServerThread()
         {
             byte[] bytes = new Byte[1024];
-
             // server receiving loop 
             while (true)
             {
@@ -101,18 +116,25 @@ namespace MixUp
         {
             string command = commandLine.Substring(0, commandLine.IndexOf(":"));
             string parameters = commandLine.Substring(commandLine.IndexOf(":") + 1);
+            server.serverLobby.songList = queueList;
             switch (command)
             {
                 case "AddSong":
                     SongService service = new SongService();
                     Song song = service.GetSongById(server._userHost.Token, parameters).Result;
                     server.serverLobby.songList.Add(song);
+                    if (currentPlayingSong == null)
+                    {
+                        currentPlayingSong = song;
+                        notPlayed = true;
+                        server.serverLobby.songList.Remove(song);
+                    }
+                    if (nextInQueue == null && server.serverLobby.songList.Count > 0)
+                    {
+                        nextInQueue = server.serverLobby.songList[0];
+                    }
 
-                    MediaPlayerService playerService = new MediaPlayerService();
-                    playerService.AddToQueue(song, server._userHost.Token);
-
-                    // Va chercher la queue
-                    //server.serverLobby.songList = queue;
+                    queueList = server.serverLobby.songList;
                     return;
 
                 default:
@@ -120,6 +142,54 @@ namespace MixUp
             }
         }
 
+        // Handle the alarm manager event
+        // Used for adding the next song in queue when the current playing song is finishing
+        public override void OnReceive(Context context, Intent intent)
+        {
+            intent.Extras.Clear();
+            var alarmIntent = new Intent(context, typeof(ServerThread));
+            AlarmManager alarmManager = (AlarmManager)context.ApplicationContext.GetSystemService(Context.AlarmService);
+            var currentTime = Calendar.GetInstance(Android.Icu.Util.TimeZone.Default).TimeInMillis;
+
+            if (currentPlayingSong == null)
+            {
+                var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.UpdateCurrent);
+                alarmManager.Set(AlarmType.Rtc, currentTime + (long)TimeSpan.FromSeconds(2).TotalMilliseconds, pending);
+            }
+            else
+            {
+                if (nextInQueue != null)
+                {
+                    playerService.AddToQueue(nextInQueue);
+                    currentPlayingSong = nextInQueue;
+                    queueList.Remove(currentPlayingSong);
+                    if (queueList.Count > 0)
+                    {
+                        nextInQueue = queueList[0];
+                    }
+                    else
+                    {
+                        nextInQueue = null;
+                    }
+                    var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.CancelCurrent);
+                    alarmManager.Cancel(pending);
+                    alarmManager.SetExact(AlarmType.Rtc, (currentTime + currentPlayingSong.DurationMs) - 10000, pending);
+                    
+                }
+                else if (notPlayed)
+                {
+                    playerService.PlaySong(currentPlayingSong);
+                    var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.CancelCurrent);
+                    alarmManager.Cancel(pending);
+                    alarmManager.SetExact(AlarmType.Rtc, (currentTime + currentPlayingSong.DurationMs), pending);
+                    notPlayed = false;
+                }
+                else
+                {
+                    currentPlayingSong = null;
+                }
+            }
+        }
     }
 
 }

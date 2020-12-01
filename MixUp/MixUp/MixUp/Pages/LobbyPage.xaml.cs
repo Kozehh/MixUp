@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Android.Provider;
 using ClassLibrary.Models;
 using MixUp.Services;
 using MongoDB.Bson;
@@ -28,36 +29,48 @@ namespace MixUp.Pages
         private Thread clientThread;
         private Thread serverThread;
         private Server server;
-        private User HostUser;
+        private User user;
         public const string songToAdd = "/cAddSong:";
         public Lobby lobbyPagelobby;
         public static ObservableCollection<Song> songList;
-        private MediaPlayerService playerService;
+        
+        public static Song currentlyPlaying;
+        private MusicPage playlists;
+        private ObservableCollection<Playlist> _playlists;
+        private Playlist selectedPlaylist;
 
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+                Title = "Browse";
+                RefreshCommand = new Command(ExecuteRefreshCommand);
+                SongList = new ObservableCollection<Song>();
+                this.user = user;
+                Playlists = new ObservableCollection<Playlist>(user.UserPlaylists);
+                //lobbyIp.Text = "TESTTING";
+                // Get info of the Host playback
+                if (server != null && st != null)
+                {
+                    this.server = server;
+                    serverThread = st;
+                }
 
-            Title = "Browse";
-            RefreshCommand = new Command(ExecuteRefreshCommand);
-            SongList = new ObservableCollection<Song>();
-
-
-            playerService = new MediaPlayerService();
-            HostUser = user;
-            HostUser.Devices = playerService.GetUserDevices(HostUser);
-            lobbyIp.Text = "TESTTING";
-            this.server = server;
-            serverThread = st;
+                this.ip = ip;
+                // Start the Session thread
+                Session lobbySession = new Session(name, this);
+                session = lobbySession;
+                ThreadStart clientWork = lobbySession.ExecuteClient;
+                clientThread = new Thread(clientWork);
+                clientThread.Start();
+                BindingContext = this;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             
-            this.ip = ip;
-            // Start the Session thread
-            Session lobbySession = new Session(name, this);
-            session = lobbySession;
-            ThreadStart clientWork = lobbySession.ExecuteClient;
-            clientThread = new Thread(clientWork);
-            clientThread.Start();
-            BindingContext = this;
         }
         
         async void OnDisconnectButtonClicked(object sender, EventArgs args)
@@ -77,12 +90,15 @@ namespace MixUp.Pages
         public void Update(Lobby lobby)
         {
             lobbyPagelobby = lobby;
-
+            if (ServerThread.currentPlayingSong != null)
+            {
+                CurrentlyPlaying = ServerThread.currentPlayingSong;
+            }
             SongList = new ObservableCollection<Song>(lobby.songList);
             Device.BeginInvokeOnMainThread(() =>
             {
-                lobbyName.Text = lobby.name.ToString();
-                lobbyIp.Text = lobby.ipAddress.ToString();
+                //lobbyName.Text = lobby.name.ToString();
+                //lobbyIp.Text = lobby.ipAddress.ToString();
             });
         }
 
@@ -94,12 +110,23 @@ namespace MixUp.Pages
 
         async void OnMusicPageClicked(object sender, EventArgs args)
         {
-            await Navigation.PushAsync(new MusicPage(HostUser, session));
+            await Navigation.PushAsync(playlists);
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+
+        public Song CurrentlyPlaying
+        {
+            get { return currentlyPlaying; }
+            set
+            {
+                currentlyPlaying = value;
+                OnPropertyChanged();
+            }
         }
 
         public ObservableCollection<Song> SongList
@@ -112,9 +139,19 @@ namespace MixUp.Pages
             }
         }
 
+        public ObservableCollection<Playlist> Playlists
+        {
+            get { return _playlists; }
+            set
+            {
+                _playlists = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand RefreshCommand { get; }
 
-        bool isRefreshing;
+        private bool isRefreshing;
         public bool IsRefreshing
         {
             get => isRefreshing;
@@ -130,6 +167,17 @@ namespace MixUp.Pages
             session.SendMessage("refresh");
             // Stop refreshing
             IsRefreshing = false;
+        }
+        
+        public async void OnPlaylistClicked(object sender, EventArgs args)
+        {
+            var button = (ImageButton) sender;
+            string name = button.CommandParameter.ToString();
+            var selectedPlaylist = user.UserPlaylists.Find(playlist => playlist.Name == name);
+            if (selectedPlaylist != null)
+            {
+                await Navigation.PushAsync(new MusicPage(user, session, selectedPlaylist));
+            }
         }
     }
 }
