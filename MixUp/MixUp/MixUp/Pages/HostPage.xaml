@@ -26,7 +26,8 @@
                          Grid.Row="1">
 
                 <Entry Placeholder="Enter an epic name"
-                       x:Name="lobbyNameEntry"/>
+                       x:Name="lobbyNameEntry"
+                       MaxLength="20"/>
 
 
 

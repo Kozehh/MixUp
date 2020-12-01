@@ -14,15 +14,25 @@
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-        
+
+            <Label Text="Join a lobby by entering the given room code below"
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center"
+                    HorizontalTextAlignment="Center"
+
+/>
+
             <StackLayout Grid.Column="1"
                          Grid.Row="1">
 
-                <Entry Placeholder="Ip address"
+                <Entry Placeholder="Enter Room Code"
                             x:Name="ipEntry"
                             HorizontalOptions="CenterAndExpand"
                             VerticalOptions="Center"
-                            TextColor="black" />
+                            TextColor="black"
+                            MaxLength="20"/>
 
                 <Button Text="Join!"
                             HorizontalOptions="CenterAndExpand"

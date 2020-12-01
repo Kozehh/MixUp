@@ -49,8 +49,6 @@
 
                 </StackLayout>
 
-
-            
                 <CollectionView Grid.Row="1" Grid.Column="1" Margin="20,0,20,-20" ItemsSource="{Binding SongList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" SelectionMode="Single" BackgroundColor="LightGray" >
                     
                     <CollectionView.Header>
@@ -61,7 +59,9 @@
                                 TextColor="White"
                                 BackgroundColor="#1DB954"
                                 FontAttributes="Bold"
-                                HorizontalTextAlignment="Center"/>
+                                HorizontalTextAlignment="Center"
+                                FontSize="18"
+                               />
                     </CollectionView.Header>
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="1"/>

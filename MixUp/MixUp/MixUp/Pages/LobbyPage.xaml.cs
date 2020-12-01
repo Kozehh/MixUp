@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ClassLibrary.Models;
+using MixUp.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Android.Provider;
 using ClassLibrary.Models;
@@ -24,20 +21,19 @@ namespace MixUp.Pages
     public partial class LobbyPage : ContentPage, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        Session session;
-        public string ip;
+        public String ip;
+
         private Thread clientThread;
         private Thread serverThread;
         private Server server;
         private User user;
         public const string songToAdd = "/cAddSong:";
-        public Lobby lobbyPagelobby;
         public static ObservableCollection<Song> songList;
-        
-        public static Song currentlyPlaying;
+        public static Session session;
         private MusicPage playlists;
         private ObservableCollection<Playlist> _playlists;
         private Playlist selectedPlaylist;
+        private Song currentlyPlaying;
 
         public LobbyPage(string name, string ip, Thread st, Server server, User user)
         {
@@ -49,7 +45,6 @@ namespace MixUp.Pages
                 SongList = new ObservableCollection<Song>();
                 this.user = user;
                 Playlists = new ObservableCollection<Playlist>(user.UserPlaylists);
-                //lobbyIp.Text = "TESTTING";
                 // Get info of the Host playback
                 if (server != null && st != null)
                 {
@@ -57,11 +52,12 @@ namespace MixUp.Pages
                     serverThread = st;
                 }
 
+                currentlyPlaying = null;
                 this.ip = ip;
+                
+                session = new Session(name, this);
                 // Start the Session thread
-                Session lobbySession = new Session(name, this);
-                session = lobbySession;
-                ThreadStart clientWork = lobbySession.ExecuteClient;
+                ThreadStart clientWork = session.ExecuteClient;
                 clientThread = new Thread(clientWork);
                 clientThread.Start();
                 BindingContext = this;
@@ -72,27 +68,14 @@ namespace MixUp.Pages
             }
             
         }
-        
-        async void OnDisconnectButtonClicked(object sender, EventArgs args)
-        {
-            if(serverThread != null)
-            {
-                foreach(Thread t in server.serverThreads)
-                {
-                    t.Abort();
-                }
-                serverThread.Abort();
-            }
-            clientThread.Abort();
-            await Navigation.PopAsync();
-        }
 
         public void Update(Lobby lobby)
         {
-            lobbyPagelobby = lobby;
-            if (ServerThread.currentPlayingSong != null)
+            // Visually Update the lobby
+            session.lobby = lobby;
+            if (session.lobby.currentPlayingSong != null)
             {
-                CurrentlyPlaying = ServerThread.currentPlayingSong;
+                CurrentlyPlaying = session.lobby.currentPlayingSong;
             }
             SongList = new ObservableCollection<Song>(lobby.songList);
             Device.BeginInvokeOnMainThread(() =>
@@ -100,12 +83,6 @@ namespace MixUp.Pages
                 //lobbyName.Text = lobby.name.ToString();
                 //lobbyIp.Text = lobby.ipAddress.ToString();
             });
-        }
-
-        void OnSendButtonClicked(object sender, EventArgs args)
-        {
-            //String messageToSend = messageEntry.Text;
-            //session.SendMessage(messageToSend);
         }
 
         async void OnMusicPageClicked(object sender, EventArgs args)
@@ -162,7 +139,7 @@ namespace MixUp.Pages
             }
         }
 
-        void ExecuteRefreshCommand()
+        public void ExecuteRefreshCommand()
         {
             session.SendMessage("refresh");
             // Stop refreshing

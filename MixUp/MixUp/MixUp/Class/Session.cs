@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net;
-using System.Net.Sockets;
 using System.IO;
-using System.Threading;
-using Xamarin.Forms.Internals;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+using Android.App;
+using Android.Content;
+using Android.Icu.Util;
+using MixUp.Pages;
 
 namespace MixUp
 {
@@ -14,13 +13,13 @@ namespace MixUp
     {
         public Lobby lobby;
         public ConnectionManager connectionManager;
-        public MixUp.Pages.LobbyPage lobbyPage;
+        public LobbyPage sessionLobbyPage;
 
-        public Session(string name, Pages.LobbyPage lobbyPage)
+        public Session(string name, LobbyPage lobbyPage)
         {
-            this.lobbyPage = lobbyPage;
+            sessionLobbyPage = lobbyPage;
             connectionManager = new ConnectionManager(this);
-            lobby = new Lobby(null, null);
+            lobby = new Lobby(null, null, null);
         }
 
         public void ExecuteClient()
@@ -34,22 +33,15 @@ namespace MixUp
             BinaryFormatter bf = new BinaryFormatter();
             lobby = (Lobby)bf.Deserialize(stream);
             stream.Close();
-            lobbyPage.Update(lobby);
+            sessionLobbyPage.Update(lobby);
         }
 
-        public void JoinLobby(String name) 
-        {
-            String command = "/cJoin:";
-            command += name;
-            SendMessage(command);
-        }
-
-        public void SendMessage(String message)
+        public void SendMessage(string message)
         {
             byte[] messageSent = Encoding.ASCII.GetBytes(message);
             if (connectionManager.socket != null)
             {
-                int byteSent = this.connectionManager.socket.Send(messageSent);
+                int byteSent = connectionManager.socket.Send(messageSent);
             }
         }
     }

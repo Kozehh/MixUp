@@ -4,10 +4,19 @@
              x:Class="MixUp.App">
     <Application.Resources>
         <ResourceDictionary>
-            <Style TargetType="Label" x:Key="WelcomeLabel">
+            <Style TargetType="Label" x:Key="TitleLabel">
                 <Setter Property="TextColor" Value="#1DB954"/>
-                <Setter Property="FontSize" Value="24"/>
+                <Setter Property="FontSize" Value="42"/>
                 <Setter Property="FontAttributes" Value="Bold, Italic"/>
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+                <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+                <Setter Property="CharacterSpacing" Value="8"/>
+            </Style>
+
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="#1DB954"/>
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="CharacterSpacing" Value="1"/>
             </Style>
 
             <Style TargetType="Button">

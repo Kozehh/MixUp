@@ -24,13 +24,11 @@
         </Label>
 
             <StackLayout Grid.Column="1"
-                         Grid.Row="2">
+                         Grid.Row="1">
 
             <Button Text="Login"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="Center"
-                    Clicked="OnLoginPageButtonClicked"
-                    FontSize="20"/>
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="Center"/>
 
         </StackLayout>
 
