@@ -15,7 +15,12 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-
+            <Label Text="MIXUP"
+                    Style="{StaticResource TitleLabel}"
+                    Grid.Column="1"
+                    Grid.Row="0">
+            </Label>
+            
             <StackLayout x:Name="Login"
                          Grid.Column="1"
                          Grid.Row="1">

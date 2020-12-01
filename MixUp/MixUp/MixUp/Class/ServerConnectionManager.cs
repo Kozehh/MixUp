@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -9,11 +7,11 @@ namespace MixUp
 {
     public class ServerConnectionManager
     {
-        IPHostEntry ipHost;
-        public IPAddress ipAddr;
-        IPEndPoint localEndPoint;
-        Socket listener;
-        Server server;
+        private IPHostEntry ipHost;
+        private IPAddress ipAddr;
+        private IPEndPoint localEndPoint;
+        private Socket listener;
+        private Server server;
 
         public ServerConnectionManager(Server server)
         {
@@ -48,7 +46,7 @@ namespace MixUp
                         // Suspend while waiting for  incoming connection Using Accept() method the server will accept connection of client 
                         Socket clientSocket = listener.Accept();
                         Console.WriteLine("Server accepted!!!");
-                        ServerThread st = new ServerThread(clientSocket, this.server);
+                        ServerThread st = new ServerThread(clientSocket, server);
                         Thread serverThread = new Thread(st.ExecuteServerThread);
                         serverThread.Start();
                         server.serverThreads.Add(serverThread);

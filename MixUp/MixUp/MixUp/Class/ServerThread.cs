@@ -1,49 +1,39 @@
-﻿using System;
+﻿using ClassLibrary.Models;
+using MixUp.Services;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
-using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-
 using Android.App;
 using Android.Content;
 using Android.Icu.Util;
-using Android.OS;
-using ClassLibrary.Models;
-using Java.Lang;
-using Java.Interop;
-using MixUp.Services;
-using Byte = System.Byte;
-using String = System.String;
 
 namespace MixUp
 {
     [BroadcastReceiver]
     public class ServerThread : BroadcastReceiver
     {
-        protected Socket socket;
-        public Server server;
-        public static Song currentPlayingSong = null;
-        public static Song nextInQueue = null;
+        public Socket socket;
+        public static Server server = null;
         public static MediaPlayerService playerService;
-        public static bool notPlayed;
-        public static List<Song> queueList;
-
+        
         public ServerThread()
         {
         }
-
+        
         public ServerThread(Socket clientSocket, Server lobbyServer)
         {
-            this.socket = clientSocket;
-            this.server = lobbyServer;
+            socket = clientSocket;
+            server = lobbyServer;
             playerService = new MediaPlayerService(server._userHost);
-            queueList = new List<Song>();
         }
 
         public void ExecuteServerThread()
         {
             byte[] bytes = new Byte[1024];
+
             // server receiving loop 
             while (true)
             {
@@ -53,7 +43,7 @@ namespace MixUp
                 data += Encoding.ASCII.GetString(bytes, 0, numByte);
                 Console.WriteLine("Text received -> {0} ", data);
 
-                // 1. INTERPRETER LE MESSAGE/COMMANDE RECU
+                // Command Interpreter
                 if (data.Length > 1)
                 {
                     if (data.Substring(0, 2) == "/c")
@@ -61,7 +51,7 @@ namespace MixUp
                         CommandInterpreterAsync(data.Substring(2));
                     }
                 }
-                // 2. UPDATE LE LOBBY TOUT LE TEMPS 
+                // 2. Always Update Lobby
                 UpdateLobby();
             }
             
@@ -88,8 +78,6 @@ namespace MixUp
             {
                 SendMessage(sock, message);
             }
-
-            
         }
 
         private void SendMessage(Socket socket, byte[] message)
@@ -112,29 +100,28 @@ namespace MixUp
             }
         }
 
-        public void CommandInterpreterAsync(String commandLine)
+        public void CommandInterpreterAsync(string commandLine)
         {
             string command = commandLine.Substring(0, commandLine.IndexOf(":"));
             string parameters = commandLine.Substring(commandLine.IndexOf(":") + 1);
-            server.serverLobby.songList = queueList;
             switch (command)
             {
                 case "AddSong":
                     SongService service = new SongService();
                     Song song = service.GetSongById(server._userHost.Token, parameters).Result;
                     server.serverLobby.songList.Add(song);
-                    if (currentPlayingSong == null)
+                    if (server.serverLobby.currentPlayingSong == null)
                     {
-                        currentPlayingSong = song;
-                        notPlayed = true;
+                        server.serverLobby.currentPlayingSong = song;
+                        server.serverLobby.notPlayed = true;
                         server.serverLobby.songList.Remove(song);
                     }
-                    if (nextInQueue == null && server.serverLobby.songList.Count > 0)
+                    if (server.serverLobby.nextInQueue == null && server.serverLobby.songList.Count > 0)
                     {
-                        nextInQueue = server.serverLobby.songList[0];
+                        server.serverLobby.nextInQueue = server.serverLobby.songList[0];
                     }
 
-                    queueList = server.serverLobby.songList;
+                    server.serverLobby.queueList = server.serverLobby.songList;
                     return;
 
                 default:
@@ -151,44 +138,46 @@ namespace MixUp
             AlarmManager alarmManager = (AlarmManager)context.ApplicationContext.GetSystemService(Context.AlarmService);
             var currentTime = Calendar.GetInstance(Android.Icu.Util.TimeZone.Default).TimeInMillis;
 
-            if (currentPlayingSong == null)
+            if (server == null || server.serverLobby.currentPlayingSong == null)
             {
                 var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.UpdateCurrent);
                 alarmManager.Set(AlarmType.Rtc, currentTime + (long)TimeSpan.FromSeconds(2).TotalMilliseconds, pending);
             }
             else
             {
-                if (nextInQueue != null)
+                if (server != null && server.serverLobby.nextInQueue != null)
                 {
-                    playerService.AddToQueue(nextInQueue);
-                    currentPlayingSong = nextInQueue;
-                    queueList.Remove(currentPlayingSong);
-                    if (queueList.Count > 0)
+                    playerService.AddToQueue(server.serverLobby.nextInQueue);
+                    server.serverLobby.currentPlayingSong = server.serverLobby.nextInQueue;
+                    server.serverLobby.queueList.Remove(server.serverLobby.currentPlayingSong);
+                    if (server.serverLobby.queueList.Count > 0)
                     {
-                        nextInQueue = queueList[0];
+                        server.serverLobby.nextInQueue = server.serverLobby.queueList[0];
                     }
                     else
                     {
-                        nextInQueue = null;
+                        server.serverLobby.nextInQueue = null;
                     }
                     var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.CancelCurrent);
                     alarmManager.Cancel(pending);
-                    alarmManager.SetExact(AlarmType.Rtc, (currentTime + currentPlayingSong.DurationMs) - 10000, pending);
-                    
+                    alarmManager.SetExact(AlarmType.Rtc, (currentTime + server.serverLobby.currentPlayingSong.DurationMs) - 15000, pending);
+
                 }
-                else if (notPlayed)
+                else if (server.serverLobby.notPlayed)
                 {
-                    playerService.PlaySong(currentPlayingSong);
+                    playerService.PlaySong(server.serverLobby.currentPlayingSong);
                     var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.CancelCurrent);
                     alarmManager.Cancel(pending);
-                    alarmManager.SetExact(AlarmType.Rtc, (currentTime + currentPlayingSong.DurationMs), pending);
-                    notPlayed = false;
+                    alarmManager.SetExact(AlarmType.Rtc, (currentTime + server.serverLobby.currentPlayingSong.DurationMs), pending);
+                    server.serverLobby.notPlayed = false;
                 }
                 else
                 {
-                    currentPlayingSong = null;
+                    server.serverLobby.currentPlayingSong = null;
                 }
+                UpdateLobby();
             }
+            
         }
     }
 
