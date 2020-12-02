@@ -8,10 +8,10 @@ namespace MixUp
     {
         public RoomCodeGenerator(){}
 
-        public String GenerateAndInsertCode(IPAddress ip)
+        public string GenerateAndInsertCode(IPAddress ip)
         {
-            String ipString = ip.ToString();
-            String generatedCode = "";
+            string ipString = ip.ToString();
+            string generatedCode = "";
             do
             {
                 generatedCode = RandomString(6);
@@ -24,10 +24,10 @@ namespace MixUp
             return generatedCode;
         }
 
-        public String GetRoomAddress(String code)
+        public string GetRoomAddress(string code)
         {
             code = code.ToUpper();
-            String ipAddStr = "";
+            string ipAddStr = "";
             // if(BD.exist(code))
             //{
             // ipAddStr = BD.getRoomCode(code)

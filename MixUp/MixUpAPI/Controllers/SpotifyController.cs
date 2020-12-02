@@ -147,6 +147,21 @@ namespace MixUpAPI.Controllers
             
         }
 
+        [HttpPost]
+        public void SaveLobbyCode([FromBody] LobbyInfo lobbyInfo)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         public Token GetNewToken(Dictionary<string, string> requestBody)
         {
             HttpClient client = new HttpClient();

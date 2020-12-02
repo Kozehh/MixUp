@@ -15,7 +15,6 @@ namespace MixUp
         public IPAddress ipAddress;
         public string roomCode;
         public bool notPlayed;
-        public List<Song> queueList;
         public Song currentPlayingSong;
         public Song nextInQueue;
 

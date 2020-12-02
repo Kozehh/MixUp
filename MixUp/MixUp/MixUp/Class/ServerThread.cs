@@ -121,7 +121,6 @@ namespace MixUp
                         server.serverLobby.nextInQueue = server.serverLobby.songList[0];
                     }
 
-                    server.serverLobby.queueList = server.serverLobby.songList;
                     return;
 
                 default:
@@ -149,10 +148,10 @@ namespace MixUp
                 {
                     playerService.AddToQueue(server.serverLobby.nextInQueue);
                     server.serverLobby.currentPlayingSong = server.serverLobby.nextInQueue;
-                    server.serverLobby.queueList.Remove(server.serverLobby.currentPlayingSong);
-                    if (server.serverLobby.queueList.Count > 0)
+                    server.serverLobby.songList.Remove(server.serverLobby.currentPlayingSong);
+                    if (server.serverLobby.songList.Count > 0)
                     {
-                        server.serverLobby.nextInQueue = server.serverLobby.queueList[0];
+                        server.serverLobby.nextInQueue = server.serverLobby.songList[0];
                     }
                     else
                     {

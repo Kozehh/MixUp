@@ -12,10 +12,12 @@ namespace DBManager.Controllers
     {
 
         private readonly UserService _userService;
+        private readonly LobbyService _lobbyService;
 
-        public DBManagerController(UserService userService)
+        public DBManagerController(UserService userService, LobbyService lobbyService)
         {
             _userService = userService;
+            _lobbyService = lobbyService;
         }
 
         [HttpGet]
@@ -43,6 +45,13 @@ namespace DBManager.Controllers
         public Token AddToken([FromBody] Token newToken)
         {
             return _userService.Create(newToken);
+        }
+
+        [HttpPost]
+        [Route("Lobby/Code")]
+        public void CreateLobby([FromBody] LobbyInfo lobbyInfo)
+        {
+            _lobbyService.CreateLobby(lobbyInfo);
         }
     }
 }
