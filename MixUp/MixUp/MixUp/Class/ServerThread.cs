@@ -160,7 +160,7 @@ namespace MixUp
                     }
                     var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.CancelCurrent);
                     alarmManager.Cancel(pending);
-                    alarmManager.SetExact(AlarmType.Rtc, (currentTime + server.serverLobby.currentPlayingSong.DurationMs) - 15000, pending);
+                    alarmManager.SetExact(AlarmType.Rtc, (currentTime + server.serverLobby.currentPlayingSong.DurationMs), pending);
 
                 }
                 else if (server.serverLobby.notPlayed)
@@ -168,7 +168,7 @@ namespace MixUp
                     playerService.PlaySong(server.serverLobby.currentPlayingSong);
                     var pending = PendingIntent.GetBroadcast(context.ApplicationContext, 0, alarmIntent, PendingIntentFlags.CancelCurrent);
                     alarmManager.Cancel(pending);
-                    alarmManager.SetExact(AlarmType.Rtc, (currentTime + server.serverLobby.currentPlayingSong.DurationMs), pending);
+                    alarmManager.SetExact(AlarmType.Rtc, (currentTime + server.serverLobby.currentPlayingSong.DurationMs -10000), pending);
                     server.serverLobby.notPlayed = false;
                 }
                 else

@@ -8,6 +8,7 @@ using ClassLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
 namespace MixUpAPI.Controllers
@@ -20,16 +21,18 @@ namespace MixUpAPI.Controllers
         private const string _tokenURL = "https://accounts.spotify.com/api/token";
         private const string _userURL = "https://api.spotify.com/v1/me";
 
-        public string client_secret = "e86971bae67043eaa474a084eab7b356";
-        public string client_id = "d8235676727f4a1b9938a49627c86640";
-        public string response_type = "code";
-        public string redirect_uri = "http://192.168.0.162:9000/mixup/callback";
-        private string _state = "profile activity";
-        public string scope = "user-read-private user-read-email user-modify-playback-state user-read-playback-state";
+        private const string client_secret = "e86971bae67043eaa474a084eab7b356";
+        private const string client_id = "d8235676727f4a1b9938a49627c86640";
+        private const string response_type = "code";
+        private string redirect_uri;
+        private const string _state = "profile activity";
+        private const string scope = "user-read-private user-read-email user-modify-playback-state user-read-playback-state";
         private string _code; // Code received from authorize access -> Will be exchange for an access
-        
+        private const string auth_code = "authorization_code";
 
+        // Variables d'environnement venant du Dockerfile
         private string dbManagerApi = Environment.GetEnvironmentVariable("DB_MANAGER_ADDR");
+        private string serverApi = Environment.GetEnvironmentVariable("SERVER_API");
 
 
         [HttpGet]
@@ -65,6 +68,8 @@ namespace MixUpAPI.Controllers
         [Route("authenticate")]
         public string Authenticate()
         {
+            redirect_uri = GetServerUrl();
+            redirect_uri += "/mixup/callback";
             var param = new Dictionary<string, string>()
             {
                 {"client_id", client_id},
@@ -82,12 +87,13 @@ namespace MixUpAPI.Controllers
         [Route("requestToken")]
         public string RequestToken([FromBody] string code)
         {
-            string s = "authorization_code";
+            redirect_uri = GetServerUrl();
+            redirect_uri += "/mixup/callback";
             var param = new Dictionary<string, string>()
             {
                 {"code", code },
                 {"redirect_uri", redirect_uri},
-                {"grant_type", s},
+                {"grant_type", auth_code},
                 {"client_id", client_id},
                 {"client_secret", client_secret}
             };
@@ -164,14 +170,28 @@ namespace MixUpAPI.Controllers
             }
             catch (Exception ex)
             {
-                
                 Console.WriteLine(ex.Message);
                 return null;
             }
         }
 
-        
-        
+        public string GetServerUrl()
+        {
+            string url = null;
+            HttpClient client = new HttpClient();
+            var res = client.GetAsync($"{serverApi}:4551/api/tunnels").Result;
+            var json = res.Content.ReadAsStringAsync().Result;
+            try
+            {
+                JObject response = JObject.Parse(json);
+                url = (string) response["tunnels"][1]["public_url"];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return url;
+        }
 
     }
 }
