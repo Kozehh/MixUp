@@ -14,11 +14,18 @@
             </Style>
 
             <Style TargetType="Label">
-                <Setter Property="TextColor" Value="#1DB954"/>
+                <Setter Property="TextColor" Value="Black"/>
                 <Setter Property="FontSize" Value="18"/>
                 <Setter Property="CharacterSpacing" Value="1"/>
             </Style>
 
+            <Style TargetType="Entry">
+                <Setter Property="TextColor" Value="Black"/>
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="CharacterSpacing" Value="1"/>
+                <Setter Property="PlaceholderColor" Value="DarkGray"/>
+            </Style>
+            
             <Style TargetType="Button">
                 <Setter Property="BackgroundColor" Value="#1DB954"/>
                 <Setter Property="CornerRadius" Value="20"/>
@@ -30,7 +37,7 @@
 
             </Style>
 
-            <Style TargetType="ContentPage">
+            <Style TargetType="ContentPage" ApplyToDerivedTypes="true">
                 <Setter Property="BackgroundColor" Value="#f2f2f2"/>
             </Style>
 
