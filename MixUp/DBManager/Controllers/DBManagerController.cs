@@ -6,52 +6,48 @@ using MongoDB.Driver;
 
 namespace DBManager.Controllers
 {
-    [Route("db-manager")]
+    [Route("dbmanager")]
     [ApiController]
     public class DBManagerController : ControllerBase
     {
 
-        private readonly UserService _userService;
-        private readonly LobbyService _lobbyService;
+        private UserService _userService;
+        private LobbyService _lobbyService;
 
-        public DBManagerController(UserService userService, LobbyService lobbyService)
+        public DBManagerController()
         {
-            _userService = userService;
-            _lobbyService = lobbyService;
+            _userService = new UserService();
+            _lobbyService = new LobbyService();
         }
 
-        [HttpGet]
-        [Route("db")]
-        public void Test()
-        {
-            var client = new MongoClient("mongodb+srv://dbAnthoAdmin:xgf1jm3gYRTpqlcP@mixup.wrwba.mongodb.net/MixUp?retryWrites=true&w=majority");
-            var dbL = client.GetDatabase("sample_airbnb");
-            var ll = dbL.ListCollections().ToList();
-            foreach (var doc in ll)
-            {
-                Console.WriteLine(doc.ToString());
-            }
-        }
-
+        
         [HttpPost]
-        [Route("Token/Update")]
+        [Route("token/update")]
         public void UpdateToken([FromBody] Token newToken)
         {
-            UserService service = new UserService();
+            throw new NotImplementedException();
         }
 
         [HttpPost]
-        [Route("Token/Add")]
+        [Route("token/add")]
         public Token AddToken([FromBody] Token newToken)
         {
             return _userService.Create(newToken);
         }
 
         [HttpPost]
-        [Route("Lobby/Code")]
+        [Route("lobby/create")]
         public void CreateLobby([FromBody] LobbyInfo lobbyInfo)
         {
             _lobbyService.CreateLobby(lobbyInfo);
+        }
+
+        [HttpPost]
+        [Route("lobby/connect")]
+        public LobbyInfo GetLobbyAddr([FromBody] LobbyInfo lobby)
+        {
+            var lobbyInfo = _lobbyService.Get(lobby);
+            return lobbyInfo;
         }
     }
 }

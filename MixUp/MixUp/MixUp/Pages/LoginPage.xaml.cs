@@ -16,7 +16,7 @@ namespace MixUp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage : ContentPage, INotifyPropertyChanged
     {
-        private const string mixupApi = @"http://1cb04b93ffbd.ngrok.io/mixup/";
+        public static string mixupApi = @"http://fd0c0025e042.ngrok.io/mixup/";
         private const string callback = "mixup/callback";
         private HttpClient _client;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -73,7 +73,7 @@ namespace MixUp.Pages
                 Timeout = TimeSpan.FromSeconds(4)
             };
             
-            ClearCookies();
+            //ClearCookies();
         }
 
         // Login to spotify
@@ -107,9 +107,13 @@ namespace MixUp.Pages
             // If the login process is finished, we redirect the user to the HomePage
             if (finishedLogin)
             {
+                Token token = null;
                 Web = false;
                 Load = true;
-                var token = await GetToken();
+                while (token == null || token.AccessToken == null)
+                {
+                    token = await GetToken();
+                }
                 var user = GetUser(token);
                 user.Token = token;
                 Load = false;

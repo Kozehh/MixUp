@@ -13,9 +13,9 @@ namespace MixUp
         public List<Socket> connectedUsersList;
         public ServerConnectionManager serverConnectionManager;
         public User _userHost;
-        public String roomCode;
+        public string roomCode;
 
-        public Server(User user, String serverName, String code)
+        public Server(User user, string serverName, string code)
         {
             roomCode = code;
             _userHost = user;

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using ClassLibrary.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -15,6 +16,10 @@ namespace DBManager.Services
 
             _connectionInfo = database.GetCollection<LobbyInfo>("ConnectionInfo");
         }
+
+        public LobbyInfo Get(LobbyInfo lobby) =>
+            _connectionInfo.Find<LobbyInfo>(addr => addr.RoomCode == lobby.RoomCode).FirstOrDefault();
+        
 
         public void CreateLobby(LobbyInfo lobbyInfo)
         {

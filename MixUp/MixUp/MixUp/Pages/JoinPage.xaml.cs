@@ -1,5 +1,6 @@
 ﻿using ClassLibrary.Models;
 using System;
+using MixUp.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -17,14 +18,16 @@ namespace MixUp.Pages
 
         async void OnJoinClicked(object sender, EventArgs args)
         {
+            LobbyService service = new LobbyService();
             if (ipEntry.Text != null && ipEntry.Text.Length == 6)
             {
                 RoomCodeGenerator rcg = new RoomCodeGenerator();
-                String ipAddress = rcg.GetRoomAddress(ipEntry.Text);
+                string ipAddress = rcg.GetRoomAddress(ipEntry.Text);
+                var lobby = service.FindLobbyWithCode(ipEntry.Text);
 
-                if (ipAddress != "")
+                if (lobby.LobbyAddr != "")
                 {
-                    await Navigation.PushAsync(new LobbyPage(null, ipAddress, null, null, user));
+                    await Navigation.PushAsync(new LobbyPage(null, lobby.LobbyAddr, null, null, user));
                 }
 
                 else
