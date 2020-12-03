@@ -196,15 +196,17 @@ namespace MixUpAPI.Controllers
             HttpClient client = new HttpClient();
             var res = client.GetAsync($"{serverApi}:4551/api/tunnels").Result;
             var json = res.Content.ReadAsStringAsync().Result;
+            Console.WriteLine("Json " + json);
             try
             {
                 JObject response = JObject.Parse(json);
-                url = (string) response["tunnels"][1]["public_url"];
+                url = (string) response["tunnels"][0]["public_url"];
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+            Console.WriteLine("URL " + url);
             return url;
         }
 
