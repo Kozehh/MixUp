@@ -37,9 +37,19 @@ namespace DBManager.Controllers
 
         [HttpPost]
         [Route("lobby/create")]
-        public void CreateLobby([FromBody] LobbyInfo lobbyInfo)
+        public bool CreateLobby([FromBody] LobbyInfo lobbyInfo)
         {
-            _lobbyService.CreateLobby(lobbyInfo);
+            bool canSaveLobby = false;
+            var result = _lobbyService.Exists(lobbyInfo);
+            // Si le code généré n'est pas déjà associé à un lobby
+            if (result == null)
+            {
+                canSaveLobby = true;
+                // On peut en créer un nouveau
+                _lobbyService.CreateLobby(lobbyInfo);
+            }
+            // Sinon on retourne l'objet avec une adresse null, et on va en générer un autre
+            return canSaveLobby;
         }
 
         [HttpPost]

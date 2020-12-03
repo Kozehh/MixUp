@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using ClassLibrary.Models;
+using MixUp.Services;
 
 namespace MixUp
 {
     class RoomCodeGenerator
     {
-        public RoomCodeGenerator(){}
-
+        private LobbyService lobbyService;
+        public RoomCodeGenerator()
+        {
+            lobbyService = new LobbyService();
+        }
+        
         public string GenerateAndInsertCode(IPAddress ip)
         {
             string ipString = ip.ToString();
@@ -15,25 +21,15 @@ namespace MixUp
             do
             {
                 generatedCode = RandomString(6);
-            }
-            //while(BD.exist(generatedCode));
-            while (false);
-
-            // BD.insert(roomCode, ipString);
+            } while (!lobbyService.SaveLobbyCode(generatedCode, ipString));
             
             return generatedCode;
         }
 
-        public string GetRoomAddress(string code)
+        public LobbyInfo GetRoomAddress(string code)
         {
             code = code.ToUpper();
-            string ipAddStr = "";
-            // if(BD.exist(code))
-            //{
-            // ipAddStr = BD.getRoomCode(code)
-            //}
-
-            return ipAddStr;
+            return lobbyService.FindLobbyWithCode(code);
         }
 
 

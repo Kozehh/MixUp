@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using ClassLibrary.Models;
 using MixUp.Pages;
 using Newtonsoft.Json;
@@ -11,8 +12,9 @@ namespace MixUp.Services
     public class LobbyService
     {
         private HttpClient client = new HttpClient();
-        public async void SaveLobbyCode(string roomCode, string ipAddr)
+        public bool SaveLobbyCode(string roomCode, string ipAddr)
         {
+            bool canSaveLobby = true;
             try
             {
                 LobbyInfo lobbyInfo = new LobbyInfo()
@@ -23,10 +25,13 @@ namespace MixUp.Services
                 var serialize = JsonConvert.SerializeObject(lobbyInfo);
                 var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
                 var res = client.PostAsync(LoginPage.mixupApi+"lobby/create", toSend).Result;
+                canSaveLobby = JsonConvert.DeserializeObject<bool>(res.Content.ReadAsStringAsync().Result);
+                return canSaveLobby;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return canSaveLobby = false;
             }
         }
 

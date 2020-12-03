@@ -21,7 +21,7 @@ namespace MixUpAPI.Controllers
         private const string _authURL = "https://accounts.spotify.com/authorize?";
         private const string _tokenURL = "https://accounts.spotify.com/api/token";
         private const string _userURL = "https://api.spotify.com/v1/me";
-        private string redirect_uri;
+        private string redirect_uri = "https://servermixupudes.loca.lt/mixup/callback";
 
         // Identifiant et code secret utilisé dans le authorization code flow pour 
         // avoir un token d'accès de l'application
@@ -37,7 +37,7 @@ namespace MixUpAPI.Controllers
 
         // Variables d'environnement venant du Dockerfile
         private string dbManagerApi = Environment.GetEnvironmentVariable("DB_MANAGER_ADDR");
-        private string serverApi = Environment.GetEnvironmentVariable("SERVER_API");
+        //private string serverApi = Environment.GetEnvironmentVariable("SERVER_API");
 
         private HttpClient client = new HttpClient();
 
@@ -74,8 +74,6 @@ namespace MixUpAPI.Controllers
         [Route("authenticate")]
         public string Authenticate()
         {
-            redirect_uri = GetServerUrl();
-            redirect_uri += "/mixup/callback";
             var param = new Dictionary<string, string>()
             {
                 {"client_id", client_id},
@@ -93,8 +91,6 @@ namespace MixUpAPI.Controllers
         [Route("requestToken")]
         public string RequestToken([FromBody] string code)
         {
-            redirect_uri = GetServerUrl();
-            redirect_uri += "/mixup/callback";
             var param = new Dictionary<string, string>()
             {
                 {"code", code },
@@ -153,18 +149,21 @@ namespace MixUpAPI.Controllers
 
         [HttpPost]
         [Route("lobby/create")]
-        public void SaveLobbyCode([FromBody] LobbyInfo lobbyInfo)
+        public bool SaveLobbyCode([FromBody] LobbyInfo lobbyInfo)
         {
-            Console.WriteLine("lobby/create");
+            bool canSaveLobby = true;
             try
             {
                 var serialize = JsonConvert.SerializeObject(lobbyInfo);
                 var toSend = new StringContent(serialize, Encoding.UTF8, "application/json");
                 var res = client.PostAsync(dbManagerApi + "/dbmanager/lobby/create", toSend).Result;
+                canSaveLobby = JsonConvert.DeserializeObject<bool>(res.Content.ReadAsStringAsync().Result);
+                return canSaveLobby;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return canSaveLobby = false;
             }
         }
 
@@ -215,28 +214,5 @@ namespace MixUpAPI.Controllers
                 return null;
             }
         }
-
-        // Vu qu'on utilise un tunnelling service pour expose notre app sur internet,
-        // On doit aller chercher le public url qui nous offre de se connecter à notre API
-        // ** Sert a construire le callback url qui est envoyé au API de Spotify
-        public string GetServerUrl()
-        {
-            string url = null;
-            var res = client.GetAsync($"{serverApi}:4551/api/tunnels").Result;
-            var json = res.Content.ReadAsStringAsync().Result;
-            Console.WriteLine("Json " + json);
-            try
-            {
-                JObject response = JObject.Parse(json);
-                url = (string) response["tunnels"][0]["public_url"];
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            Console.WriteLine("URL " + url);
-            return url;
-        }
-
     }
 }

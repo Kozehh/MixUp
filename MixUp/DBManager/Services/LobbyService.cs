@@ -18,8 +18,10 @@ namespace DBManager.Services
         }
 
         public LobbyInfo Get(LobbyInfo lobby) =>
-            _connectionInfo.Find<LobbyInfo>(addr => addr.RoomCode == lobby.RoomCode).FirstOrDefault();
-        
+            _connectionInfo.Find<LobbyInfo>(room => room.RoomCode == lobby.RoomCode).FirstOrDefault();
+
+        public LobbyInfo Exists(LobbyInfo lobby) =>
+            _connectionInfo.Find<LobbyInfo>(room => room.RoomCode == lobby.RoomCode).Limit(1).FirstOrDefault();
 
         public void CreateLobby(LobbyInfo lobbyInfo)
         {

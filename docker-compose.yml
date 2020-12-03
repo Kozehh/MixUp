@@ -17,14 +17,11 @@ services:
             context: ./MixUp
             dockerfile: DBManager/Dockerfile
 
-    # Ngrok Service
-    ngrok:
-        image: shkoliar/ngrok:latest
-        ports:
-        - 4551:4551
+# tunnel service to make our mixup API service expose to the internet
+    localtunnel:
+        image: efrecon/localtunnel
         links:
-        - mixupapi
-        environment:
-        - DOMAIN=mixupapi
-        - PORT=80
+            - mixupapi
+        command:
+            --local-host mixupapi --port 80 --subdomain servermixupudes
         

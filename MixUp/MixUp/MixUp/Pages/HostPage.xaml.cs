@@ -22,17 +22,15 @@ namespace MixUp.Pages
             _user = user;
         }
 
-        async void OnCreateLobbyButtonClicked(object sender, EventArgs args)
+        public async void OnCreateLobbyButtonClicked(object sender, EventArgs args)
         {
             // Start Server thread
             if (lobbyNameEntry.Text != null)
             {
-                LobbyService lobbyService = new LobbyService();
                 IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
                 IPAddress ipAddr = ipHost.AddressList[0];
                 RoomCodeGenerator rcg = new RoomCodeGenerator();
                 string roomCode = rcg.GenerateAndInsertCode(ipAddr);
-                lobbyService.SaveLobbyCode(roomCode, ipAddr.ToString());
                 Server lobbyServer = new Server(_user, lobbyNameEntry.Text, roomCode);
                 ThreadStart work = lobbyServer.ExecuteServer;
                 Thread serverThread = new Thread(work);
@@ -43,7 +41,6 @@ namespace MixUp.Pages
             else
             {
                 await DisplayAlert("Invalid Name", "Please enter a valid room name", "OK");
-                return;
             }
         }
     }
