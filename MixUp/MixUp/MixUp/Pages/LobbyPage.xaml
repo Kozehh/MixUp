@@ -7,7 +7,7 @@
         <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
         <Grid Margin="20,35,20,20">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="2*" />
                 <RowDefinition Height="4*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -22,26 +22,43 @@
                     Grid.Row="0"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="FillAndExpand"
-                    Margin="20,-30,20,0">
+                    Margin="20,-30, 15,0">
+
+                    <Label Text="Lobby"
+                           TextColor="Black"
+                           HorizontalOptions="Center"
+                           FontSize="Large"
+                           x:Name="lobbyName"/>
+
+                    <Label Text="Code"
+                           TextColor="DarkGray"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Start"
+                           FontSize="Small"
+                           x:Name="lobbyCode"/>
+
                     <Grid HorizontalOptions="FillAndExpand">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <StackLayout VerticalOptions="Center">
+                        <StackLayout VerticalOptions="Center" BackgroundColor="#f2f2f2" Padding="1">
                             <StackLayout>
                                 <Label Text="Currently Playing"
-                                   HorizontalOptions="Center"
+                                   HorizontalOptions="FillAndExpand"
                                    TextColor="#1DB954"
-                                   FontSize="20"/>
+                                   FontAttributes="Bold"
+                                   HorizontalTextAlignment="Center"
+                                   FontSize="20"
+                                   BackgroundColor="#f2f2f2"/>
                             </StackLayout>
-                        <Label Text="{Binding CurrentlyPlaying.Name}" FontSize="16"/>
-                        <Label Text="{Binding CurrentlyPlaying.Artists[0].Name}" FontSize="16" />
+                        <Label Text="{Binding CurrentlyPlaying.Name}" FontSize="16" TextColor="Black" Margin="10,0,0,0"/>
+                            <Label Text="{Binding CurrentlyPlaying.Artists[0].Name}" FontSize="16" TextColor="DarkGreen" Margin="10,0,0,0"/>
                         </StackLayout>
                         <Frame CornerRadius="20"
                                Padding="0"
                                HorizontalOptions="End" VerticalOptions="End" HeightRequest="55">
-                            <Image Margin="0,0,0,3"  Source="{Binding CurrentlyPlaying.SongAlbum.Images[0].Url}"/>
+                            <Image Margin="0,0,0,0"  Source="{Binding CurrentlyPlaying.SongAlbum.Images[0].Url}"/>
                         </Frame>
                         
                     </Grid>
@@ -49,7 +66,7 @@
 
                 </StackLayout>
 
-                <CollectionView Grid.Row="1" Grid.Column="1" Margin="20,0,20,-20" ItemsSource="{Binding SongList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" SelectionMode="Single" BackgroundColor="LightGray" >
+                <CollectionView Grid.Row="1" Grid.Column="1" Margin="20,-20,20,-20" ItemsSource="{Binding SongList}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" SelectionMode="Single" BackgroundColor="LightGray" >
                     
                     <CollectionView.Header>
 
@@ -86,28 +103,33 @@
                 </CollectionView>
 
 
-                <CollectionView Grid.Column="1"
-                                Grid.Row="3"
-                                ItemsSource="{Binding Playlists}"
-                                Margin="0,-40,0,0"
-                                SelectionMode="Single">
-                    <CollectionView.Header>
-                        <Label Text="My Playlists" FontSize="16"
+                <StackLayout Grid.Column="1"
+                             Grid.Row="3"
+                             Margin="20,-60,20,0">
+                    <Label Text="My Playlists" FontSize="16"
                                TextColor="#1DB954"
-                               FontAttributes="Bold"/>
-                    </CollectionView.Header>
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Horizontal" VerticalItemSpacing="1"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout>
-                                <Label Text="{Binding Name}" HorizontalOptions="CenterAndExpand" FontSize="16"/>
-                                <ImageButton Aspect="AspectFill" BackgroundColor="AliceBlue" CornerRadius="20" Source="{Binding Images[0].Url}" Clicked="OnPlaylistClicked" CommandParameter="{Binding Name}" HeightRequest="85" WidthRequest="85" Margin="10,-5,10,0"/>
-                            </StackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"/>
+
+                    <CollectionView 
+                                ItemsSource="{Binding Playlists}"
+
+                                SelectionMode="Single">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Horizontal" VerticalItemSpacing="1"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout>
+                                    <Label Text="{Binding Name}" HorizontalOptions="CenterAndExpand" FontSize="16"/>
+                                    <ImageButton Aspect="AspectFill" BackgroundColor="AliceBlue" CornerRadius="20" Source="{Binding Images[0].Url}" Clicked="OnPlaylistClicked" CommandParameter="{Binding Name}" HeightRequest="85" WidthRequest="85" Margin="10,-5,10,0"/>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </StackLayout>
+                
         </Grid>
         </RefreshView>
     </ContentPage.Content>

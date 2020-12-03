@@ -73,7 +73,7 @@ namespace MixUp.Pages
                 Timeout = TimeSpan.FromSeconds(4)
             };
             
-            //ClearCookies();
+            ClearCookies();
         }
 
         // Login to spotify
