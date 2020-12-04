@@ -36,13 +36,15 @@ namespace MixUp
             sessionLobbyPage.Update(lobby);
         }
 
-        public void SendMessage(string message)
+        public bool SendMessage(string message)
         {
             byte[] messageSent = Encoding.ASCII.GetBytes(message);
             if (connectionManager.socket != null)
             {
                 int byteSent = connectionManager.socket.Send(messageSent);
+                return true;
             }
+            return false;
         }
     }
 }

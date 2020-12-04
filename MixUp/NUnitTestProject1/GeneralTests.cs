@@ -4,7 +4,7 @@ using System.Net;
 
 namespace NUnitTestProject1
 {
-    public class Tests
+    public class GeneralTests
     {
         [SetUp]
         public void Setup()
@@ -29,6 +29,16 @@ namespace NUnitTestProject1
             string result = rcg.GetRoomAddress(code).LobbyAddr;
             Assert.AreEqual(firstIp, result);
         }
+
+
+        [Test]
+        public void SendMessageTest()
+        {
+            Session session = new Session(null, null);
+            Assert.IsFalse(session.SendMessage("ShouldFail"));
+        }
+
+
 
     }
 }
