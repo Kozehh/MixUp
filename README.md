@@ -22,10 +22,11 @@ Mix Up est un gestionnaire de musique interactif qui facilite la gestion de la m
 
 ## Prérequis
 
-- Docker et Docker-Compose
+- Installer [Docker](https://docs.docker.com/desktop/) et [Docker-Compose](https://docs.docker.com/compose/install/)
 - Cellulaire android (Suivre les [étapes](https://docs.microsoft.com/en-us/xamarin/android/get-started/installation/set-up-device-for-development) pour setup l'environnement du cellulaire)
-- Xamarin (Suivre les [étapes](https://docs.microsoft.com/en-us/xamarin/get-started/installation/?pivots=windows) pour installer xamarin)
-- .NET Core 3.1 [Installer](https://dotnet.microsoft.com/download)
+- Installer [Xamarin](https://docs.microsoft.com/en-us/xamarin/get-started/installation/?pivots=windows)
+- Installer [.NET Core 3.1] (https://dotnet.microsoft.com/download)
+- Installer [Git](https://git-scm.com/downloads)
 
 
 ## Utilisation

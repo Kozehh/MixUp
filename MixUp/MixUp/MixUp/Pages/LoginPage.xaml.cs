@@ -16,7 +16,7 @@ namespace MixUp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage : ContentPage, INotifyPropertyChanged
     {
-        public static string mixupApi = @"http://servermixupudes.loca.lt/mixup/";
+        public static string mixupApi = @"http://server-mixup-udes.loca.lt/mixup/";
         private const string callback = "mixup/callback";
         private HttpClient _client;
         public event PropertyChangedEventHandler PropertyChanged;
