@@ -31,12 +31,6 @@ namespace NUnitTestProject1
         }
 
 
-        [Test]
-        public void SendMessageTest()
-        {
-            Session session = new Session(null, null);
-            Assert.IsFalse(session.SendMessage("ShouldFail"));
-        }
 
 
 
