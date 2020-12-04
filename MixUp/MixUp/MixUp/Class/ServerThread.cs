@@ -100,7 +100,7 @@ namespace MixUp
             }
         }
 
-        public void CommandInterpreterAsync(string commandLine)
+        public bool CommandInterpreterAsync(string commandLine)
         {
             string command = commandLine.Substring(0, commandLine.IndexOf(":"));
             string parameters = commandLine.Substring(commandLine.IndexOf(":") + 1);
@@ -121,10 +121,10 @@ namespace MixUp
                         server.serverLobby.nextInQueue = server.serverLobby.songList[0];
                     }
 
-                    return;
+                    return true;
 
                 default:
-                    return;
+                    return false;
             }
         }
 

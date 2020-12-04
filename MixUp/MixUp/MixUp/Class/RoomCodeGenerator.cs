@@ -6,7 +6,7 @@ using MixUp.Services;
 
 namespace MixUp
 {
-    class RoomCodeGenerator
+    public class RoomCodeGenerator
     {
         private LobbyService lobbyService;
         public RoomCodeGenerator()
