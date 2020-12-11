@@ -61,7 +61,7 @@ namespace MixUp
         {
             // 1. Serialiser le lobby.
             // SerializePath
-            string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             folder += "/LobbyData.dat";
 
             Stream stream = File.Open(folder, FileMode.OpenOrCreate);
@@ -121,6 +121,10 @@ namespace MixUp
                         server.serverLobby.nextInQueue = server.serverLobby.songList[0];
                     }
 
+                    return true;
+
+                case "refresh":
+                    UpdateLobby();
                     return true;
 
                 default:

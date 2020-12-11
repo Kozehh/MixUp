@@ -22,7 +22,6 @@ namespace MixUp.Pages
         private const string urlToSkipTunnelPage =
             "http://server-mixup-udes.loca.lt/continue/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOiIyMDIwLTEyLTA0VDE0OjM0OjE0LjU3MVoiLCJzdWJkb21haW4iOiJibHVlLWZhbGNvbi01NSIsImlwIjoiNzQuNTYuMTE5LjEzNiIsImlhdCI6MTYwNzA5MjQ1NH0.gUWlFnovpwTra0RWADhCfthOoH-YMkPYGq88Juo6sXE";
 
-        private bool isLocalTunnelPage;
         private HttpClient _client;
         public event PropertyChangedEventHandler PropertyChanged;
         private bool _web;
@@ -71,7 +70,7 @@ namespace MixUp.Pages
                 Timeout = TimeSpan.FromSeconds(4)
             };
             
-            //ClearCookies();
+            ClearCookies();
         }
 
         // Login to spotify

@@ -52,8 +52,8 @@
                                    FontSize="20"
                                    BackgroundColor="#f2f2f2"/>
                             </StackLayout>
-                        <Label Text="{Binding CurrentlyPlaying.Name}" FontSize="16" TextColor="Black" Margin="10,0,0,0"/>
-                            <Label Text="{Binding CurrentlyPlaying.Artists[0].Name}" FontSize="16" TextColor="DarkGreen" Margin="10,0,0,0"/>
+                            <Label Text="{Binding CurrentlyPlaying.Name}" FontSize="14" TextColor="Black" Margin="10,0,0,0" />
+                            <Label Text="{Binding CurrentlyPlaying.Artists[0].Name}" FontSize="14" TextColor="DarkGreen" Margin="10,0,0,0"/>
                         </StackLayout>
                         <Frame CornerRadius="20"
                                Padding="0"
@@ -91,7 +91,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <StackLayout VerticalOptions="Center">
-                                    <Label Text="{Binding Name}" TextColor="Black" FontSize="17"/>
+                                    <Label Text="{Binding Name}" TextColor="Black" FontSize="17" HorizontalOptions="StartAndExpand" Padding="0,0,38,0"/>
                                     <Label Text="{Binding Artists[0].Name}" TextColor="Black" FontSize="12" Opacity="0.5"/>
                                 </StackLayout>
                                 <pv:PancakeView HeightRequest="45" WidthRequest="45" CornerRadius="20" HorizontalOptions="End" VerticalOptions="Center" >
@@ -121,7 +121,7 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout>
-                                    <Label Text="{Binding Name}" HorizontalOptions="CenterAndExpand" FontSize="16"/>
+                                    <Label Text="{Binding Name}" HorizontalOptions="CenterAndExpand" FontSize="14" WidthRequest="85" HorizontalTextAlignment="Center" MaxLines="1"/>
                                     <ImageButton Aspect="AspectFill" BackgroundColor="AliceBlue" CornerRadius="20" Source="{Binding Images[0].Url}" Clicked="OnPlaylistClicked" CommandParameter="{Binding Name}" HeightRequest="85" WidthRequest="85" Margin="10,-5,10,0"/>
                                 </StackLayout>
                             </DataTemplate>

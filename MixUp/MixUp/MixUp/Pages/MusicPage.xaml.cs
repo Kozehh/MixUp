@@ -22,7 +22,6 @@ namespace MixUp.Pages
         public const string songToAdd = "/cAddSong:";
 
         // Variables qui modifient propriétés du UI quand elles changent
-        
 
         public Playlist Playlist
         {

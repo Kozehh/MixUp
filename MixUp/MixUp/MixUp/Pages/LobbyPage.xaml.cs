@@ -61,6 +61,7 @@ namespace MixUp.Pages
                 ThreadStart clientWork = session.ExecuteClient;
                 clientThread = new Thread(clientWork);
                 clientThread.Start();
+                ExecuteRefreshCommand();
                 BindingContext = this;
             }
             catch (Exception ex)
@@ -137,7 +138,7 @@ namespace MixUp.Pages
 
         public void ExecuteRefreshCommand()
         {
-            session.SendMessage("refresh");
+            session.SendMessage("/crefresh:");
             // Stop refreshing
             IsRefreshing = false;
         }

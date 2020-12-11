@@ -13,24 +13,23 @@ namespace MixUp
     {
         public Session session;
         public Socket socket;
-        IPAddress ipAddr;
-        IPHostEntry ipHost;
-        IPEndPoint localEndPoint;
-        Socket sender;
-        Int32 port = 11000;
+        private IPAddress hostAddr;
+        private IPHostEntry hostName;
+        private IPEndPoint remoteEndPoint;
+        private Socket sender;
+        private Int32 port = 11000;
+        private readonly IPAddress _androidEmulatorIp = IPAddress.Parse("192.168.232.2"); 
+
         public ConnectionManager(Session session)
         {
             this.session = session;
-            ipHost = Dns.GetHostEntry(Dns.GetHostName());
+            hostName = Dns.GetHostEntry(Dns.GetHostName());
+            hostAddr = hostName.AddressList[0];
             if (!string.IsNullOrEmpty(session.sessionLobbyPage.ip))
             {
-                ipAddr = IPAddress.Parse(session.sessionLobbyPage.ip);
+                hostAddr = IPAddress.Parse(session.sessionLobbyPage.ip);
             }
-            else
-            {
-                ipAddr = ipHost.AddressList[0];
-            }
-            localEndPoint = new IPEndPoint(ipAddr, port);
+            remoteEndPoint = new IPEndPoint(hostAddr, port);
             sender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
@@ -38,7 +37,7 @@ namespace MixUp
         {
             try
             {
-                sender.Connect(localEndPoint);
+                sender.Connect(remoteEndPoint);
                 this.socket = sender;
                 Console.WriteLine("connected to -> {0} ", sender.RemoteEndPoint.ToString());
 
