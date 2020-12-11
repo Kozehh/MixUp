@@ -18,6 +18,11 @@ namespace MixUp.Pages
     {
         public static string mixupApi = @"http://server-mixup-udes.loca.lt/mixup/";
         private const string callback = "mixup/callback";
+
+        private const string urlToSkipTunnelPage =
+            "http://server-mixup-udes.loca.lt/continue/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOiIyMDIwLTEyLTA0VDE0OjM0OjE0LjU3MVoiLCJzdWJkb21haW4iOiJibHVlLWZhbGNvbi01NSIsImlwIjoiNzQuNTYuMTE5LjEzNiIsImlhdCI6MTYwNzA5MjQ1NH0.gUWlFnovpwTra0RWADhCfthOoH-YMkPYGq88Juo6sXE";
+
+        private bool isLocalTunnelPage;
         private HttpClient _client;
         public event PropertyChangedEventHandler PropertyChanged;
         private bool _web;
@@ -59,14 +64,7 @@ namespace MixUp.Pages
             _loginView = this.FindByName<WebView>("loginview");
             // Handle Navigated and Navigating events of our webview
             _loginView.Navigated += View_Navigated;
-            _loginView.Navigating += (sen, e) =>
-            {
-                // If we are naviagting to the callback URL, the login is finished
-                if (e.Url.Contains(callback))
-                {
-                    finishedLogin = true;
-                }
-            };
+            _loginView.Navigating += View_Navigating;
             // Create an http client and set a 4 sec timeout
             _client = new HttpClient
             {
@@ -100,27 +98,6 @@ namespace MixUp.Pages
             }
         }
 
-        // Get the auth code from the Spotify redirect
-        // And get the token afterward
-        public async void View_Navigated(object sender, EventArgs e)
-        {
-            // If the login process is finished, we redirect the user to the HomePage
-            if (finishedLogin)
-            {
-                Token token = null;
-                Web = false;
-                Load = true;
-                while (token == null || token.AccessToken == null)
-                {
-                    token = await GetToken();
-                }
-                var user = GetUser(token);
-                user.Token = token;
-                Load = false;
-                await Navigation.PushAsync(new HomePage(user));
-            }
-        }
-
         // Getting the user code
         private async Task<Token> GetToken()
         {
@@ -146,6 +123,45 @@ namespace MixUp.Pages
         {
             var cookieManager = CookieManager.Instance;
             cookieManager.RemoveAllCookie();
+        }
+
+        // Get the auth code from the Spotify redirect
+        // And get the token afterward
+        public async void View_Navigated(object sender, EventArgs e)
+        {
+            // If the login process is finished, we redirect the user to the HomePage
+            if (finishedLogin)
+            {
+                Token token = null;
+                Web = false;
+                Load = true;
+                while (token == null || token.AccessToken == null)
+                {
+                    token = await GetToken();
+                }
+                var user = GetUser(token);
+                user.Token = token;
+                Load = false;
+                await Navigation.PushAsync(new HomePage(user));
+            }
+        }
+
+        public void View_Navigating(object sender, WebNavigatingEventArgs e)
+        {
+             // If we are naviagting to the callback URL, the login is finished
+            if (e.Url.Contains(callback))
+            {
+                finishedLogin = true;
+            }
+            else if (e.Url.Contains("html"))
+            {
+                var source = new UrlWebViewSource()
+                {
+                    Url = urlToSkipTunnelPage
+                };
+                _loginView.Source = source;
+                _loginView.Source = (_loginView.Source as UrlWebViewSource).Url;
+            }
         }
     }
 }

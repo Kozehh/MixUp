@@ -4,42 +4,31 @@
              x:Class="MixUp.Pages.HostPage">
     <ContentPage.Content>
 
-        <Grid Margin="20,35,0,20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <StackLayout Orientation="Vertical">
+        <Label Text="Host your private Lobby by pressing Create Lobby."
+               Margin="20,20"
+               HorizontalTextAlignment="Center"
+               FontSize="28"
+               VerticalOptions="Start" 
+               HorizontalOptions="Start" />
 
-            <Label Text="Host your private Lobby by pressing Create Lobby."
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    Grid.ColumnSpan="3"
-                    VerticalOptions="CenterAndExpand" 
-                    HorizontalOptions="CenterAndExpand" />
-
-            <StackLayout Grid.Column="1"
-                         Grid.Row="1">
-
-                <Entry Placeholder="Enter an epic name"
-                       x:Name="lobbyNameEntry"
-                       MaxLength="20"/>
+        <BoxView HeightRequest="4" BackgroundColor="LightBlue" HorizontalOptions="FillAndExpand" VerticalOptions="Start"></BoxView>
+        <StackLayout Orientation="Vertical" Margin="40,20" HorizontalOptions="FillAndExpand">
+            <Entry Margin="15,0,15,0" WidthRequest="40" 
+                   Placeholder="Enter a lobby name"
+                   x:Name="lobbyNameEntry"
+                   MaxLength="20"/>
 
 
 
-                <Button Text="Create Lobby!"
-                        HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="Center"
+            <Button WidthRequest="40"
+                        HeightRequest="70"
+                        Text="Create Lobby!"
+                        HorizontalOptions="FillAndExpand"
                         Clicked="OnCreateLobbyButtonClicked" />
 
-            </StackLayout>
-
-        </Grid>
+        </StackLayout>
+        </StackLayout>
 
     </ContentPage.Content>
 </ContentPage>

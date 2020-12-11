@@ -33,15 +33,15 @@
                         </Grid>
                     </Grid>
                 </pv:PancakeView>
+                <SearchBar 
+                    x:Name="searchBar"
+                    Placeholder="Search in playlist"
+                    PlaceholderColor="Orange"
+                    TextChanged="OnTextChanged"
+                    TextColor="Black"/>
             </StackLayout>
-            <CollectionView Grid.Row="1" Margin="20,-20" ItemsSource="{Binding SongList}" x:Name="searchResults"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" SelectionMode="Single"
-                SelectedItem="{Binding SelectedSong}" SelectionChangedCommand="{Binding AddedCommand}">
-                <CollectionView.Header>
-                    <SearchBar x:Name="searchBar"
-                               Placeholder="Search in playlist"
-                               PlaceholderColor="Orange"
-                               TextChanged="OnTextChanged"/>
-                </CollectionView.Header>
+            <CollectionView Grid.Row="1" Margin="20,-20" x:Name="searchResult" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" SelectionMode="Single"
+                            SelectedItem="{Binding SelectedSong}" SelectionChangedCommand="{Binding AddedCommand}">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="1"/>
                 </CollectionView.ItemsLayout>

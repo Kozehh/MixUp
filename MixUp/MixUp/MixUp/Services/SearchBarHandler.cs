@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using ClassLibrary.Models;
 using MixUp.Pages;
@@ -17,41 +18,17 @@ namespace MixUp.Services
         {
         }
 
-        public static List<PlaylistSong<Song>> GetSearchResults(string query)
+        public static List<PlaylistSong<Song>> GetSearchResults(string query = null)
         {
-            var normalizeQuery = query?.ToLower() ?? "";
-            if (normalizeQuery.Equals(""))
+            var normalizeQuery = query.ToLower();
+            if (normalizeQuery == string.Empty)
             {
-                MusicPage.songList = new ObservableCollection<PlaylistSong<Song>>(MusicPage._playlist.PlaylistSongs.Items);
-                return MusicPage.songList.OrderBy(item => item.Song.Name).ToList<PlaylistSong<Song>>();
+                return MusicPage.allSongs.OrderBy(item => item.Song.Name).ToList();
             }
-            else
-            {
-                return MusicPage.songList.Where(item => item.Song.Name.ToLower().Contains(normalizeQuery)).OrderBy(
-                    item => item.Song.Name).ToList<PlaylistSong<Song>>();/*
+            return MusicPage.allSongs.Where(item => item.Song.Name.ToLower().Contains(normalizeQuery)).ToList();/*
                                                         &&
                                                         item.Song.Artists.Any(artist => artist.Name.ToLower().Contains(normalizeQuery)))*/
-            }
+            
         }
-
-
-        /*
-        protected override void OnQueryChanged(string oldValue, string newValue)
-        {
-            base.OnQueryChanged(oldValue, newValue);
-
-            if (string.IsNullOrWhiteSpace(newValue))
-            {
-                ItemsSource = MusicPage.songList.OrderBy(item => item.Song.Name);
-            }
-            else
-            {
-                ItemsSource = MusicPage.songList.Where(item => item.Song.Name.ToLower().Contains(newValue.ToLower()) 
-                                                               &&
-                                                               item.Song.Artists.Any(artist => artist.Name.ToLower().Contains(newValue.ToLower())))
-                    .OrderBy(
-                        item => item.Song.Name).ToList<PlaylistSong<Song>>();
-            }
-        }*/
     }
 }

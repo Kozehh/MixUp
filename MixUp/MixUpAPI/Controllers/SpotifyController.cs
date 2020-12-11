@@ -37,7 +37,6 @@ namespace MixUpAPI.Controllers
 
         // Variables d'environnement venant du Dockerfile
         private string dbManagerApi = Environment.GetEnvironmentVariable("DB_MANAGER_ADDR");
-        //private string serverApi = Environment.GetEnvironmentVariable("SERVER_API");
 
         private HttpClient client = new HttpClient();
 

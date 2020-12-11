@@ -30,7 +30,7 @@
                            FontSize="Large"
                            x:Name="lobbyName"/>
 
-                    <Label Text="Code"
+                    <Label Text="Room Code"
                            TextColor="DarkGray"
                            HorizontalOptions="Center"
                            VerticalOptions="Start"

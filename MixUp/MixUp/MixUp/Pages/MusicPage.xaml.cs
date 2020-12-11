@@ -16,11 +16,9 @@ namespace MixUp.Pages
         // Variables de classe
         private Session session;
         public event PropertyChangedEventHandler PropertyChanged;
-        private PlaylistService _playlistService;
-        private User User;
         public static Playlist _playlist;
         private PlaylistSong<Song> selectedSong;
-        public static ObservableCollection<PlaylistSong<Song>> songList;
+        public static ObservableCollection<PlaylistSong<Song>> allSongs;
         public const string songToAdd = "/cAddSong:";
 
         // Variables qui modifient propriétés du UI quand elles changent
@@ -36,16 +34,6 @@ namespace MixUp.Pages
             }
         }
 
-        public ObservableCollection<PlaylistSong<Song>> SongList
-        {
-            get { return songList; }
-            set
-            {
-                songList = value;
-                OnPropertyChanged();
-            }
-        }
-
         public PlaylistSong<Song> SelectedSong
         {
             get { return selectedSong; }
@@ -57,23 +45,23 @@ namespace MixUp.Pages
         }
 
         // Constructeur de la page
-        public MusicPage(User user, Session lobbySession, Playlist playlist)
+        public MusicPage(Session lobbySession, Playlist playlist)
         {
             InitializeComponent();
-            BindingContext = this;
             session = lobbySession;
-            User = user;
             Playlist = playlist;
-            SongList = new ObservableCollection<PlaylistSong<Song>>(playlist.PlaylistSongs.Items);
+            allSongs = new ObservableCollection<PlaylistSong<Song>>(playlist.PlaylistSongs.Items);
+            searchResult.ItemsSource = allSongs;
+            BindingContext = this;
         }
 
 
         // Méthodes
         
         // Événements 
-        void OnTextChanged(object sender, TextChangedEventArgs e)
+        private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            searchResults.ItemsSource = new ObservableCollection<PlaylistSong<Song>>(SearchBarHandler.GetSearchResults(e.NewTextValue));
+            searchResult.ItemsSource = new ObservableCollection<PlaylistSong<Song>>(SearchBarHandler.GetSearchResults(e.NewTextValue));
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = "")

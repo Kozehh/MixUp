@@ -27,6 +27,7 @@ namespace MixUp.Pages
         private Thread serverThread;
         private Server server;
         private User user;
+        private const string roomCodePH = "Room Code is : ";
         public const string songToAdd = "/cAddSong:";
         public static ObservableCollection<Song> songList;
         public static Session session;
@@ -81,13 +82,8 @@ namespace MixUp.Pages
             Device.BeginInvokeOnMainThread(() =>
             {
                 lobbyName.Text = lobby.name;
-                lobbyCode.Text = lobby.roomCode;
+                lobbyCode.Text = roomCodePH + lobby.roomCode;
             });
-        }
-
-        async void OnMusicPageClicked(object sender, EventArgs args)
-        {
-            await Navigation.PushAsync(playlists);
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = "")
@@ -153,7 +149,7 @@ namespace MixUp.Pages
             var selectedPlaylist = user.UserPlaylists.Find(playlist => playlist.Name == name);
             if (selectedPlaylist != null)
             {
-                await Navigation.PushAsync(new MusicPage(user, session, selectedPlaylist));
+                await Navigation.PushAsync(new MusicPage(session, selectedPlaylist));
             }
         }
     }
