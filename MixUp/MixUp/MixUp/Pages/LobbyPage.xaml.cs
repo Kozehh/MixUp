@@ -47,11 +47,9 @@ namespace MixUp.Pages
                 this.user = user;
                 Playlists = new ObservableCollection<Playlist>(user.UserPlaylists);
                 // Get info of the Host playback
-                if (server != null && st != null)
-                {
-                    this.server = server;
-                    serverThread = st;
-                }
+                this.server = server;
+                serverThread = st;
+                
 
                 currentlyPlaying = null;
                 this.ip = ip;

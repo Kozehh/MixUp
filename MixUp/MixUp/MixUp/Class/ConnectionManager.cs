@@ -18,7 +18,6 @@ namespace MixUp
         private IPEndPoint remoteEndPoint;
         private Socket sender;
         private Int32 port = 11000;
-        private readonly IPAddress _androidEmulatorIp = IPAddress.Parse("192.168.232.2"); 
 
         public ConnectionManager(Session session)
         {
@@ -39,7 +38,7 @@ namespace MixUp
             {
                 sender.Connect(remoteEndPoint);
                 this.socket = sender;
-                Console.WriteLine("connected to -> {0} ", sender.RemoteEndPoint.ToString());
+                Console.WriteLine("connected to -> {0} ", sender.RemoteEndPoint);
 
                 // receiving message loop
                 while (true)
@@ -55,15 +54,15 @@ namespace MixUp
             // Manage of Socket's Exceptions y
             catch (ArgumentNullException ane)
             {
-                Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
+                Console.WriteLine("ArgumentNullException : {0}", ane.Message);
             }
             catch (SocketException se)
             {
-                Console.WriteLine("SocketException : {0}", se.ToString());
+                Console.WriteLine("SocketException : {0}", se.Message);
             }
             catch (Exception e)
             {
-                Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                Console.WriteLine("Unexpected exception : {0}", e.Message);
             }
         }
 

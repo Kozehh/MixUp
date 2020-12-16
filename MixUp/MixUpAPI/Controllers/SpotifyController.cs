@@ -21,9 +21,9 @@ namespace MixUpAPI.Controllers
         private const string _authURL = "https://accounts.spotify.com/authorize?";
         private const string _tokenURL = "https://accounts.spotify.com/api/token";
         private const string _userURL = "https://api.spotify.com/v1/me";
-        private string redirect_uri = "https://server-mixup-udes.loca.lt/mixup/callback";
+        private string redirect_uri = "https://servermixupudes.loca.lt/mixup/callback";
 
-        // Identifiant et code secret utilisé dans le authorization code flow pour 
+        // Identifiant et code secret utilisé dans le authorization code flow pour
         // avoir un token d'accès de l'application
         private const string client_secret = "e86971bae67043eaa474a084eab7b356";
         private const string client_id = "d8235676727f4a1b9938a49627c86640";

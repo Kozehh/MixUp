@@ -23,5 +23,5 @@ services:
         links:
             - mixupapi
         command:
-            --local-host mixupapi --port 80 --subdomain server-mixup-udes
+            --local-host mixupapi --port 80 --subdomain servermixupudes
         

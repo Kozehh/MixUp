@@ -16,11 +16,11 @@ namespace MixUp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage : ContentPage, INotifyPropertyChanged
     {
-        public static string mixupApi = @"http://server-mixup-udes.loca.lt/mixup/";
+        public static string mixupApi = @"http://servermixupudes.loca.lt/mixup/";
         private const string callback = "mixup/callback";
 
         private const string urlToSkipTunnelPage =
-            "http://server-mixup-udes.loca.lt/continue/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOiIyMDIwLTEyLTA0VDE0OjM0OjE0LjU3MVoiLCJzdWJkb21haW4iOiJibHVlLWZhbGNvbi01NSIsImlwIjoiNzQuNTYuMTE5LjEzNiIsImlhdCI6MTYwNzA5MjQ1NH0.gUWlFnovpwTra0RWADhCfthOoH-YMkPYGq88Juo6sXE";
+            "http://servermixupudes.loca.lt/continue/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lc3RhbXAiOiIyMDIwLTEyLTA0VDE0OjM0OjE0LjU3MVoiLCJzdWJkb21haW4iOiJibHVlLWZhbGNvbi01NSIsImlwIjoiNzQuNTYuMTE5LjEzNiIsImlhdCI6MTYwNzA5MjQ1NH0.gUWlFnovpwTra0RWADhCfthOoH-YMkPYGq88Juo6sXE";
 
         private HttpClient _client;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -159,7 +159,6 @@ namespace MixUp.Pages
                     Url = urlToSkipTunnelPage
                 };
                 _loginView.Source = source;
-                _loginView.Source = (_loginView.Source as UrlWebViewSource).Url;
             }
         }
     }
